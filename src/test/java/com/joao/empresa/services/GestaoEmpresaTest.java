@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import com.joao.empresa.model.Empresa;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,10 +8,10 @@ import org.junit.jupiter.api.Test;
 public class GestaoEmpresaTest {
 
     @Test
-    public void quandoMetodoBuscarPorIdForChamadoEExistirEmpresaComIdDoParametroDeveRetornarEssaEmpresa(){
+    public void quandoMetodoBuscarPorIdForChamadoEExistirEmpresaComIdBuscadoDeveRetornarEssaEmpresa(){
         // cenário
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
         GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
+        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
         gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
         //execucao
@@ -20,6 +21,15 @@ public class GestaoEmpresaTest {
         Assertions.assertEquals(1, empresa.getId());
     }
 
+    @Test
+    public void quandoMetodoBuscarPorIdForChamadoENaoExistirEmpresaComOIdBuscadoDeveLancarExcecao(){
 
+        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
+        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
+        gestaoEmpresa.cadastrarEmpresa(empresaNova);
+
+        Assertions.assertThrows(EmpresaNaoEncontradaException.class, () -> gestaoEmpresa.buscarPorId(2));
+
+    }
 
 }
