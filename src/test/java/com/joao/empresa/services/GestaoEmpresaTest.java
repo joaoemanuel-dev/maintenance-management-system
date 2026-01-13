@@ -44,4 +44,15 @@ public class GestaoEmpresaTest {
         Assertions.assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
     }
 
+    @Test
+    public void quandoOMetodoCadastrarEmpresaForChamadoSeJaExistirUmaEmpresaComOMesmoCnpjDeveLancarExcecao(){
+
+        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
+        Empresa empresaNova1 = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
+        Empresa empresaNova2 = new Empresa(2, "Vale do Rio Doce", "2023018977", "Congonhas", "Produtora de chapas");
+        gestaoEmpresa.cadastrarEmpresa(empresaNova1);
+
+        Assertions.assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
+    }
+
 }
