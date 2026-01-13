@@ -1,7 +1,6 @@
-package main.java.com.joao.empresa.model;
+package com.joao.empresa.model;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Manutencao extends Entidade {
 

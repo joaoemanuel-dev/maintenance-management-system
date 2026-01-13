@@ -1,8 +1,8 @@
-package main.java.com.joao.empresa.services;
+package com.joao.empresa.services;
 
-import main.java.com.joao.empresa.exceptions.UsuarioJaCadastradoException;
-import main.java.com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
-import main.java.com.joao.empresa.model.Usuario;
+import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
+import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
+import com.joao.empresa.model.Usuario;
 import java.util.*;
 
 public class GestaoUsuario {

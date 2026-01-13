@@ -1,4 +1,4 @@
-package main.java.com.joao.empresa.model;
+package com.joao.empresa.model;
 
 import java.util.Objects;
 

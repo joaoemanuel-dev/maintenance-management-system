@@ -1,9 +1,8 @@
-package main.java.com.joao.empresa.services;
+package com.joao.empresa.services;
 
-import main.java.com.joao.empresa.model.Empresa;
-import main.java.com.joao.empresa.exceptions.EmpresaJaCadastradaException;
-import main.java.com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
-
+import com.joao.empresa.model.Empresa;
+import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
+import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
