@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class GestaoEmpresaTest {
 
     @Test
-    public void quandoMetodoBuscarPorIdForChamadoDeveRetornarEmpresaComIdDoParametro(){
+    public void quandoMetodoBuscarPorIdForChamadoEExistirEmpresaComIdDoParametroDeveRetornarEssaEmpresa(){
         // cenário
         Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
         GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
@@ -19,5 +19,7 @@ public class GestaoEmpresaTest {
         //verificacao
         Assertions.assertEquals(1, empresa.getId());
     }
+
+
 
 }
