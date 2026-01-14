@@ -31,7 +31,6 @@ public class GestaoEmpresaTest {
         gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
         assertThrows(EmpresaNaoEncontradaException.class, () -> gestaoEmpresa.buscarPorId(2));
-
     }
 
     @Test
@@ -57,15 +56,13 @@ public class GestaoEmpresaTest {
     }
 
     @Test
-    public void quandoCadastrarEmpresaSemConflitosDeIdECnpjDeveAdicionarEmpresaAoSistema(){
+    public void quandoCadastrarEmpresaForChamadoSemConflitosDeIdECnpjDeveAdicionarEmpresaAoSistema(){
 
         GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
         Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
         gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
         assertTrue(gestaoEmpresa.listarEmpresas().contains(empresaNova)); // a empresa cadastrada está no sistema?
-
     }
-
 
 }
