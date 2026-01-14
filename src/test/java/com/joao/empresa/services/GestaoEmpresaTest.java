@@ -4,8 +4,8 @@ import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import com.joao.empresa.model.Empresa;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GestaoEmpresaTest {
 
@@ -55,5 +55,17 @@ public class GestaoEmpresaTest {
 
         assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
     }
+
+    @Test
+    public void quandoCadastrarEmpresaSemConflitosDeIdECnpjDeveAdicionarEmpresaAoSistema(){
+
+        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
+        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
+        gestaoEmpresa.cadastrarEmpresa(empresaNova);
+
+        assertTrue(gestaoEmpresa.listarEmpresas().contains(empresaNova)); // a empresa cadastrada está no sistema?
+
+    }
+
 
 }
