@@ -65,4 +65,23 @@ public class GestaoEmpresaTest {
         assertTrue(gestaoEmpresa.listarEmpresas().contains(empresaNova)); // a empresa cadastrada está no sistema?
     }
 
+    @Test
+    public void quandoAtualizarEmpresaForChamadoDeveAtualizarOsDadosDaEmpresaCadastrada(){
+
+        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
+        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
+        gestaoEmpresa.cadastrarEmpresa(empresaNova);
+        Empresa empresaAlterada = new Empresa(1, "Vale do Rio Doce", "2023018977", "Congonhas", "Produtora de chapas");
+
+        gestaoEmpresa.atualizarEmpresa(empresaAlterada);
+
+        // não compara os dois objetos de uma vez pq é arriscado: depende de equals e se algum falhar não sabe qual
+        assertAll( // aqui os erros aparecem tudo de uma vez (sem isso, no primeiro erro o teste parava)
+                () -> assertEquals(empresaAlterada.getNome(), empresaNova.getNome()),
+                () -> assertEquals(empresaAlterada.getCnpj(), empresaNova.getCnpj()),
+                () -> assertEquals(empresaAlterada.getEndereco(), empresaNova.getEndereco()),
+                () -> assertEquals(empresaAlterada.getSegmento(), empresaNova.getSegmento())
+        );
+    }
+
 }
