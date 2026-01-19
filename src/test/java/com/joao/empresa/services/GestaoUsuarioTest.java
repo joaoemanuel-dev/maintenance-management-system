@@ -1,6 +1,7 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.builders.AdministradorBuilder;
+import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Usuario;
 import org.junit.jupiter.api.Test;
 
@@ -20,16 +21,19 @@ public class GestaoUsuarioTest {
         assertEquals(1, usuario.getId());
     }
 
-    /*@Test
-    public void quandoMetodoBuscarPorIdForChamadoENaoExistirEmpresaComOIdBuscadoDeveLancarExcecao(){
+    @Test
+    public void quandoMetodoBuscarPorIdForChamadoENaoExistirUsuarioComOIdBuscadoDeveLancarExcecao(){
 
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova);
+        GestaoUsuario gestaoUsuario = new GestaoUsuario();
+        Usuario usuarioNovo = AdministradorBuilder.builder().build();
+        gestaoUsuario.cadastrarUsuario(usuarioNovo);
 
-        assertThrows(EmpresaNaoEncontradaException.class, () -> gestaoEmpresa.buscarPorId(2));
+        assertThrows(UsuarioNaoEncontradoException.class, () ->{
+            gestaoUsuario.buscarPorId(2);
+        });
     }
 
+    /*
     @Test
     public void quandoOMetodoCadastrarEmpresaForChamadoSeJaExistirUmaEmpresaComOMesmoIdDeveLancarExcecao(){
 
