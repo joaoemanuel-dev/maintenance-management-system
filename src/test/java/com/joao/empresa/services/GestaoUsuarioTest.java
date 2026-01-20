@@ -1,7 +1,6 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.builders.AdministradorBuilder;
-import com.joao.empresa.builders.GestorBuilder;
 import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Usuario;
