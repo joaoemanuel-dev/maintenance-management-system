@@ -58,6 +58,17 @@ public class GestaoUsuarioTest {
         assertTrue(gestaoUsuario.listarUsuarios().contains(usuarioNovo));
     }
 
+    @Test
+    public void quandoOMetodoExcluirUsuarioForChamadoOUsuarioDeveSerExcluidoDoSistema(){
+
+        GestaoUsuario gestaoUsuario = new GestaoUsuario();
+        Usuario usuarioNovo = AdministradorBuilder.builder().build();
+        gestaoUsuario.cadastrarUsuario(usuarioNovo);
+
+        gestaoUsuario.removerUsuario(1);
+
+        assertFalse(gestaoUsuario.listarUsuarios().contains(usuarioNovo));
+    }
 
     /*
     @Test
@@ -78,16 +89,9 @@ public class GestaoUsuarioTest {
                 () -> assertEquals(empresaAlterada.getSegmento(), empresaNova.getSegmento())
         );
     }
+    */
 
-    @Test
-    public void quandoOMetodoExcluirEmpresaForChamadoAEmpresaDeveSerExcluidaDoSistema(){
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
-        gestaoEmpresa.excluirEmpresa(1);
 
-        assertFalse(gestaoEmpresa.listarEmpresas().contains(empresaNova));
-    }*/
 
 }
