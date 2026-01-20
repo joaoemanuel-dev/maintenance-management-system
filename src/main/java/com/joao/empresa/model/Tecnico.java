@@ -1,8 +1,6 @@
-package main.java.com.joao.empresa.model;
+package com.joao.empresa.model;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class Tecnico extends Usuario {

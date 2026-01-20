@@ -1,4 +1,4 @@
-package main.java.com.joao.empresa.model;
+package com.joao.empresa.model;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -85,6 +85,18 @@ public class Empresa extends Entidade {
 
     public void adicionarEquipamento(Equipamento equipamento){
         equipamentos.add(equipamento);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Empresa empresa)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(nome, empresa.nome) && Objects.equals(cnpj, empresa.cnpj) && Objects.equals(endereco, empresa.endereco) && Objects.equals(segmento, empresa.segmento) && status == empresa.status && Objects.equals(equipamentos, empresa.equipamentos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), nome, cnpj, endereco, segmento, status, equipamentos);
     }
 
     @Override

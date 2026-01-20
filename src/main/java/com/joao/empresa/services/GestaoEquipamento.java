@@ -1,10 +1,9 @@
-package main.java.com.joao.empresa.services;
+package com.joao.empresa.services;
 
-import main.java.com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
-import main.java.com.joao.empresa.exceptions.EquipamentoNaManutencaoException;
-import main.java.com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
-import main.java.com.joao.empresa.model.Equipamento;
-
+import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
+import com.joao.empresa.exceptions.EquipamentoNaManutencaoException;
+import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
+import com.joao.empresa.model.Equipamento;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +12,10 @@ public class GestaoEquipamento {
 
     private GestaoManutencao gestaoManutencao;
     private Set<Equipamento> equipamentos = new HashSet<>();
+
+    public GestaoEquipamento() {
+        this.gestaoManutencao = new GestaoManutencao();
+    }
 
     // Injeção de dependência: construtor recebe a referência para eu acessar
     // os métodos da manutenção (aqui, acessar as listas de equipamento em manutenção).

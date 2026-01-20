@@ -1,6 +1,4 @@
-package main.java.com.joao.empresa.model;
-
-import java.util.Objects;
+package com.joao.empresa.model;
 
 public abstract class Usuario extends Entidade{
 

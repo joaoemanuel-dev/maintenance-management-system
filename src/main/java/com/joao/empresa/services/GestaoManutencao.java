@@ -1,8 +1,8 @@
-package main.java.com.joao.empresa.services;
+package com.joao.empresa.services;
 
-import main.java.com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
-import main.java.com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
-import main.java.com.joao.empresa.model.Manutencao;
+import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
+import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
+import com.joao.empresa.model.Manutencao;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;

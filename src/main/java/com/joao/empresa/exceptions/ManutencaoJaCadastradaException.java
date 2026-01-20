@@ -1,4 +1,4 @@
-package main.java.com.joao.empresa.exceptions;
+package com.joao.empresa.exceptions;
 
 public class ManutencaoJaCadastradaException extends RuntimeException {
 
