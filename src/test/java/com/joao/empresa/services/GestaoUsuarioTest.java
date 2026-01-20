@@ -39,8 +39,8 @@ public class GestaoUsuarioTest {
     public void quandoOMetodoCadastrarUsuarioForChamadoSeJaExistirUmUsuarioComOMesmoIdDeveLancarExcecao(){
 
         GestaoUsuario gestaoUsuario = new GestaoUsuario();
-        Usuario usuarioNovo1 = GestorBuilder.builder().build();
-        Usuario usuarioNovo2 = GestorBuilder.builder().build();
+        Usuario usuarioNovo1 = AdministradorBuilder.builder().build();
+        Usuario usuarioNovo2 = AdministradorBuilder.builder().build();
         gestaoUsuario.cadastrarUsuario(usuarioNovo1);
 
         assertThrows(UsuarioJaCadastradoException.class, () -> {
@@ -52,7 +52,7 @@ public class GestaoUsuarioTest {
     public void quandoCadastrarUsuarioForChamadoSemConflitosDeIdDeveAdicionarUsuarioAoSistema(){
 
         GestaoUsuario gestaoUsuario = new GestaoUsuario();
-        Usuario usuarioNovo = GestorBuilder.builder().build();
+        Usuario usuarioNovo = AdministradorBuilder.builder().build();
         gestaoUsuario.cadastrarUsuario(usuarioNovo);
 
         assertTrue(gestaoUsuario.listarUsuarios().contains(usuarioNovo));
