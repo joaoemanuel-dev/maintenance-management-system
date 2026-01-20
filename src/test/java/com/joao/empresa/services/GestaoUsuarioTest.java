@@ -1,6 +1,8 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.builders.AdministradorBuilder;
+import com.joao.empresa.builders.GestorBuilder;
+import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Usuario;
 import org.junit.jupiter.api.Test;
@@ -33,29 +35,20 @@ public class GestaoUsuarioTest {
         });
     }
 
+    @Test
+    public void quandoOMetodoCadastrarUsuarioForChamadoSeJaExistirUmUsuarioComOMesmoIdDeveLancarExcecao(){
+
+        GestaoUsuario gestaoUsuario = new GestaoUsuario();
+        Usuario usuarioNovo1 = GestorBuilder.builder().build();
+        Usuario usuarioNovo2 = GestorBuilder.builder().build();
+        gestaoUsuario.cadastrarUsuario(usuarioNovo1);
+
+        assertThrows(UsuarioJaCadastradoException.class, () -> {
+            gestaoUsuario.cadastrarUsuario(usuarioNovo2);
+        });
+    }
+
     /*
-    @Test
-    public void quandoOMetodoCadastrarEmpresaForChamadoSeJaExistirUmaEmpresaComOMesmoIdDeveLancarExcecao(){
-
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova1 = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        Empresa empresaNova2 = new Empresa(1, "Vale do Rio Doce", "98390955", "Congonhas", "Produtora de chapas");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova1);
-
-        assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
-    }
-
-    @Test
-    public void quandoOMetodoCadastrarEmpresaForChamadoSeJaExistirUmaEmpresaComOMesmoCnpjDeveLancarExcecao(){
-
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova1 = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        Empresa empresaNova2 = new Empresa(2, "Vale do Rio Doce", "2023018977", "Congonhas", "Produtora de chapas");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova1);
-
-        assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
-    }
-
     @Test
     public void quandoCadastrarEmpresaForChamadoSemConflitosDeIdECnpjDeveAdicionarEmpresaAoSistema(){
 
@@ -66,6 +59,7 @@ public class GestaoUsuarioTest {
         assertTrue(gestaoEmpresa.listarEmpresas().contains(empresaNova)); // a empresa cadastrada está no sistema?
     }
 
+    /*
     @Test
     public void quandoAtualizarEmpresaForChamadoDeveAtualizarOsDadosDaEmpresaCadastrada(){
 
