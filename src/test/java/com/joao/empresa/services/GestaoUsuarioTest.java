@@ -48,16 +48,16 @@ public class GestaoUsuarioTest {
         });
     }
 
-    /*
     @Test
-    public void quandoCadastrarEmpresaForChamadoSemConflitosDeIdECnpjDeveAdicionarEmpresaAoSistema(){
+    public void quandoCadastrarUsuarioForChamadoSemConflitosDeIdDeveAdicionarUsuarioAoSistema(){
 
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova);
+        GestaoUsuario gestaoUsuario = new GestaoUsuario();
+        Usuario usuarioNovo = GestorBuilder.builder().build();
+        gestaoUsuario.cadastrarUsuario(usuarioNovo);
 
-        assertTrue(gestaoEmpresa.listarEmpresas().contains(empresaNova)); // a empresa cadastrada está no sistema?
+        assertTrue(gestaoUsuario.listarUsuarios().contains(usuarioNovo));
     }
+
 
     /*
     @Test
