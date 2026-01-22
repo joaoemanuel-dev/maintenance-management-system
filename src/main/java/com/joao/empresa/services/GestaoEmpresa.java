@@ -20,12 +20,14 @@ public class GestaoEmpresa {
                 );
     }
 
+    // PENSAR AQUI QUE PODE DAR NULL POINTER EXCEPTION, AÍ VAI DAR PROBLEMA
+
     // Método auxiliar interno que busca sem lançar exceção -> pra quando a ausência é normal e não um erro
     private Empresa buscarPorIdSemExcecao(int id) {
         return empresas.stream()
                 .filter(emp -> emp.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .orElse(null); // se retorna null é pq não tem empresa com o id buscado
     }
 
     //método interno
@@ -37,13 +39,13 @@ public class GestaoEmpresa {
 
     public void cadastrarEmpresa(Empresa emp){
         // se o throw for executado, o método para imediatamente
-        if(buscarPorIdSemExcecao(emp.getId()) != null){
+        if(buscarPorIdSemExcecao(emp.getId()) != null){ // se tiver empresa
             throw new EmpresaJaCadastradaException("Já existe uma empresa cadastrada com o ID: " + emp.getId());
         }
         if(existeCnpj(emp.getCnpj())){
             throw new EmpresaJaCadastradaException("CNPJ já cadastrado: " + emp.getCnpj());
         }
-        empresas.add(emp);
+        empresas.add(emp); // se as outras condições forem null ou falsas chega aqui
     }
 
     public Set<Empresa> listarEmpresas(){
