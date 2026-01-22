@@ -8,6 +8,13 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/* ---------------------------------------------------------------------------------------------------------------
+* Para os métodos cadastrarUsuario, buscarPorId, listarUsuarios e removerUsuario vou testar com um subtipo qualquer
+* de Usuario. Esses métodos são agnósticos de tipo, então para qualquer um que eu testar serve para todos. Porém,
+* para o método atualizarUsuario eu vou precisar testar para cada subtipo, porque cada um tem regra própria,
+* cada um altera campos diferentes e cada um reage diferente ao alterado.
+------------------------------------------------------------------------------------------------------------------*/
+
 public class GestaoUsuarioTest {
 
     // atributos disponíveis para todas as classes, se criasse no before each ia morrer ali mesmo
@@ -15,7 +22,7 @@ public class GestaoUsuarioTest {
     private Usuario usuarioNovo;
 
     @BeforeEach
-    public void antesDeCadaMetodoInstanciasOsObjetos() {
+    public void antesDeCadaMetodoInstanciaOsObjetos() {
         gestaoUsuario = new GestaoUsuario();
         usuarioNovo = AdministradorBuilder.builder().comId(1).build(); // deixar explícito no teste que o id é 1
     }
