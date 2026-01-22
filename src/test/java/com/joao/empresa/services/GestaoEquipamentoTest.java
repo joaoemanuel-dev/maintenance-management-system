@@ -1,9 +1,7 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.builders.EquipamentoBuilder;
-import com.joao.empresa.builders.EquipamentoBuilder;
 import com.joao.empresa.exceptions.*;
-import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Equipamento;
 import org.junit.jupiter.api.*;
 
@@ -20,7 +18,7 @@ public class GestaoEquipamentoTest {
     @BeforeEach
     public void antesDeCadaMetodoInstanciaOObjeto(){
         gestaoEquipamento = new GestaoEquipamento();
-        equipamentoNovo = EquipamentoBuilder.builder().comId(1).build();
+        equipamentoNovo = EquipamentoBuilder.builder().comId(1).comCodigoPatrimonio("12345678").build();
     }
 
     @Test
@@ -52,6 +50,19 @@ public class GestaoEquipamentoTest {
         assertThrows(EquipamentoJaCadastradoException.class, () -> gestaoEquipamento.cadastrarEquipamento(equipamentoNovo2));
     }
 
+    @Test
+    public void quandochamarCadastrarEquipamentoSeJaExistirUmEquipamentoComOMesmoCodigoPatrimonioDeveLancarExcecao(){
 
+        Equipamento equipamentoNovo2 = EquipamentoBuilder.builder().
+                comId(2).comNome("Rolamento da empilhadeira").
+                comCodigoPatrimonio("12345678").
+                comDataAquisicao(LocalDate.of(2013, 05, 02)).
+                build();
+
+        gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
+        gestaoEquipamento.cadastrarEquipamento(equipamentoNovo2);
+
+        assertThrows(EquipamentoJaCadastradoException.class, () -> gestaoEquipamento.cadastrarEquipamento(equipamentoNovo2));
+    }
 
 }
