@@ -1,7 +1,9 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.builders.EmpresaBuilder;
 import com.joao.empresa.builders.EquipamentoBuilder;
 import com.joao.empresa.exceptions.*;
+import com.joao.empresa.model.Empresa;
 import com.joao.empresa.model.Equipamento;
 import org.junit.jupiter.api.*;
 
@@ -70,6 +72,25 @@ public class GestaoEquipamentoTest {
         gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
 
         assertTrue(gestaoEquipamento.listarEquipamentos().contains(equipamentoNovo));
+    }
+
+    @Test
+    public void quandoAtualizarEquipamentoForChamadoDeveAtualizarOsDadosDaEquipamentoCadastrada(){
+
+        gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
+        Equipamento equipamentoAlterado = EquipamentoBuilder.builder().
+                comId(1).comNome("Rolamento da empilhadeira").
+                comCodigoPatrimonio("12345678").
+                comDataAquisicao(LocalDate.of(2013, 05, 02)).
+                build();
+
+        gestaoEquipamento.atualizarEquipamento(equipamentoAlterado);
+
+        assertAll(
+                () -> assertEquals(equipamentoAlterado.getNome(), equipamentoNovo.getNome()),
+                () -> assertEquals(equipamentoAlterado.getCodigoPatrimonio(), equipamentoAlterado.getCodigoPatrimonio()),
+                () -> assertEquals(equipamentoAlterado.getDataAquisicao(), equipamentoNovo.getDataAquisicao())
+        );
     }
 
 }
