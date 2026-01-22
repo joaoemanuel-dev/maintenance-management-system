@@ -7,8 +7,7 @@ import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GestaoEquipamentoTest {
 
@@ -63,6 +62,14 @@ public class GestaoEquipamentoTest {
         gestaoEquipamento.cadastrarEquipamento(equipamentoNovo2);
 
         assertThrows(EquipamentoJaCadastradoException.class, () -> gestaoEquipamento.cadastrarEquipamento(equipamentoNovo2));
+    }
+
+    @Test
+    public void quandoCadastrarEquipamentoForChamadoSemConflitosDeIdECodigoDeveAdicionarEquipamentoAoSistema(){
+
+        gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
+
+        assertTrue(gestaoEquipamento.listarEquipamentos().contains(equipamentoNovo));
     }
 
 }
