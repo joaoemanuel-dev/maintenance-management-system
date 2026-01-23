@@ -96,7 +96,7 @@ public class GestaoEquipamentoTest {
         );
     }
 
-    @Nested
+    @Nested // agrupar os testes em uma hierarquia de classes alinhadas
     @ExtendWith(MockitoExtension.class)
     class GestaoEquipamentoComMockTest{
 
@@ -107,7 +107,7 @@ public class GestaoEquipamentoTest {
         GestaoEquipamento gestaoEquipamento; // injeção de dependência (Manutencao dentro do construtor de Equipamento)
 
         @Test
-        void quandoExcluirEquipamentoENaoTiverManutencaoAssociadaDeveRemoverDoSistema() {
+        public void quandoExcluirEquipamentoENaoTiverManutencaoAssociadaDeveRemoverDoSistema() {
 
             gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
 
@@ -119,9 +119,18 @@ public class GestaoEquipamentoTest {
             assertFalse(gestaoEquipamento.listarEquipamentos().contains(equipamentoNovo));
         }
 
+        @Test
+        public void quandoExcluirEquipamentoETiverManutencaoAssociadaDeveLancarExcecao(){
 
+            gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
+
+            when(gestaoManutencao.existeManutencaoDoEquipamento(1)).
+                    thenReturn(true);
+
+            assertThrows(EquipamentoNaManutencaoException.class, () -> gestaoEquipamento.excluirEquipamento(1));
+
+        }
 
     }
-    
-    
+
 }
