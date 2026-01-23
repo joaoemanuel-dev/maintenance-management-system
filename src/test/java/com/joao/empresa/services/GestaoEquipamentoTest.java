@@ -1,15 +1,18 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.builders.EmpresaBuilder;
 import com.joao.empresa.builders.EquipamentoBuilder;
 import com.joao.empresa.exceptions.*;
-import com.joao.empresa.model.Empresa;
 import com.joao.empresa.model.Equipamento;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 public class GestaoEquipamentoTest {
 
@@ -93,4 +96,32 @@ public class GestaoEquipamentoTest {
         );
     }
 
+    @Nested
+    @ExtendWith(MockitoExtension.class)
+    class GestaoEquipamentoComMockTest{
+
+        @Mock
+        GestaoManutencao gestaoManutencao; // aqui eu quero mockar, ou seja fingir que existe
+
+        @InjectMocks
+        GestaoEquipamento gestaoEquipamento; // injeção de dependência (Manutencao dentro do construtor de Equipamento)
+
+        @Test
+        void quandoExcluirEquipamentoENaoTiverManutencaoAssociadaDeveRemoverDoSistema() {
+
+            gestaoEquipamento.cadastrarEquipamento(equipamentoNovo);
+
+            when(gestaoManutencao.existeManutencaoDoEquipamento(1))
+                    .thenReturn(false); // finge que deu certo e retorna falso (eu decido a realidade do método da outra classa)
+
+            gestaoEquipamento.excluirEquipamento(1);
+
+            assertFalse(gestaoEquipamento.listarEquipamentos().contains(equipamentoNovo));
+        }
+
+
+
+    }
+    
+    
 }
