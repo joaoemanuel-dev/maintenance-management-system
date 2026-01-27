@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -103,7 +102,7 @@ public class GestaoEquipamentoTest {
         @Mock
         GestaoManutencao gestaoManutencao; // aqui eu quero mockar, ou seja fingir que existe
 
-        @InjectMocks
+        @InjectMocks // onde eu quero colocar o mock
         GestaoEquipamento gestaoEquipamento; // injeção de dependência (Manutencao dentro do construtor de Equipamento)
 
         @Test
@@ -113,6 +112,7 @@ public class GestaoEquipamentoTest {
 
             when(gestaoManutencao.existeManutencaoDoEquipamento(1))
                     .thenReturn(false); // finge que deu certo e retorna falso (eu decido a realidade do método da outra classa)
+            // quando eu chamar a função ela deve retornar falso
 
             gestaoEquipamento.excluirEquipamento(1);
 
