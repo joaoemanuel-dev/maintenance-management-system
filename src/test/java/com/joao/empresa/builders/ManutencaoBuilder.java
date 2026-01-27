@@ -40,11 +40,6 @@ public class ManutencaoBuilder {
         return this;
     }
 
-    public ManutencaoBuilder comCusto(double custo) {
-        this.custo = custo;
-        return this;
-    }
-
     public ManutencaoBuilder comTecnicoResponsavel(Tecnico tecnicoResponsavel) {
         this.tecnicoResponsavel = tecnicoResponsavel;
         return this;
@@ -56,7 +51,7 @@ public class ManutencaoBuilder {
     }
 
     public Manutencao build() {
-        return new Manutencao(id, tipoManutencao, descricao, custo, tecnicoResponsavel, equipamento);
+        return new Manutencao(id, tipoManutencao, dataInicio, descricao, tecnicoResponsavel, equipamento);
     }
 
 }
