@@ -40,9 +40,22 @@ public class GestaoManutencaoTest {
     }
 
     @Test
-    public void quandoOMetodoCadastrarManutencaoForChamadoSeJaExistirManutencaoComOMesmoIdDeveLancarExcecao(){
+    public void quandoOMetodoCadastrarManutencaoForChamadoSeJaExistirManutencaoAtivaComOMesmoIdDeveLancarExcecao(){
 
         gestaoManutencao.cadastrarManutencao(manutencaoNova);
+        Manutencao manutencaoNova2 = ManutencaoBuilder.builder().
+                comId(1).comDescricao("Luz da injeção eletrônica acendendo").
+                comDataInicio(LocalDate.of(2026, 01, 28)).
+                build();
+
+        assertThrows(ManutencaoJaCadastradaException.class, () -> gestaoManutencao.cadastrarManutencao(manutencaoNova2));
+    }
+
+    @Test
+    public void quandoOMetodoCadastrarManutencaoForChamadoSeJaExistirManutencaoFinalizadaComOMesmoIdDeveLancarExcecao(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+        gestaoManutencao.finalizarManutencao(1);
         Manutencao manutencaoNova2 = ManutencaoBuilder.builder().
                 comId(1).comDescricao("Luz da injeção eletrônica acendendo").
                 comDataInicio(LocalDate.of(2026, 01, 28)).
