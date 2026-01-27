@@ -31,7 +31,7 @@ public class GestaoManutencao {
     }
 
     public Manutencao buscarFinalizadasPorId(int id){
-        return manutencoesAtivas.stream().
+        return manutencoesFinalizadas.stream().
                 filter(mnt -> mnt.getId() == id). //só passa os que forem true
                         findFirst(). //retorna o primeiro
                         orElseThrow(() ->
@@ -40,7 +40,7 @@ public class GestaoManutencao {
     }
 
     private Manutencao buscarFinalizadasPorIdSemExcecao(int id){
-        return manutencoesAtivas.stream().
+        return manutencoesFinalizadas.stream().
                 filter(mnt -> mnt.getId() == id).
                 findFirst().
                 orElse(null);
@@ -53,8 +53,8 @@ public class GestaoManutencao {
         manutencoesAtivas.add(mnt);
     }
 
-    public boolean existeManutencaoDoEquipamento(int idEquipamento) {
-        return manutencoesAtivas.stream() // cada manutenção da lista entra no parâmetro da função anônima
+    public boolean existeManutencaoDoEquipamento(int idEquipamento) { // me diz se o equipamento tem manuntenção associada
+        return manutencoesAtivas.stream()
                 .anyMatch(m -> m.getEquipamento().getId() == idEquipamento)
                 || manutencoesFinalizadas.stream()
                 .anyMatch(m -> m.getEquipamento().getId() == idEquipamento);
@@ -91,8 +91,8 @@ public class GestaoManutencao {
         manutencoesFinalizadas.add(mnt);
     }
 
-    public void finalizarManutencao(int id) {
-        Manutencao mnt = buscarAtivasPorId(id); // aqui já lança a exceção
+    public void finalizarManutencao(int id) { // encerra ativa e joga pra finalizadas
+        Manutencao mnt = buscarAtivasPorId(id);
         mnt.setStatus(Manutencao.Status.CONCLUIDA);
         manutencoesAtivas.remove(mnt);
         manutencoesFinalizadas.add(mnt);
@@ -100,7 +100,7 @@ public class GestaoManutencao {
         mnt.getTecnicoResponsavel().adicionarManutencao(mnt); // joga pro histórico do técnico
     }
 
-    public void excluirManutencao(int id){
+    public void excluirManutencao(int id){ // excluir do sistema (finalizadas)
         Manutencao mnt = buscarFinalizadasPorId(id);
         manutencoesFinalizadas.remove(mnt);
     }
