@@ -1,12 +1,18 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.builders.EquipamentoBuilder;
 import com.joao.empresa.builders.ManutencaoBuilder;
+import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
+import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GestaoManutencaoTest {
 
@@ -39,7 +45,17 @@ public class GestaoManutencaoTest {
         assertEquals(1, manutencao.getId());
     }
 
+    @Test
+    public void quandoOMetodoCadastrarManutencaoForChamadoSeJaExistirManutencaoComOMesmoIdDeveLancarExcecao(){
 
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+        Manutencao manutencaoNova2 = ManutencaoBuilder.builder().
+                comId(1).comDescricao("Luz da injeção eletrônica acendendo").
+                comDataInicio(LocalDate.of(2026, 01, 28)).
+                build();
+
+        assertThrows(ManutencaoJaCadastradaException.class, () -> gestaoManutencao.cadastrarManutencao(manutencaoNova2));
+    }
 
 
 }
