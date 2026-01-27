@@ -1,14 +1,9 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.builders.EquipamentoBuilder;
 import com.joao.empresa.builders.ManutencaoBuilder;
-import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
 import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
-import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.*;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +33,7 @@ public class GestaoManutencaoTest {
     public void quandoBuscarFinalizadasPorIdForChamadoDeveRetornarEssaManutencao(){
 
         gestaoManutencao.cadastrarManutencao(manutencaoNova);
-
+        gestaoManutencao.finalizarManutencao(1); // só vai pras finalizadas depois que eu finalizo
         Manutencao manutencao = gestaoManutencao.buscarFinalizadasPorId(1);
 
         assertEquals(1, manutencao.getId());
@@ -64,5 +59,12 @@ public class GestaoManutencaoTest {
         assertTrue(gestaoManutencao.listarManutencoes().contains(manutencaoNova));
     }
 
+    @Test
+    public void quandoExisteManutencaoDoEquipamentoAssociadaRetornaTrue(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+
+        assertTrue(gestaoManutencao.existeManutencaoDoEquipamento(1));
+    }
 
 }
