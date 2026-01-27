@@ -63,7 +63,10 @@ public class GestaoManutencao {
     }
 
     public Set<Manutencao> listarManutencoes() {
-        return Collections.unmodifiableSet(manutencoesAtivas);
+        Set<Manutencao> todas = new LinkedHashSet<>();
+        todas.addAll(manutencoesAtivas);
+        todas.addAll(manutencoesFinalizadas);
+        return Collections.unmodifiableSet(todas);
     }
 
     public void atualizarManutencao(Manutencao alterada){ // recebo objeto somente com o campos que quero alterar, os demais ficam null
