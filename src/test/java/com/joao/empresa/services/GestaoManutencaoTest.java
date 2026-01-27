@@ -29,6 +29,16 @@ public class GestaoManutencaoTest {
         assertEquals(1, manutencao.getId());
     }
 
+    @Test
+    public void quandoBuscarFinalizadasPorIdForChamadoDeveRetornarEssaManutencao(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+
+        Manutencao manutencao = gestaoManutencao.buscarFinalizadasPorId(1);
+
+        assertEquals(1, manutencao.getId());
+    }
+
 
 
 
