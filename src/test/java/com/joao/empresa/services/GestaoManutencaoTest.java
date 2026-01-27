@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GestaoManutencaoTest {
 
@@ -55,6 +54,14 @@ public class GestaoManutencaoTest {
                 build();
 
         assertThrows(ManutencaoJaCadastradaException.class, () -> gestaoManutencao.cadastrarManutencao(manutencaoNova2));
+    }
+
+    @Test
+    public void quandoCadastrarManutencaoForChamadoSemConflitosDeIdDeveAdicionarManutencaoAoSistema(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+
+        assertTrue(gestaoManutencao.listarManutencoes().contains(manutencaoNova));
     }
 
 
