@@ -31,7 +31,7 @@ public class GestaoManutencao {
     }
 
     public Manutencao buscarFinalizadasPorId(int id){
-        return manutencoesAtivas.stream().
+        return manutencoesFinalizadas.stream().
                 filter(mnt -> mnt.getId() == id). //só passa os que forem true
                         findFirst(). //retorna o primeiro
                         orElseThrow(() ->
@@ -40,28 +40,33 @@ public class GestaoManutencao {
     }
 
     private Manutencao buscarFinalizadasPorIdSemExcecao(int id){
-        return manutencoesAtivas.stream().
+        return manutencoesFinalizadas.stream().
                 filter(mnt -> mnt.getId() == id).
                 findFirst().
                 orElse(null);
     }
 
     public void cadastrarManutencao(Manutencao mnt) {
-        if(buscarAtivasPorIdSemExcecao(mnt.getId()) != null){
-            throw new ManutencaoJaCadastradaException("Já existe uma manutenção cadastrada com o ID " + mnt.getId());
+        if (buscarAtivasPorIdSemExcecao(mnt.getId()) != null ||
+                buscarFinalizadasPorIdSemExcecao(mnt.getId()) != null) {
+            throw new ManutencaoJaCadastradaException(
+                    "Já existe uma manutenção cadastrada com o ID " + mnt.getId());
         }
         manutencoesAtivas.add(mnt);
     }
 
-    public boolean existeManutencaoDoEquipamento(int idEquipamento) {
-        return manutencoesAtivas.stream() // cada manutenção da lista entra no parâmetro da função anônima
+    public boolean existeManutencaoDoEquipamento(int idEquipamento) { // me diz se o equipamento tem manuntenção associada
+        return manutencoesAtivas.stream()
                 .anyMatch(m -> m.getEquipamento().getId() == idEquipamento)
                 || manutencoesFinalizadas.stream()
                 .anyMatch(m -> m.getEquipamento().getId() == idEquipamento);
     }
 
     public Set<Manutencao> listarManutencoes() {
-        return Collections.unmodifiableSet(manutencoesAtivas);
+        Set<Manutencao> todas = new LinkedHashSet<>();
+        todas.addAll(manutencoesAtivas);
+        todas.addAll(manutencoesFinalizadas);
+        return Collections.unmodifiableSet(todas);
     }
 
     public void atualizarManutencao(Manutencao alterada){ // recebo objeto somente com o campos que quero alterar, os demais ficam null
@@ -91,8 +96,8 @@ public class GestaoManutencao {
         manutencoesFinalizadas.add(mnt);
     }
 
-    public void finalizarManutencao(int id) {
-        Manutencao mnt = buscarAtivasPorId(id); // aqui já lança a exceção
+    public void finalizarManutencao(int id) { // encerra ativa e joga pra finalizadas
+        Manutencao mnt = buscarAtivasPorId(id);
         mnt.setStatus(Manutencao.Status.CONCLUIDA);
         manutencoesAtivas.remove(mnt);
         manutencoesFinalizadas.add(mnt);
@@ -100,7 +105,7 @@ public class GestaoManutencao {
         mnt.getTecnicoResponsavel().adicionarManutencao(mnt); // joga pro histórico do técnico
     }
 
-    public void excluirManutencao(int id){
+    public void excluirManutencao(int id){ // excluir do sistema (finalizadas)
         Manutencao mnt = buscarFinalizadasPorId(id);
         manutencoesFinalizadas.remove(mnt);
     }

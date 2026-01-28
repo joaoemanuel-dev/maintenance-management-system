@@ -1,45 +1,50 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.builders.EmpresaBuilder;
 import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import com.joao.empresa.model.Empresa;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GestaoEmpresaTest {
 
+    private GestaoEmpresa gestaoEmpresa;
+    private Empresa empresaNova;
+
+    @BeforeEach
+    public void antesDeCadaMetodoInstanciaOObjeto(){
+        gestaoEmpresa = new GestaoEmpresa();
+        empresaNova = EmpresaBuilder.builder().comId(1).build();
+    }
+
     @Test
     public void quandoMetodoBuscarPorIdForChamadoEExistirEmpresaComIdBuscadoDeveRetornarEssaEmpresa(){
-        // cenário
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
+
         gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
-        //execucao
         Empresa empresa = gestaoEmpresa.buscarPorId(1); // basta testar com um para ver se o método funcionar "TESTE UNITÁRIO"
 
-        //verificacao
         assertEquals(1, empresa.getId());
     }
 
     @Test
     public void quandoMetodoBuscarPorIdForChamadoENaoExistirEmpresaComOIdBuscadoDeveLancarExcecao(){
-
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova);
-
         assertThrows(EmpresaNaoEncontradaException.class, () -> gestaoEmpresa.buscarPorId(2));
     }
 
     @Test
     public void quandoOMetodoCadastrarEmpresaForChamadoSeJaExistirUmaEmpresaComOMesmoIdDeveLancarExcecao(){
 
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova1 = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        Empresa empresaNova2 = new Empresa(1, "Vale do Rio Doce", "98390955", "Congonhas", "Produtora de chapas");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova1);
+        Empresa empresaNova2 = EmpresaBuilder.builder().
+                comId(1).comNome("Vale do Rio Doce").
+                comEndereco("Congonhas").
+                comSeguimento("Produtora de Chapas").
+                build();
+
+        gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
         assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
     }
@@ -47,10 +52,14 @@ public class GestaoEmpresaTest {
     @Test
     public void quandoOMetodoCadastrarEmpresaForChamadoSeJaExistirUmaEmpresaComOMesmoCnpjDeveLancarExcecao(){
 
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova1 = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        Empresa empresaNova2 = new Empresa(2, "Vale do Rio Doce", "2023018977", "Congonhas", "Produtora de chapas");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova1);
+        Empresa empresaNova2 = EmpresaBuilder.builder().
+                comId(1).comNome("Vale do Rio Doce").
+                comCpnj("999929714").
+                comEndereco("Congonhas").
+                comSeguimento("Produtora de Chapas").
+                build();
+
+        gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
         assertThrows(EmpresaJaCadastradaException.class, () -> gestaoEmpresa.cadastrarEmpresa(empresaNova2));
     }
@@ -58,8 +67,6 @@ public class GestaoEmpresaTest {
     @Test
     public void quandoCadastrarEmpresaForChamadoSemConflitosDeIdECnpjDeveAdicionarEmpresaAoSistema(){
 
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
         gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
         assertTrue(gestaoEmpresa.listarEmpresas().contains(empresaNova)); // a empresa cadastrada está no sistema?
@@ -68,10 +75,11 @@ public class GestaoEmpresaTest {
     @Test
     public void quandoAtualizarEmpresaForChamadoDeveAtualizarOsDadosDaEmpresaCadastrada(){
 
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
         gestaoEmpresa.cadastrarEmpresa(empresaNova);
-        Empresa empresaAlterada = new Empresa(1, "Vale do Rio Doce", "2023018977", "Congonhas", "Produtora de chapas");
+        Empresa empresaAlterada = EmpresaBuilder.builder().
+                comNome("Vale do Rio Doce").
+                comSeguimento("Produtora de aço").
+                build(); // o resto dos atributos já estão por padrão no builders
 
         gestaoEmpresa.atualizarEmpresa(empresaAlterada);
 
@@ -86,10 +94,8 @@ public class GestaoEmpresaTest {
 
     @Test
     public void quandoOMetodoExcluirEmpresaForChamadoAEmpresaDeveSerExcluidaDoSistema(){
-        GestaoEmpresa gestaoEmpresa = new GestaoEmpresa();
-        Empresa empresaNova = new Empresa(1, "Gerdau Açominas", "2023018977", "Ouro Branco", "Produtora de aço");
-        gestaoEmpresa.cadastrarEmpresa(empresaNova);
 
+        gestaoEmpresa.cadastrarEmpresa(empresaNova);
         gestaoEmpresa.excluirEmpresa(1);
 
         assertFalse(gestaoEmpresa.listarEmpresas().contains(empresaNova));
