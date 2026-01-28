@@ -73,7 +73,7 @@ public class GestaoManutencaoTest {
     }
 
     @Test
-    public void quandoExisteManutencaoDoEquipamentoAssociadaRetornaTrue(){
+    public void quandoExisteManutencaoAtivaDoEquipamentoAssociadaRetornaTrue(){
 
         gestaoManutencao.cadastrarManutencao(manutencaoNova);
 
