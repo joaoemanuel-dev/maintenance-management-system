@@ -69,7 +69,7 @@ public class GestaoManutencaoTest {
 
         gestaoManutencao.cadastrarManutencao(manutencaoNova);
 
-        assertTrue(gestaoManutencao.listarManutencoes().contains(manutencaoNova));
+        assertTrue(gestaoManutencao.listarManutencoesAtivas().contains(manutencaoNova));
     }
 
     @Test
@@ -114,6 +114,16 @@ public class GestaoManutencaoTest {
                 () -> assertEquals(alterada.getEquipamento(), manutencaoNova.getEquipamento()),
                 () -> assertEquals(alterada.getStatus(), manutencaoNova.getStatus())
         );
+    }
+
+    @Test
+    public void quandoChamarOMetodoCancelarManutencaoAManutencaoDeveSerExcluidaDasAtivas(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+
+        gestaoManutencao.cancelarManutencao(1);
+
+        assertFalse(gestaoManutencao.listarManutencoesAtivas().contains(manutencaoNova));
     }
 
 }
