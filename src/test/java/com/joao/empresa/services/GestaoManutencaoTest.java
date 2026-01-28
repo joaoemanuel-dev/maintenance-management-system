@@ -129,14 +129,35 @@ public class GestaoManutencaoTest {
         assertEquals(Manutencao.Status.CANCELADA, manutencao.getStatus());
     }
 
-    /*@Test
-    public void quandoChamarOMetodoCancelarManutencaoAManutencaoDeveSerExcluidaDasAtivasEAdicio{
+    @Test
+    public void quandoCancelarManutencaoDeveAtualizarStatusERemoverDasAtivas(){
 
         gestaoManutencao.cadastrarManutencao(manutencaoNova);
 
         gestaoManutencao.cancelarManutencao(1);
 
+        Manutencao manutencao = gestaoManutencao.buscarFinalizadasPorId(1); // isso aqui já testa de foi pra finalizadas, se não lança exceção
+
         assertFalse(gestaoManutencao.listarManutencoesAtivas().contains(manutencaoNova));
-    }*/
+        assertEquals(Manutencao.Status.CANCELADA, manutencao.getStatus());
+    }
+
+    @Test
+    public void quandoFinalizarManutencaoDeveSerAtualizarStatusRemoverDasAtivasEAtualizarNosHistóricos(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+
+        gestaoManutencao.finalizarManutencao(1);
+
+        Manutencao manutencao = gestaoManutencao.buscarFinalizadasPorId(1); // isso aqui já testa de foi pra finalizadas, se não lança exceção
+
+        assertAll(
+                () -> assertEquals(Manutencao.Status.CONCLUIDA, manutencao.getStatus()),
+                () -> assertFalse(gestaoManutencao.listarManutencoesAtivas().contains(manutencaoNova)),
+                () -> assertTrue(manutencao.getEquipamento().getHistoricoManutencoes().contains(manutencaoNova)),
+                () -> assertTrue(manutencao.getTecnicoResponsavel().getManutencoesResponsaveis().contains(manutencaoNova))
+        );
+    }
+
 
 }
