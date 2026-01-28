@@ -95,5 +95,4 @@ public class GestaoManutencaoTest {
         assertFalse(gestaoManutencao.existeManutencaoDoEquipamento(2));
     }
 
-
 }
