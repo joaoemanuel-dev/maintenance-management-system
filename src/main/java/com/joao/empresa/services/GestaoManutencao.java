@@ -62,7 +62,15 @@ public class GestaoManutencao {
                 .anyMatch(m -> m.getEquipamento().getId() == idEquipamento);
     }
 
-    public Set<Manutencao> listarManutencoes() {
+    public Set<Manutencao> listarManutencoesAtivas() {
+        return Collections.unmodifiableSet(manutencoesAtivas);
+    }
+
+    public Set<Manutencao> listarManutencoesFinalizadas() {
+        return Collections.unmodifiableSet(manutencoesFinalizadas);
+    }
+
+    public Set<Manutencao> listarTodasManutencoes() {
         Set<Manutencao> todas = new LinkedHashSet<>();
         todas.addAll(manutencoesAtivas);
         todas.addAll(manutencoesFinalizadas);
