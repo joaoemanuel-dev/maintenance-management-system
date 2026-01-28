@@ -95,4 +95,25 @@ public class GestaoManutencaoTest {
         assertFalse(gestaoManutencao.existeManutencaoDoEquipamento(2));
     }
 
+    @Test
+    public void quandoAtualizarManutencaoForChamadoDeveAtualizarOsDadosDaManutencaoCadastrada(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+        Manutencao alterada = ManutencaoBuilder.builder().
+                comId(1).comDescricao("Luz da injeção eletrônica acendendo").
+                comDataInicio(LocalDate.of(2026, 01, 28)).
+                build();
+
+        gestaoManutencao.atualizarManutencao(alterada);
+
+        assertAll(
+                () -> assertEquals(alterada.getTipoManutencao(), manutencaoNova.getTipoManutencao()),
+                () -> assertEquals(alterada.getDataInicio(), manutencaoNova.getDataInicio()),
+                () -> assertEquals(alterada.getDescricao(), manutencaoNova.getDescricao()),
+                () -> assertEquals(alterada.getTecnicoResponsavel(), manutencaoNova.getTecnicoResponsavel()),
+                () -> assertEquals(alterada.getEquipamento(), manutencaoNova.getEquipamento()),
+                () -> assertEquals(alterada.getStatus(), manutencaoNova.getStatus())
+        );
+    }
+
 }
