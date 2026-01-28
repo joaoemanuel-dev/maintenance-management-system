@@ -80,4 +80,11 @@ public class GestaoManutencaoTest {
         assertTrue(gestaoManutencao.existeManutencaoDoEquipamento(1));
     }
 
+    @Test
+    public void quandoNaoExisteManutencaoDoEquipamentoAssociadaRetornaFalse(){
+
+        assertFalse(gestaoManutencao.existeManutencaoDoEquipamento(2));
+    }
+
+
 }
