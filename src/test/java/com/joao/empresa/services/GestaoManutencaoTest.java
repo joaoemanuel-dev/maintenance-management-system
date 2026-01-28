@@ -81,6 +81,15 @@ public class GestaoManutencaoTest {
     }
 
     @Test
+    public void quandoExisteManutencaoFinalizadaDoEquipamentoAssociadaRetornaTrue(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+        gestaoManutencao.finalizarManutencao(1);
+
+        assertTrue(gestaoManutencao.existeManutencaoDoEquipamento(1));
+    }
+
+    @Test
     public void quandoNaoExisteManutencaoDoEquipamentoAssociadaRetornaFalse(){
 
         assertFalse(gestaoManutencao.existeManutencaoDoEquipamento(2));
