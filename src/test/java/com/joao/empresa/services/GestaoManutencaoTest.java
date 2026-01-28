@@ -159,5 +159,14 @@ public class GestaoManutencaoTest {
         );
     }
 
+    @Test
+    public void quandoExcluirManutencaoDeveRemoverDasFinalizadas(){
+
+        gestaoManutencao.cadastrarManutencao(manutencaoNova);
+        gestaoManutencao.cancelarManutencao(1); // joga pras finalizadas
+        gestaoManutencao.excluirManutencao(1);
+
+        assertFalse(gestaoManutencao.listarManutencoesFinalizadas().contains(manutencaoNova));
+    }
 
 }
