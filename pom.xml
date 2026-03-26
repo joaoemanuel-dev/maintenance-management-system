@@ -14,14 +14,12 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- versões centralizadas (boa prática) -->
         <junit.jupiter.version>5.10.1</junit.jupiter.version>
         <mockito.version>5.8.0</mockito.version>
     </properties>
 
     <dependencies>
 
-        <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -29,7 +27,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -37,7 +34,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito + JUnit 5 (ESSENCIAL pro @ExtendWith) -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
@@ -45,26 +41,30 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
 
-            <!-- Plugin necessário pra rodar JUnit 5 -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
             </plugin>
 
-            <!-- JaCoCo: cobertura de testes -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.11</version>
                 <executions>
 
-                    <!-- Instrumenta o código antes dos testes -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
@@ -72,7 +72,6 @@
                         </goals>
                     </execution>
 
-                    <!-- Gera o relatório após os testes -->
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>
