@@ -1,4 +1,5 @@
 package com.joao.empresa.model;
+com.joao.empresa.model.Usuario.TipoUsuario
 
 public abstract class Usuario extends Entidade{
 
