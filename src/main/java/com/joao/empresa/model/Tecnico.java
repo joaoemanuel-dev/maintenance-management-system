@@ -37,7 +37,7 @@ public class Tecnico extends Usuario {
     }
 
     public void adicionarManutencao(Manutencao manutencao) {
-        manutencoesResponsaveis.add(manutencao);
+        manutencoesResponsaveis.add(manutencao)
     }
 
     @Override

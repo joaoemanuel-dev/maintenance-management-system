@@ -49,15 +49,17 @@ public class Equipamento extends Entidade {
     }
 
     public void adicionarManutencao(Manutencao manutencao) {
-        historicoManutencoes.add(manutencao);
+        boolean add = historicoManutencoes.add(manutencao);
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "Equipamento{id=%d, nome='%s', patrimonio='%s', dataAquisicao=%s, historico=%s}",
-                getId(), nome, codigoPatrimonio, dataAquisicao, historicoManutencoes
-        );
+        return "Equipamento{" +
+                "nome='" + nome + '\'' +
+                ", codigoPatrimonio='" + codigoPatrimonio + '\'' +
+                ", dataAquisicao=" + dataAquisicao +
+                ", historicoManutencoes=" + historicoManutencoes +
+                '}';
     }
 }
 
