@@ -84,7 +84,7 @@ public class Empresa extends Entidade {
     }
 
     public void adicionarEquipamento(Equipamento equipamento){
-        equipamentos.add(equipamento)
+        equipamentos.add(equipamento);
     }
 
     @Override
