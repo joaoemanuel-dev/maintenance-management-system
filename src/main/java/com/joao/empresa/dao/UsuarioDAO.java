@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAO {
 
@@ -75,6 +77,57 @@ public class UsuarioDAO {
             throw new RuntimeException("Erro ao buscar usuário", e);
         }
         return null;
+    }
+
+    public List<Usuario> listar() {
+
+        String sql = "SELECT * FROM usuario"; // o que seria executado no workbench
+
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql); // vai guardando os pedaços de SQL
+             ResultSet rs = stmt.executeQuery()) { // resultado da consulta pq ja consulta de uma vez para listar
+
+            // Enquanto existir próxima linha no resultado
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String email = rs.getString("email");
+                String senha = rs.getString("senha");
+
+                Usuario.TipoUsuario tipo =
+                        Usuario.TipoUsuario.valueOf(rs.getString("tipo_usuario"));
+
+                // vou instanciar os objetos 'Usuario' de acordo com cada tipo e joga tudo na lista
+                Usuario usuario;
+
+                switch (tipo) {
+                    case ADMINISTRADOR:
+                        usuario = new Administrador(id, nome, email, senha, "TI");
+                        break;
+                    case TECNICO:
+                        String especialidade = rs.getString("especialidade");
+                        usuario = new Tecnico(id, nome, email, senha, especialidade);
+                        break;
+                    case GESTOR:
+                        String areaResponsavel = rs.getString("area_responsavel");
+                        usuario = new Gestor(id, nome, email, senha, areaResponsavel);
+                        break;
+                    default:
+                        throw new RuntimeException("Tipo inválido");
+                }
+
+                // adiciona na lista
+                usuarios.add(usuario);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar usuários", e);
+        }
+
+        return usuarios;
     }
 
 }
