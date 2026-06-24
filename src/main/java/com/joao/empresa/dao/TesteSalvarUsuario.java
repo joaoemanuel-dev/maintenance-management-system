@@ -3,7 +3,7 @@ package com.joao.empresa.dao;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
 
-public class TesteUsuarioDAO {
+public class TesteSalvarUsuario {
     public static void main(String[] args) {
 
         Usuario usuario = new Tecnico(
