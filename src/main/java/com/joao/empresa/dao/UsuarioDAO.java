@@ -1,10 +1,11 @@
 package com.joao.empresa.dao;
 
-import com.joao.empresa.model.Usuario;
+import com.joao.empresa.model.*;
 import com.joao.empresa.database.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UsuarioDAO {
@@ -31,4 +32,49 @@ public class UsuarioDAO {
             throw new RuntimeException("Erro ao salvar usuário", e);
         }
     }
+
+    public Usuario buscarPorId(int id) {
+
+        // isso é como que eu pesquisaria no MySQL e o id vem do parâmetro
+        String sql = "SELECT * FROM usuario WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) { // esse objeto que coloca o valor no sql
+
+            // Substitui o ? pelo id
+            stmt.setInt(1, id);
+
+            // Executa SELECT
+            ResultSet rs = stmt.executeQuery();
+
+            // Se encontrou resultado (o primeiro é o cabeçalho, vem se tem tupla depois)
+            if (rs.next()) {
+
+                String nome = rs.getString("nome"); // pego o valor da coluna e salva aqui
+                String email = rs.getString("email");
+                String senha = rs.getString("senha");
+                String especialidade = rs.getString("especialidade");
+                String areaResponavel = rs.getString("area_responsavel");
+
+                // Converte String do banco → enum
+                Usuario.TipoUsuario tipo =
+                        Usuario.TipoUsuario.valueOf(rs.getString("tipo_usuario"));
+
+                switch (tipo) { // Aqui eu crio o objeto com base nos valores que busquei no banco
+                    case ADMINISTRADOR:
+                        return new Administrador(id, nome, email, senha, "TI");
+                    case TECNICO:
+                        return new Tecnico(id, nome, email, senha, especialidade);
+                    case GESTOR:
+                        return new Gestor(id, nome, email, senha, areaResponavel);
+                    default:
+                        throw new RuntimeException("Tipo de usuário inválido");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar usuário", e);
+        }
+        return null;
+    }
+
 }
