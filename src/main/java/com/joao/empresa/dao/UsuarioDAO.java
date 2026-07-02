@@ -14,6 +14,7 @@ public class UsuarioDAO {
 
     public void salvar(Usuario usuario) { // método que vai salvar um usuário no banco
 
+        // código sql que vai receber os parâmetros com PreparedStatement
         String sql = "INSERT INTO usuario (nome, email, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
 
         // tudo aqui será fechado automaticamente
