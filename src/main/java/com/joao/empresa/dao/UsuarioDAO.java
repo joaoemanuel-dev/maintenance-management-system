@@ -19,7 +19,7 @@ public class UsuarioDAO {
 
         // tudo aqui será fechado automaticamente
         try (Connection conn = ConnectionFactory.getConnection(); // cria a conexão com o bd
-             PreparedStatement stmt = conn.prepareStatement(sql)) { // serve para passar os valores por parâmetro para o SQL
+             PreparedStatement stmt = conn.prepareStatement(sql)) { // esse objeto que coloca o valor no “?” SQL.
 
             // esse objeto vai guardando os parâmetros e as informações, depois executa tudo organizado no SQL
             stmt.setString(1, usuario.getNome());
@@ -129,6 +129,35 @@ public class UsuarioDAO {
         }
 
         return usuarios;
+    }
+
+    public void atualizar(Usuario usuario) {
+
+        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, tipo_usuario = ?, especialidade = ? WHERE id = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, usuario.getSenha());
+            stmt.setString(4, usuario.getTipoUsuario().name()); // pego o nome do enum
+
+            if (usuario instanceof Tecnico) { // usuario é uma instância de Tecnico, eu coloco a especialidade
+                stmt.setString(5, ((Tecnico) usuario).getEspecialidade());
+            } else {
+                stmt.setString(5, null);
+            }
+
+            stmt.setInt(6, usuario.getId());
+
+            stmt.executeUpdate(); // preencho os parâmetros do SQL e vai pro banco
+
+            System.out.println("Usuário atualizado!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar usuário", e);
+        }
     }
 
 }
