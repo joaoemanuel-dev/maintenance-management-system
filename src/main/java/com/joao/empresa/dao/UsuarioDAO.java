@@ -160,4 +160,22 @@ public class UsuarioDAO {
         }
     }
 
+    public void deletar(int id){
+
+        String sql = "DELETE FROM usuario WHERE id = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+
+            System.out.println("Usuário deletado!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar usuário", e);
+        }
+    }
+
 }
