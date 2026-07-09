@@ -64,8 +64,8 @@ public abstract class Usuario extends Entidade{
         return tipo;
     }
 
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipo = tipoUsuario;
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
     }
 
     public void atualizarDados(Usuario alterado){  // regra de negócio do próprio objeto

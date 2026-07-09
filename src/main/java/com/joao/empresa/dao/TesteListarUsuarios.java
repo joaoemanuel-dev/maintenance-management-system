@@ -21,7 +21,7 @@ public class TesteListarUsuarios {
                 System.out.println("ID: " + u.getId());
                 System.out.println("Nome: " + u.getNome());
                 System.out.println("Email: " + u.getEmail());
-                System.out.println("Tipo: " + u.getTipoUsuario());
+                System.out.println("Tipo: " + u.getTipo());
             }
         }
     }

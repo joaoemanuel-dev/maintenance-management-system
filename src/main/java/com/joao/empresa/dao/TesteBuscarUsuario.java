@@ -12,7 +12,7 @@ public class TesteBuscarUsuario {
         if (usuario != null) {
             System.out.println("Nome: " + usuario.getNome());
             System.out.println("Email: " + usuario.getEmail());
-            System.out.println("Tipo: " + usuario.getTipoUsuario());
+            System.out.println("Tipo: " + usuario.getTipo());
         } else {
             System.out.println("Usuário não encontrado");
         }

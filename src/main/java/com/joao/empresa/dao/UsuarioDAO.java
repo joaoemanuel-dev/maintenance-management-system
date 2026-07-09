@@ -25,7 +25,7 @@ public class UsuarioDAO {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
-            stmt.setString(4, usuario.getTipoUsuario().name()); // enum convertido para String
+            stmt.setString(4, usuario.getTipo().name()); // enum convertido para String
 
             stmt.executeUpdate(); // executa o insert no banco
 
@@ -141,7 +141,7 @@ public class UsuarioDAO {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
-            stmt.setString(4, usuario.getTipoUsuario().name()); // pego o nome do enum
+            stmt.setString(4, usuario.getTipo().name()); // pego o nome do enum
 
             if (usuario instanceof Tecnico) { // usuario é uma instância de Tecnico, eu coloco a especialidade
                 stmt.setString(5, ((Tecnico) usuario).getEspecialidade());
