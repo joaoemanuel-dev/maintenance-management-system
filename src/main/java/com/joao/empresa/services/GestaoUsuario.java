@@ -19,11 +19,8 @@ public class GestaoUsuario {
         return usuario;
     }
 
-    public void cadastrarUsuario(Usuario usr){
-        if(buscarPorIdSemExcecao(usr.getId()) != null){
-            throw new UsuarioJaCadastradoException("Já existe um usuário cadastrado com o ID: " + usr.getId());
-        }
-        usuarios.add(usr);
+    public void cadastrarUsuario(Usuario usuario){
+        usuarioDAO.salvar(usuario);
     }
 
     public Set<Usuario> listarUsuarios() {
