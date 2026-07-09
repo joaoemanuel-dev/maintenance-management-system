@@ -19,13 +19,6 @@ public class GestaoUsuario {
         return usuario;
     }
 
-    private Usuario buscarPorIdSemExcecao(int id) {
-        return usuarios.stream()
-                .filter(usr -> usr.getId() == id)
-                .findFirst()
-                .orElse(null);
-    }
-
     public void cadastrarUsuario(Usuario usr){
         if(buscarPorIdSemExcecao(usr.getId()) != null){
             throw new UsuarioJaCadastradoException("Já existe um usuário cadastrado com o ID: " + usr.getId());
