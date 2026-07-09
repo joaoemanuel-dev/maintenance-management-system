@@ -23,8 +23,8 @@ public class GestaoUsuario {
         usuarioDAO.salvar(usuario);
     }
 
-    public Set<Usuario> listarUsuarios() {
-        return Collections.unmodifiableSet(usuarios);
+    public List<Usuario> listarUsuarios() {
+        return usuarioDAO.listar();
     }
 
     public void atualizarUsuario(Usuario alterado){
