@@ -1,7 +1,7 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.dao.UsuarioDAO;
-import com.joao.empresa.model.Usuario;
+import com.joao.empresa.model.*;
 import com.joao.empresa.exceptions.*;
 import java.util.*;
 
@@ -27,11 +27,14 @@ public class GestaoUsuario {
         return usuarioDAO.listar();
     }
 
-    public void atualizarUsuario(Usuario alterado){
-        Usuario existente = buscarPorId(alterado.getId()); // aqui já lança exceção
+    public void atualizarUsuario(Usuario alterado) {
+
+        Usuario existente = buscarPorId(alterado.getId());
 
         existente.atualizarDados(alterado);
         existente.atualizarEspecifico(alterado);
+
+        usuarioDAO.atualizar(existente);
     }
 
     public void removerUsuario(int id){
