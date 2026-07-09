@@ -37,9 +37,11 @@ public class GestaoUsuario {
         usuarioDAO.atualizar(existente);
     }
 
-    public void removerUsuario(int id){
-        Usuario usr = buscarPorId(id); // aqui lança exceção
-        usuarios.remove(usr);
+    public void removerUsuario(int id) {
+
+        buscarPorId(id); // garante que existe, se n existir já lança a exceção
+
+        usuarioDAO.deletar(id);
     }
 
 }
