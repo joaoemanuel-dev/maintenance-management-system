@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.dao.UsuarioDAO;
 import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Usuario;
@@ -7,7 +8,7 @@ import java.util.*;
 
 public class GestaoUsuario {
 
-    private Set<Usuario> usuarios = new HashSet<>();
+    private UsuarioDAO usuarioDAO = new UsuarioDAO(); // poder mexer no banco daqui mesmo
 
     public Usuario buscarPorId(int id){
         return usuarios.stream()
