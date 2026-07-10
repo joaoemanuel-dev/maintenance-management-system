@@ -270,37 +270,86 @@ public class UsuarioDAO {
             }
 
         } catch (SQLException e) {
-                throw new RuntimeException("Erro ao listar usuários", e);
+            throw new RuntimeException("Erro ao listar usuários", e);
+        }
 
         return usuarios;
     }
 
+    // Recebe o usuário já alterado, pego as partes e jogo no update pra mudar dentro do banco
     public void atualizar(Usuario usuario) {
 
-        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, tipo_usuario = ?, especialidade = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, tipo_usuario = ? WHERE id = ?";
 
-        try(Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
-            stmt.setString(4, usuario.getTipo().name()); // pego o nome do enum
+            stmt.setString(4, usuario.getTipo().name());
+            stmt.setInt(5, usuario.getId());
 
-            if (usuario instanceof Tecnico) { // usuario é uma instância de Tecnico, eu coloco a especialidade
-                stmt.setString(5, ((Tecnico) usuario).getEspecialidade());
-            } else {
-                stmt.setString(5, null);
-            }
+            stmt.executeUpdate();
 
-            stmt.setInt(6, usuario.getId());
-
-            stmt.executeUpdate(); // preencho os parâmetros do SQL e vai pro banco
+            // Depois que mudar na tabela pai usuario, muda os específicos na tabela filha
+            atualizarDadosEspecificos(usuario);
 
             System.out.println("Usuário atualizado!");
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar usuário", e);
+        }
+    }
+
+    private void atualizarDadosEspecificos(Usuario usuario) {
+
+        if (usuario instanceof Tecnico tecnico) {
+            String sql = "UPDATE tecnico SET especialidade = ? WHERE usuario_id = ?";
+
+            try (Connection conn = ConnectionFactory.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setString(1, tecnico.getEspecialidade());
+                stmt.setInt(2, tecnico.getId());
+
+                stmt.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao atualizar técnico", e);
+            }
+        }
+
+        if (usuario instanceof Gestor gestor) {
+            String sql = "UPDATE gestor SET area_responsavel = ? WHERE usuario_id = ?";
+
+            try (Connection conn = ConnectionFactory.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setString(1, gestor.getAreaResponsavel());
+                stmt.setInt(2, gestor.getId());
+
+                stmt.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao atualizar gestor", e);
+            }
+        }
+
+        if (usuario instanceof Administrador administrador) {
+            String sql = "UPDATE administrador SET departamento = ? WHERE usuario_id = ?";
+
+            try (Connection conn = ConnectionFactory.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setString(1, administrador.getDepartamento());
+                stmt.setInt(2, administrador.getId());
+
+                stmt.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao atualizar administrador", e);
+            }
         }
     }
 
@@ -321,5 +370,4 @@ public class UsuarioDAO {
             throw new RuntimeException("Erro ao deletar usuário", e);
         }
     }
-
 }
