@@ -111,6 +111,7 @@ public class UsuarioDAO {
             ResultSet rs = stmt.executeQuery();
 
             // Se encontrou resultado (o primeiro é o cabeçalho, vem se tem tupla depois)
+            // a ideia é criar o objeto com os dados que eu busquei na tabela
             if (rs.next()) {
 
                 String nome = rs.getString("nome"); // pego o valor da coluna e salva aqui
@@ -123,6 +124,8 @@ public class UsuarioDAO {
                                 rs.getString("tipo_usuario")
                         );
 
+                // aí com base no tipo de usuário, eu passo os atributos que já tem de usuário
+                // e ele cria o objeto específico já na função. Pq o id é o mesmo
                 switch (tipo) {
                     case TECNICO:
                         return buscarTecnico(id, nome, email, senha);
@@ -154,7 +157,7 @@ public class UsuarioDAO {
 
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            if (rs.next()) { // o primeiro que retornar na consulta (só terá um)
 
                 String especialidade = rs.getString("especialidade");
 
@@ -218,10 +221,12 @@ public class UsuarioDAO {
         return null;
     }
 
+    // ao pé da letra, na verdade, eu não "retorno usuario", eu retorno tecnico, adm e gestor
     public List<Usuario> listar() {
 
-        String sql = "SELECT * FROM usuario"; // o que seria executado no workbench
+        String sql = "SELECT * FROM usuario"; // o que seria executado no workbench, retorna todos os usuarios
 
+        // eu vou buscar todos os dados no banco, instanciar vários objeto e colocá-los nesse lista para retornar
         List<Usuario> usuarios = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -231,7 +236,7 @@ public class UsuarioDAO {
             // Enquanto existir próxima linha no resultado
             while (rs.next()) {
 
-                int id = rs.getInt("id");
+                int id = rs.getInt("id"); // o id já foi gerado, já está lá no banco
                 String nome = rs.getString("nome");
                 String email = rs.getString("email");
                 String senha = rs.getString("senha");
@@ -239,7 +244,8 @@ public class UsuarioDAO {
                 Usuario.TipoUsuario tipo =
                         Usuario.TipoUsuario.valueOf(rs.getString("tipo_usuario"));
 
-                // vou instanciar os objetos 'Usuario' de acordo com cada tipo e joga tudo na lista
+                // vou instanciar de acordo com cada tipo e joga tudo na lista
+                // eu uso usuario só para pegar os atributos gerais, crio objeto com o específico
                 Usuario usuario;
 
                 switch (tipo) {
