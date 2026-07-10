@@ -3,25 +3,23 @@ package com.joao.empresa.dao;
 import com.joao.empresa.model.*;
 import com.joao.empresa.database.ConnectionFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAO {
 
-    public void salvar(Usuario usuario) { // método que vai salvar um usuário no banco
+    // Primeiro eu salvo a superclasse usuário no banco de dados
+    public void salvar(Usuario usuario) {
 
         // código sql que vai receber os parâmetros com PreparedStatement
         String sql = "INSERT INTO usuario (nome, email, senha, tipo_usuario) VALUES (?, ?, ?, ?)";
 
         // tudo aqui será fechado automaticamente
-        try (Connection conn = ConnectionFactory.getConnection(); // cria a conexão com o bd
-             PreparedStatement stmt = conn.prepareStatement(sql)) { // esse objeto que coloca o valor no “?” SQL.
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // esse objeto que coloca o valor no ? do sql // salva as chaves primárias geradas no banco
 
-            // esse objeto vai guardando os parâmetros e as informações, depois executa tudo organizado no SQL
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
@@ -29,10 +27,71 @@ public class UsuarioDAO {
 
             stmt.executeUpdate(); // executa o insert no banco
 
+            ResultSet rs = stmt.getGeneratedKeys(); // recupero as chaves primárias
+
+            if (rs.next()) {
+                int idGerado = rs.getInt(1); // pega o id gerado e joga na especialização
+                salvarDadosEspecificos(usuario, idGerado);
+            }
+
             System.out.println("Usuário salvo com sucesso!");
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar usuário", e);
+        }
+    }
+
+    // Depois eu salvo as subclasses com seus dados específicos no banco de dados,
+    // com chaves primárias fazendo referência ao id do usuario pai
+    private void salvarDadosEspecificos(Usuario usuario, int idGerado) {
+
+        if (usuario instanceof Tecnico tecnico) { // se usuario for instância de tecnico
+            String sql = "INSERT INTO tecnico (usuario_id, especialidade) VALUES (?, ?)";
+
+            try (Connection conn = ConnectionFactory.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setInt(1, idGerado);
+                stmt.setString(2, tecnico.getEspecialidade());
+
+                stmt.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao salvar técnico", e);
+            }
+        }
+
+        if (usuario instanceof Gestor gestor) {
+            String sql = "INSERT INTO gestor (usuario_id, area_responsavel) VALUES (?, ?)";
+
+            try (Connection conn = ConnectionFactory.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setInt(1, idGerado);
+                stmt.setString(2, gestor.getAreaResponsavel());
+
+                stmt.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao salvar gestor", e);
+            }
+        }
+
+        if (usuario instanceof Administrador administrador) {
+            String sql = "INSERT INTO administrador (usuario_id, nivel_acesso, departamento) VALUES (?, ?, ?)";
+
+            try (Connection conn = ConnectionFactory.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setInt(1, idGerado);
+                stmt.setString(2, administrador.getNivelAcesso().name());
+                stmt.setString(3, administrador.getDepartamento());
+
+                stmt.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao salvar administrador", e);
+            }
         }
     }
 
