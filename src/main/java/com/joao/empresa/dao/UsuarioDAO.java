@@ -95,6 +95,7 @@ public class UsuarioDAO {
         }
     }
 
+    // primeiro busca na tabela usuario, depois que achar busca na tabela específica com o mesmo id
     public Usuario buscarPorId(int id) {
 
         // isso é como que eu pesquisaria no MySQL e o id vem do parâmetro
@@ -115,20 +116,23 @@ public class UsuarioDAO {
                 String nome = rs.getString("nome"); // pego o valor da coluna e salva aqui
                 String email = rs.getString("email");
                 String senha = rs.getString("senha");
-                String especialidade = rs.getString("especialidade");
-                String areaResponavel = rs.getString("area_responsavel");
 
                 // Converte String do banco → enum
                 Usuario.TipoUsuario tipo =
-                        Usuario.TipoUsuario.valueOf(rs.getString("tipo_usuario"));
+                        Usuario.TipoUsuario.valueOf(
+                                rs.getString("tipo_usuario")
+                        );
 
-                switch (tipo) { // Aqui eu crio o objeto com base nos valores que busquei no banco
-                    case ADMINISTRADOR:
-                        return new Administrador(id, nome, email, senha, "TI");
+                switch (tipo) {
                     case TECNICO:
-                        return new Tecnico(id, nome, email, senha, especialidade);
+                        return buscarTecnico(id, nome, email, senha);
+
                     case GESTOR:
-                        return new Gestor(id, nome, email, senha, areaResponavel);
+                        return buscarGestor(id, nome, email, senha);
+
+                    case ADMINISTRADOR:
+                        return buscarAdministrador(id, nome, email, senha);
+
                     default:
                         throw new RuntimeException("Tipo de usuário inválido");
                 }
@@ -136,6 +140,81 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar usuário", e);
         }
+        return null;
+    }
+
+    private Tecnico buscarTecnico(int id, String nome, String email, String senha) {
+
+        String sql = "SELECT * FROM tecnico WHERE usuario_id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                String especialidade = rs.getString("especialidade");
+
+                return new Tecnico(id, nome, email, senha, especialidade);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar técnico", e);
+        }
+
+        return null;
+    }
+
+    private Gestor buscarGestor(int id, String nome, String email, String senha) {
+
+        String sql = "SELECT * FROM gestor WHERE usuario_id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                String areaResponsavel = rs.getString("area_responsavel");
+
+                return new Gestor(id, nome, email, senha, areaResponsavel);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar gestor", e);
+        }
+
+        return null;
+    }
+
+    private Administrador buscarAdministrador(int id, String nome, String email, String senha) {
+
+        String sql = "SELECT * FROM administrador WHERE usuario_id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                String departamento = rs.getString("departamento");
+
+                return new Administrador(id, nome, email, senha, departamento);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar administrador", e);
+        }
+
         return null;
     }
 
