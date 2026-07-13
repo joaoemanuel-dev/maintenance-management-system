@@ -3,10 +3,7 @@ package com.joao.empresa.dao;
 import com.joao.empresa.database.ConnectionFactory;
 import com.joao.empresa.model.Equipamento;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class EquipamentoDAO {
 
@@ -27,6 +24,33 @@ public class EquipamentoDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar equipamento", e);
+        }
+
+    }
+
+    public Equipamento buscarPorId(int id) {
+
+        String sql = "SELECT * FROM equipamento WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+
+                String nome = rs.getString("nome");
+                String codigoPatrimonio = rs.getString("codigo_patrimonio");
+                Date dataAquisicao = rs.getDate("data_aquisicao");
+
+                return new Equipamento(id, nome, codigoPatrimonio, dataAquisicao.toLocalDate());
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar equipamento", e);
         }
 
     }
