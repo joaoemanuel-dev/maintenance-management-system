@@ -29,7 +29,7 @@ public class EquipamentoDAO {
             throw new RuntimeException("Erro ao salvar equipamento", e);
         }
 
-
     }
+
 
 }
