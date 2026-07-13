@@ -53,7 +53,10 @@ public class EquipamentoDAO {
             throw new RuntimeException("Erro ao buscar equipamento", e);
         }
 
+        return null;
     }
+
+
 
 
 }
