@@ -34,14 +34,6 @@ public class GestaoEquipamento {
         return equipamento;
     }
 
-    //método interno para usar sem ter que lançar exceção
-    private Equipamento buscarPorIdSemExcecao(int id){
-        return equipamentos.stream().
-                filter(eqp -> eqp.getId() == id).
-                findFirst().
-                orElse(null);
-    }
-
     public void cadastrarEquipamento(Equipamento eqp){
         if(buscarPorIdSemExcecao(eqp.getId()) != null){
             throw new EquipamentoJaCadastradoException("Já existe um equipamento com o id: " + eqp.getId());
