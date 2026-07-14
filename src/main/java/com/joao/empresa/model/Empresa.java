@@ -31,12 +31,13 @@ public class Empresa extends Entidade {
 
     private Set<Equipamento> equipamentos = new HashSet<>();
 
-    public Empresa(int id, String nome, String cnpj, String endereco, String segmento){
+    public Empresa(int id, String nome, String cnpj, String endereco, String segmento, Status status){
         super(id);
         this.nome = nome;
         this.cnpj = cnpj;
         this.endereco = endereco;
         this.segmento = segmento;
+        this.status = status;
     }
 
     public String getNome() {
