@@ -40,18 +40,9 @@ public class GestaoEquipamento {
         return equipamentoDAO.listar();
     }
 
-    public void atualizarEquipamento(Equipamento alterado){
-        Equipamento existente = buscarPorId(alterado.getId());
-
-        if (alterado.getNome() != null) {
-            existente.setNome(alterado.getNome());
-        }
-        if (alterado.getCodigoPatrimonio() != null) {
-            existente.setCodigoPatrimonio(alterado.getCodigoPatrimonio());
-        }
-        if (alterado.getDataAquisicao() != null) {
-            existente.setDataAquisicao(alterado.getDataAquisicao());
-        }
+    public void atualizarEquipamento(Equipamento alterado) {
+        buscarPorId(alterado.getId());
+        equipamentoDAO.atualizar(alterado);
     }
 
     public void excluirEquipamento(int id) { //só exclui se não tiver manutenção aberta com ele
