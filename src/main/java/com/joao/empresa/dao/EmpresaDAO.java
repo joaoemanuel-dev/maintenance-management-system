@@ -2,10 +2,11 @@ package com.joao.empresa.dao;
 
 import com.joao.empresa.database.ConnectionFactory;
 import com.joao.empresa.model.Empresa;
+import com.joao.empresa.model.Equipamento;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmpresaDAO {
 
@@ -29,6 +30,81 @@ public class EmpresaDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar empresa", e);
         }
+    }
+
+    public Empresa buscarPorId(int id) {
+
+        String sql = "SELECT * FROM empresa WHERE idempresa = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) { // pra fechar esse result set automaticamente depois
+
+                if (rs.next()) {
+
+                    String nome = rs.getString("nome");
+                    String cnpj = rs.getString("cnpj");
+                    String endereco = rs.getString("endereco");
+                    String segmento = rs.getString("segmento");
+
+                    Empresa.Status status = Empresa.Status.valueOf(
+                            rs.getString("status")
+                    );
+
+                    Empresa empresa = new Empresa(id, nome, cnpj, endereco, segmento, status);
+
+                    Set<Equipamento> equipamentos = buscarEquipamentosDaEmpresa(id);
+
+                    for (Equipamento equipamento : equipamentos) {
+                        empresa.adicionarEquipamento(equipamento);
+                    }
+
+                    return empresa;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar empresa", e);
+        }
+
+        return null;
+    }
+
+    // Busca todos os equipamentos que pertencem à empresa.
+    private Set<Equipamento> buscarEquipamentosDaEmpresa(int empresaId) {
+
+        String sql = "SELECT * FROM equipamento WHERE fk_idempresa = ?";
+
+        Set<Equipamento> equipamentos = new HashSet<>(); // não deixa duplicado
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, empresaId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+
+                    int id = rs.getInt("id");
+                    String nome = rs.getString("nome");
+                    String codigoPatrimonio = rs.getString("codigo_patrimonio");
+                    Date dataAquisicao = rs.getDate("data_aquisicao");
+
+                    Equipamento equipamento = new Equipamento(id, nome, codigoPatrimonio, dataAquisicao.toLocalDate());
+
+                    equipamentos.add(equipamento);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar equipamentos da empresa", e);
+        }
+
+        return equipamentos;
     }
 
 
