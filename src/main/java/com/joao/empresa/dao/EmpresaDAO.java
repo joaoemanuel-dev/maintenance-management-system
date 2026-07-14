@@ -177,4 +177,22 @@ public class EmpresaDAO {
         }
     }
 
+    public void deletar(int id) {
+
+        String sql = "DELETE FROM empresa WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+
+            System.out.println("Empresa deletada!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar empresa", e);
+        }
+    }
+
 }
