@@ -1,6 +1,6 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.dao.UsuarioDAO;
+import com.joao.empresa.dao.EquipamentoDAO;
 import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
 import com.joao.empresa.exceptions.EquipamentoNaManutencaoException;
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class GestaoEquipamento {
 
-    private UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private EquipamentoDAO equipamentoDAO = new EquipamentoDAO();
 
     private GestaoManutencao gestaoManutencao;
 
@@ -25,11 +25,13 @@ public class GestaoEquipamento {
     }
 
     public Equipamento buscarPorId(int id){
-        return equipamentos.stream().
-                filter(eqp -> eqp.getId() == id).
-                findFirst().
-                orElseThrow(() ->
-                        new EquipamentoNaoEncontradoException("Equipamento com o ID: " + id + "não encontrado."));
+        Equipamento equipamento = equipamentoDAO.buscarPorId(id);
+
+        if(equipamento == null){
+            throw new EquipamentoNaoEncontradoException("Equipamento com ID " + id + " não encontrado.");
+        }
+
+        return equipamento;
     }
 
     //método interno para usar sem ter que lançar exceção
