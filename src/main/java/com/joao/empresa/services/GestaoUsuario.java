@@ -13,7 +13,7 @@ public class GestaoUsuario {
         Usuario usuario = usuarioDAO.buscarPorId(id);
 
         if(usuario == null){
-            throw new UsuarioNaoEncontradoException("Usuario com ID \" + id + \" não encontrado.");
+            throw new UsuarioNaoEncontradoException("Usuario com ID + id + não encontrado.");
         }
 
         return usuario;
