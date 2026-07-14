@@ -9,9 +9,13 @@ import java.util.List;
 
 public class EquipamentoDAO {
 
-    public void salvar(Equipamento equipamento){
+    public void salvar(Equipamento equipamento, int idEmpresa){
 
-        String sql = "INSERT INTO equipamento (nome, codigo_patrimonio, data_aquisicao) values (?, ?, ?)";
+        String sql = """
+            INSERT INTO equipamento
+            (nome, codigo_patrimonio, data_aquisicao, fk_idempresa)
+            VALUES (?, ?, ?, ?)
+            """;
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -19,6 +23,7 @@ public class EquipamentoDAO {
             stmt.setString(1, equipamento.getNome());
             stmt.setString(2, equipamento.getCodigoPatrimonio());
             stmt.setDate(3, Date.valueOf(equipamento.getDataAquisicao()));
+            stmt.setInt(4, idEmpresa);
 
             stmt.executeUpdate();
 
