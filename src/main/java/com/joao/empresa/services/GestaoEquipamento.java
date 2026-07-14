@@ -1,12 +1,10 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.dao.EquipamentoDAO;
-import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
 import com.joao.empresa.exceptions.EquipamentoNaManutencaoException;
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.model.Equipamento;
-import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 public class GestaoEquipamento {
 
@@ -38,8 +36,8 @@ public class GestaoEquipamento {
         equipamentoDAO.salvar(equipamento);
     }
 
-    public Set<Equipamento> listarEquipamentos(){
-        return Collections.unmodifiableSet(equipamentos); // devolve uma visão somente-leitura do conjunto, impedindo alterações externas
+    public List<Equipamento> listarEquipamentos() {
+        return equipamentoDAO.listar();
     }
 
     public void atualizarEquipamento(Equipamento alterado){
