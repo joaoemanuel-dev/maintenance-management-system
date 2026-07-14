@@ -107,7 +107,26 @@ public class EquipamentoDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar equipamento", e);
         }
+
     }
 
+    public void deletar(int id){
+
+        String sql = "DELETE FROM equipamento WHERE id = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            stmt.executeUpdate();
+
+            System.out.println("Equipamento deletado!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar equipamento", e);
+        }
+
+    }
 
 }
