@@ -4,6 +4,8 @@ import com.joao.empresa.database.ConnectionFactory;
 import com.joao.empresa.model.Equipamento;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EquipamentoDAO {
 
@@ -56,6 +58,34 @@ public class EquipamentoDAO {
         return null;
     }
 
+    // busco os dados e crio os objetos. À cada objeto criado, eu o salvo na lista.
+    public List<Equipamento> listar(){
+
+        String sql = "SELECT * FROM equipamento";
+
+        List<Equipamento> equipamentos = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()){
+
+            while (rs.next()){
+
+                int id = rs.getInt("id"); // o id já foi gerado, já está lá no banco
+                String nome = rs.getString("nome");
+                String codigoPatrimonio = rs.getString("codigo_patrimonio");
+                Date dataAquisicao = rs.getDate("data_aquisicao");
+
+                equipamentos.add(new Equipamento(id, nome, codigoPatrimonio, dataAquisicao.toLocalDate()));
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar equipamentos", e);
+        }
+
+        return equipamentos;
+    }
 
 
 
