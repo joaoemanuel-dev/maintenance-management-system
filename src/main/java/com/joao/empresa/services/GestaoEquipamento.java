@@ -34,11 +34,8 @@ public class GestaoEquipamento {
         return equipamento;
     }
 
-    public void cadastrarEquipamento(Equipamento eqp){
-        if(buscarPorIdSemExcecao(eqp.getId()) != null){
-            throw new EquipamentoJaCadastradoException("Já existe um equipamento com o id: " + eqp.getId());
-        }
-        equipamentos.add(eqp);
+    public void cadastrarEquipamento(Equipamento equipamento){
+        equipamentoDAO.salvar(equipamento);
     }
 
     public Set<Equipamento> listarEquipamentos(){
