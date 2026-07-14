@@ -47,14 +47,14 @@ public class GestaoEquipamento {
 
     public void excluirEquipamento(int id) { //só exclui se não tiver manutenção aberta com ele
 
-        Equipamento existente = buscarPorId(id); // vejo se existe, caso contrário já lança a exceção
+        buscarPorId(id); // vejo se existe, caso contrário já lança a exceção
 
         if (gestaoManutencao.existeManutencaoDoEquipamento(id)) {
             throw new EquipamentoNaManutencaoException(
                     "Não é possível excluir. Equipamento possui manutenção associada.");
         }
 
-        equipamentos.remove(existente);
+        equipamentoDAO.deletar(id);
     }
 
 }
