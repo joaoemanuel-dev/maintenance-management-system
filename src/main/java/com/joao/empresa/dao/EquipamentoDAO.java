@@ -87,6 +87,27 @@ public class EquipamentoDAO {
         return equipamentos;
     }
 
+    // Recebe o equipamento já alterado, pego as partes e jogo no update pra mudar dentro do banco
+    public void atualizar(Equipamento equipamento){
+
+        String sql = "UPDATE equipamento SET nome = ?, codigo_patrimonio = ?, data_aquisicao = ? WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, equipamento.getNome());
+            stmt.setString(2, equipamento.getCodigoPatrimonio());
+            stmt.setDate(3, Date.valueOf(equipamento.getDataAquisicao()));
+            stmt.setInt(4, equipamento.getId());
+
+            stmt.executeUpdate();
+
+            System.out.println("Equipamento atualizado!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar equipamento", e);
+        }
+    }
 
 
 }
