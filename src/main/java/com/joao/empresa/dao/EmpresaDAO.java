@@ -5,7 +5,9 @@ import com.joao.empresa.model.Empresa;
 import com.joao.empresa.model.Equipamento;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class EmpresaDAO {
@@ -105,6 +107,46 @@ public class EmpresaDAO {
         }
 
         return equipamentos;
+    }
+
+    public List<Empresa> listar() {
+
+        String sql = "SELECT * FROM empresa";
+
+        List<Empresa> empresas = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String cnpj = rs.getString("cnpj");
+                String endereco = rs.getString("endereco");
+                String segmento = rs.getString("segmento");
+
+                Empresa.Status status = Empresa.Status.valueOf(
+                        rs.getString("status")
+                );
+
+                Empresa empresa = new Empresa(id, nome, cnpj, endereco, segmento, status);
+
+                Set<Equipamento> equipamentos = buscarEquipamentosDaEmpresa(id);
+
+                for (Equipamento equipamento : equipamentos) {
+                    empresa.adicionarEquipamento(equipamento);
+                }
+
+                empresas.add(empresa);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar empresas", e);
+        }
+
+        return empresas;
     }
 
 
