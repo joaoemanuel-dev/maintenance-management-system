@@ -149,6 +149,32 @@ public class EmpresaDAO {
         return empresas;
     }
 
+    public void atualizar(Empresa empresa) {
 
+        // 3 aspas é só pra poder pular linha na string
+        String sql = """ 
+                UPDATE empresa
+                SET nome = ?, cnpj = ?, endereco = ?, segmento = ?, status = ?
+                WHERE id = ?
+                """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, empresa.getNome());
+            stmt.setString(2, empresa.getCnpj());
+            stmt.setString(3, empresa.getEndereco());
+            stmt.setString(4, empresa.getSegmento());
+            stmt.setString(5, empresa.getStatus().name());
+            stmt.setInt(6, empresa.getId());
+
+            stmt.executeUpdate();
+
+            System.out.println("Empresa atualizada!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar empresa", e);
+        }
+    }
 
 }
