@@ -32,8 +32,8 @@ public class GestaoEquipamento {
         return equipamento;
     }
 
-    public void cadastrarEquipamento(Equipamento equipamento){
-        equipamentoDAO.salvar(equipamento);
+    public void cadastrarEquipamento(Equipamento equipamento, int idEmpresaDona){
+        equipamentoDAO.salvar(equipamento, idEmpresaDona);
     }
 
     public List<Equipamento> listarEquipamentos() {
