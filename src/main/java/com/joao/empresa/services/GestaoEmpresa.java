@@ -1,40 +1,24 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.dao.UsuarioDAO;
+import com.joao.empresa.dao.EmpresaDAO;
+import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import com.joao.empresa.model.Empresa;
 import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
-import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import java.util.Collections;
 import java.util.Set;
 
 public class GestaoEmpresa {
 
-    UsuarioDAO usuarioDAO = new UsuarioDAO();
+    EmpresaDAO empresaDAO = new EmpresaDAO();
 
     public Empresa buscarPorId(int id) {
-        return empresas.stream()
-                .filter(emp -> emp.getId() == id) //filtra as empresas com o id
-                .findFirst() // retorna o primeiro do filtro em optional
-                .orElseThrow(() -> // retorna o valor do optional, caso contrário lança automaticamente uma exceção
-                        new EmpresaNaoEncontradaException("Empresa com ID " + id + " não encontrada.")
-                );
-    }
+        Empresa empresa = empresaDAO.buscarPorId(id);
 
-    // PENSAR AQUI QUE PODE DAR NULL POINTER EXCEPTION, AÍ VAI DAR PROBLEMA
+        if(empresa == null){
+            throw new EmpresaNaoEncontradaException("Empresa com ID " + id + " não encontrada.");
+        }
 
-    // Método auxiliar interno que busca sem lançar exceção -> pra quando a ausência é normal e não um erro
-    private Empresa buscarPorIdSemExcecao(int id) {
-        return empresas.stream()
-                .filter(emp -> emp.getId() == id)
-                .findFirst()
-                .orElse(null); // se retorna null é pq não tem empresa com o id buscado
-    }
-
-    //método interno
-    private boolean existeCnpj(String cnpj){
-        return empresas.stream().
-                anyMatch(emp -> emp.getCnpj().equals(cnpj));
-        // retorna true ou false se pelo menos um satisfaz a condição
+        return empresa;
     }
 
     public void cadastrarEmpresa(Empresa emp){
