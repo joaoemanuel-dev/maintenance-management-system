@@ -21,15 +21,8 @@ public class GestaoEmpresa {
         return empresa;
     }
 
-    public void cadastrarEmpresa(Empresa emp){
-        // se o throw for executado, o método para imediatamente
-        if(buscarPorIdSemExcecao(emp.getId()) != null){ // se tiver empresa
-            throw new EmpresaJaCadastradaException("Já existe uma empresa cadastrada com o ID: " + emp.getId());
-        }
-        if(existeCnpj(emp.getCnpj())){
-            throw new EmpresaJaCadastradaException("CNPJ já cadastrado: " + emp.getCnpj());
-        }
-        empresas.add(emp); // se as outras condições forem null ou falsas chega aqui
+    public void cadastrarEmpresa(Empresa empresa){
+        empresaDAO.salvar(empresa);
     }
 
     public Set<Empresa> listarEmpresas(){
