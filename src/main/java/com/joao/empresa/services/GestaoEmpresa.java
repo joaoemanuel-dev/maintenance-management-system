@@ -3,9 +3,7 @@ package com.joao.empresa.services;
 import com.joao.empresa.dao.EmpresaDAO;
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import com.joao.empresa.model.Empresa;
-import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
-import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 public class GestaoEmpresa {
 
@@ -25,8 +23,8 @@ public class GestaoEmpresa {
         empresaDAO.salvar(empresa);
     }
 
-    public Set<Empresa> listarEmpresas(){
-        return Collections.unmodifiableSet(empresas); // retorna uma cópia da lista e não deixa ninguém alterar
+    public List<Empresa> listarEmpresas(){
+        return empresaDAO.listar();
     }
 
     public void atualizarEmpresa(Empresa alterada){
