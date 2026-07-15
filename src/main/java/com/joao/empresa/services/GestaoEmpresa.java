@@ -1,15 +1,15 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.dao.UsuarioDAO;
 import com.joao.empresa.model.Empresa;
 import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class GestaoEmpresa {
 
-    private Set<Empresa> empresas = new HashSet<>();
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     public Empresa buscarPorId(int id) {
         return empresas.stream()
