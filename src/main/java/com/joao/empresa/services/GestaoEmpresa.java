@@ -33,8 +33,8 @@ public class GestaoEmpresa {
     }
 
     public void excluirEmpresa(int id){
-        Empresa emp = buscarPorId(id);
-        empresas.remove(emp);
+        buscarPorId(id);
+        empresaDAO.deletar(id);
     }
 
 }
