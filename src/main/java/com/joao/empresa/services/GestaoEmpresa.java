@@ -28,21 +28,8 @@ public class GestaoEmpresa {
     }
 
     public void atualizarEmpresa(Empresa alterada){
-        Empresa existente = buscarPorId(alterada.getId());
-
-        if(alterada.getNome() != null){
-            existente.setNome(alterada.getNome());
-        }
-        if(alterada.getCnpj() != null){
-            existente.setCnpj(alterada.getCnpj());
-        }
-        if(alterada.getEndereco() != null){
-            existente.setEndereco(alterada.getEndereco());
-        }
-        if(alterada.getSegmento() != null){
-            existente.setSegmento(alterada.getSegmento());
-        }
-
+        buscarPorId(alterada.getId());
+        empresaDAO.atualizar(alterada);
     }
 
     public void excluirEmpresa(int id){
