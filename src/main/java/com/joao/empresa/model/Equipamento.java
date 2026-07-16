@@ -52,6 +52,7 @@ public class Equipamento extends Entidade {
         boolean add = historicoManutencoes.add(manutencao);
     }
 
+    3
     @Override
     public String toString() {
         return "Equipamento{" +
