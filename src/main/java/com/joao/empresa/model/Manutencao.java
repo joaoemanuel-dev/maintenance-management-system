@@ -54,12 +54,13 @@ public class Manutencao extends Entidade {
     private Equipamento equipamento;
     private Status status;
 
-    public Manutencao(int id, TipoManutencao tipoManutencao, String descricao, LocalDate dataInicio,
+    public Manutencao(int id, TipoManutencao tipoManutencao, String descricao, double custo, LocalDate dataInicio,
                       Status status, Equipamento equipamento, Tecnico tecnicoResponsavel) {
         super(id);
         this.tipoManutencao = tipoManutencao;
         this.dataInicio = dataInicio;
         this.descricao = descricao;
+        this.custo = custo;
         this.status = status;
         this.equipamento = equipamento;
         this.tecnicoResponsavel = tecnicoResponsavel;
