@@ -1,14 +1,17 @@
 package com.joao.empresa.dao;
 
 import com.joao.empresa.database.ConnectionFactory;
+import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
+import com.joao.empresa.model.Tecnico;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+
 
 public class ManutencaoDAO {
+
+    private final EquipamentoDAO equipamentoDAO = new EquipamentoDAO();
+    private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     public void salvar(Manutencao manutencao){
 
@@ -39,6 +42,73 @@ public class ManutencaoDAO {
             throw new RuntimeException("Erro ao salvar manutenção", e);
         }
 
+    }
+
+    public Manutencao buscarPorId(int id){
+
+        String sql = "SELECT * FROM manutencao WHERE id_manutencao = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()){
+
+                // à cada tupla (uma manutencao) do banco de dados eu chamo a função. Só vai ter uma pq é id
+                if(rs.next()){
+                    return construirManutencao(rs);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar manutenção", e);
+        }
+
+        return null;
+    }
+
+    // transforma uma linha do banco em um objeto Manutencao
+    private Manutencao construirManutencao(ResultSet rs) throws SQLException {
+
+        int id = rs.getInt("id_manutencao");
+
+        Manutencao.TipoManutencao tipo =
+                Manutencao.TipoManutencao.valueOf(
+                        rs.getString("tipo_manutencao")
+                ); // o JDBC retorna o valor do ENUM como uma String
+
+        String descricao = rs.getString("descricao");
+        double custo = rs.getDouble("custo");
+        Date dataInicio = rs.getDate("data_inicio");
+        Date dataFim = rs.getDate("data_fim");
+
+        Manutencao.Status status =
+                Manutencao.Status.valueOf(
+                        rs.getString("status")
+                );
+
+        int equipamentoId = rs.getInt("fk_idequipamento");
+
+        int tecnicoId = rs.getInt("fk_idtecnico");
+
+        Equipamento equipamento = equipamentoDAO.buscarPorId(equipamentoId);
+
+        Tecnico tecnicoResponsavel = (Tecnico) usuarioDAO.buscarPorId(tecnicoId);
+
+        Manutencao manutencao = new Manutencao(
+                id,
+                tipo,
+                descricao,
+                custo,
+                dataInicio.toLocalDate(),
+                dataFim.toLocalDate(),
+                status,
+                equipamento,
+                tecnicoResponsavel
+        );
+
+        return manutencao;
     }
 
 
