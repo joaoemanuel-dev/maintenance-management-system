@@ -56,13 +56,6 @@ public class GestaoManutencao {
         manutencaoDAO.salvar(manutencao);
     }
 
-    public boolean existeManutencaoDoEquipamento(int idEquipamento) { // me diz se o equipamento tem manuntenção associada
-        return manutencoesAtivas.stream()
-                .anyMatch(m -> m.getEquipamento().getId() == idEquipamento)
-                || manutencoesFinalizadas.stream()
-                .anyMatch(m -> m.getEquipamento().getId() == idEquipamento);
-    }
-
     public Set<Manutencao> listarManutencoesAtivas() {
         return Collections.unmodifiableSet(manutencoesAtivas);
     }
