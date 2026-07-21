@@ -50,15 +50,10 @@ public class GestaoManutencao {
         return manutencao;
     }
 
-
-
-    public void cadastrarManutencao(Manutencao mnt) {
-        if (buscarAtivasPorIdSemExcecao(mnt.getId()) != null ||
-                buscarFinalizadasPorIdSemExcecao(mnt.getId()) != null) {
-            throw new ManutencaoJaCadastradaException(
-                    "Já existe uma manutenção cadastrada com o ID " + mnt.getId());
-        }
-        manutencoesAtivas.add(mnt);
+    // o próprio banco não deixa cadastrar duplicado. Ele lança erro, assim, justamente para não
+    // aparecer aquele erro feio na cara do usuário, a gente trata esse erro sem quebrar o programa
+    public void cadastrarManutencao(Manutencao manutencao) {
+        manutencaoDAO.salvar(manutencao);
     }
 
     public boolean existeManutencaoDoEquipamento(int idEquipamento) { // me diz se o equipamento tem manuntenção associada
