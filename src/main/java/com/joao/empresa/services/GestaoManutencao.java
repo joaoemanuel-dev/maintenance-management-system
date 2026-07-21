@@ -3,6 +3,7 @@ package com.joao.empresa.services;
 import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
+import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 
 import java.util.Collections;
@@ -73,24 +74,9 @@ public class GestaoManutencao {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.CANCELADA);
     }
 
-    public void atualizarManutencao(Manutencao alterada){ // recebo objeto somente com o campos que quero alterar, os demais ficam null
-        Manutencao existente = buscarAtivasPorId(alterada.getId()); //lança exceção
-
-        if(alterada.getTipoManutencao() != null){
-            existente.setTipoManutencao(alterada.getTipoManutencao());
-        }
-        if(alterada.getDataInicio() != null){
-            existente.setDataInicio(alterada.getDataInicio());
-        }
-        if(alterada.getDescricao() != null){
-            existente.setDescricao(alterada.getDescricao());
-        }
-        if(alterada.getTecnicoResponsavel() != null){
-            existente.setTecnicoResponsavel(alterada.getTecnicoResponsavel());
-        }
-        if(alterada.getEquipamento() != null){
-            existente.setEquipamento(alterada.getEquipamento());
-        }
+    public void atualizarManutencao(Manutencao alterada){
+        buscarAtivasPorId(alterada.getId()); //lança exceção
+        manutencaoDAO.atualizar(alterada);
     }
 
     public void cancelarManutencao(int id){ // remove das manutenções ativas
