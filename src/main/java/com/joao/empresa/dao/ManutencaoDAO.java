@@ -259,4 +259,29 @@ public class ManutencaoDAO {
         }
     }
 
+    // exclusão de equipamento verifica se existe manutenção associada
+    public boolean existeManutencaoDoEquipamento(int equipamentoId) {
+
+        // não quero buscar todos os dados, apenas saber se existe
+        String sql = """
+            SELECT 1  
+            FROM manutencao
+            WHERE fk_idequipamento = ?
+            LIMIT 1
+            """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, equipamentoId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); // retorna true se existir
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar manutenções do equipamento", e);
+        }
+    }
+
 }
