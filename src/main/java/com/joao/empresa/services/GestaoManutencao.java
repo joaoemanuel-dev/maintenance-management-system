@@ -7,6 +7,7 @@ import com.joao.empresa.model.Manutencao;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GestaoManutencao {
@@ -56,11 +57,11 @@ public class GestaoManutencao {
         manutencaoDAO.salvar(manutencao);
     }
 
-    public Set<Manutencao> listarManutencoesAtivas() {
+    public List<Manutencao> listarManutencoesAtivas() {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.ANDAMENTO);
     }
 
-    public Set<Manutencao> listarManutencoesConcluidas() {
+    public List<Manutencao> listarManutencoesConcluidas() {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.CONCLUIDA);
     }
 
