@@ -24,7 +24,7 @@ public class GestaoManutencao {
         return manutencao;
     }
 
-    public Manutencao buscarAtivaPorId(int id) {
+    public Manutencao buscarAtivasPorId(int id) {
 
         Manutencao manutencao = manutencaoDAO.buscarPorId(id);
 
@@ -37,37 +37,20 @@ public class GestaoManutencao {
         return manutencao;
     }
 
-    public Manutencao buscarAtivasPorId(int id){
-        return manutencoesAtivas.stream().
-                filter(mnt -> mnt.getId() == id). //só passa os que forem true
-                findFirst(). //retorna o primeiro
-                orElseThrow(() ->
-                        new ManutencaoNaoEncontradaException("Manutenção com ID " + id + " não encontrada.")
-                );
-    }
-
-    private Manutencao buscarAtivasPorIdSemExcecao(int id){
-        return manutencoesAtivas.stream().
-                filter(mnt -> mnt.getId() == id).
-                findFirst().
-                orElse(null);
-    }
-
     public Manutencao buscarFinalizadasPorId(int id){
-        return manutencoesFinalizadas.stream().
-                filter(mnt -> mnt.getId() == id). //só passa os que forem true
-                        findFirst(). //retorna o primeiro
-                        orElseThrow(() ->
-                        new ManutencaoNaoEncontradaException("Manutenção com ID " + id + " não encontrada.")
-                );
+
+        Manutencao manutencao = manutencaoDAO.buscarPorId(id);
+
+        if (manutencao.getStatus() == Manutencao.Status.ANDAMENTO){ // não finalizou, está em andamento
+            throw new ManutencaoNaoEncontradaException(
+                    "Não existe manutenção finalizada com ID " + id + "."
+            );
+        }
+
+        return manutencao;
     }
 
-    private Manutencao buscarFinalizadasPorIdSemExcecao(int id){
-        return manutencoesFinalizadas.stream().
-                filter(mnt -> mnt.getId() == id).
-                findFirst().
-                orElse(null);
-    }
+
 
     public void cadastrarManutencao(Manutencao mnt) {
         if (buscarAtivasPorIdSemExcecao(mnt.getId()) != null ||
