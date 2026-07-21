@@ -24,6 +24,19 @@ public class GestaoManutencao {
         return manutencao;
     }
 
+    public Manutencao buscarAtivaPorId(int id) {
+
+        Manutencao manutencao = manutencaoDAO.buscarPorId(id);
+
+        if (manutencao.getStatus() != Manutencao.Status.ANDAMENTO){ // esta comparando somente com a String retornada
+            throw new ManutencaoNaoEncontradaException(
+                    "Não existe manutenção ativa com ID " + id + "."
+            );
+        }
+
+        return manutencao;
+    }
+
     public Manutencao buscarAtivasPorId(int id){
         return manutencoesAtivas.stream().
                 filter(mnt -> mnt.getId() == id). //só passa os que forem true
