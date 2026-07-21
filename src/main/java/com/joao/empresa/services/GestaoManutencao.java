@@ -57,6 +57,10 @@ public class GestaoManutencao {
         manutencaoDAO.salvar(manutencao);
     }
 
+    public List<Manutencao> listarTodasManutencoes() {
+        return manutencaoDAO.listar();
+    }
+
     public List<Manutencao> listarManutencoesAtivas() {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.ANDAMENTO);
     }
@@ -67,13 +71,6 @@ public class GestaoManutencao {
 
     public List<Manutencao> listarManutencoesCanceladas() {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.CANCELADA);
-    }
-
-    public Set<Manutencao> listarTodasManutencoes() {
-        Set<Manutencao> todas = new LinkedHashSet<>();
-        todas.addAll(manutencoesAtivas);
-        todas.addAll(manutencoesFinalizadas);
-        return Collections.unmodifiableSet(todas);
     }
 
     public void atualizarManutencao(Manutencao alterada){ // recebo objeto somente com o campos que quero alterar, os demais ficam null
