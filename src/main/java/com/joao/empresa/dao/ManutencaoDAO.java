@@ -112,27 +112,6 @@ public class ManutencaoDAO {
         return manutencao;
     }
 
-    public List<Manutencao> listar() {
-
-        String sql = "SELECT * FROM manutencao";
-
-        List<Manutencao> manutencoes = new ArrayList<>();
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                manutencoes.add(construirManutencao(rs));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar manutenções", e);
-        }
-
-        return manutencoes;
-    }
-
     // manutenções associadas a um equipamento
     public List<Manutencao> buscarPorEquipamento(int equipamentoId) {
 
@@ -186,6 +165,52 @@ public class ManutencaoDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar manutenções do técnico", e);
+        }
+
+        return manutencoes;
+    }
+
+    public List<Manutencao> listar() {
+
+        String sql = "SELECT * FROM manutencao";
+
+        List<Manutencao> manutencoes = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                manutencoes.add(construirManutencao(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar manutenções", e);
+        }
+
+        return manutencoes;
+    }
+
+    // listar manuntencoes ativar ou finalizadas ou canceladas
+    public List<Manutencao> listarPorStatus(Manutencao.Status status) {
+
+        String sql = "SELECT * FROM manutencao WHERE status = ?";
+
+        List<Manutencao> manutencoes = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status.name());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    manutencoes.add(construirManutencao(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar manutenções por status", e);
         }
 
         return manutencoes;
