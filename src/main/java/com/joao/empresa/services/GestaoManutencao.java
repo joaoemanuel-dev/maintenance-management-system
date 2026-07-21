@@ -65,6 +65,10 @@ public class GestaoManutencao {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.CONCLUIDA);
     }
 
+    public List<Manutencao> listarManutencoesCanceladas() {
+        return manutencaoDAO.listarPorStatus(Manutencao.Status.CANCELADA);
+    }
+
     public Set<Manutencao> listarTodasManutencoes() {
         Set<Manutencao> todas = new LinkedHashSet<>();
         todas.addAll(manutencoesAtivas);
