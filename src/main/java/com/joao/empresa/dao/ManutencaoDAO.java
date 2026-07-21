@@ -5,6 +5,8 @@ import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.model.Tecnico;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManutencaoDAO {
 
@@ -110,6 +112,26 @@ public class ManutencaoDAO {
         return manutencao;
     }
 
+    public List<Manutencao> listar() {
+
+        String sql = "SELECT * FROM manutencao";
+
+        List<Manutencao> manutencoes = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                manutencoes.add(construirManutencao(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar manutenções", e);
+        }
+
+        return manutencoes;
+    }
 
 
 }
