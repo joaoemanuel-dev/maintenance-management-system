@@ -191,4 +191,54 @@ public class ManutencaoDAO {
         return manutencoes;
     }
 
+    public void atualizar(Manutencao manutencao) {
+
+        String sql = """
+                UPDATE manutencao
+                SET tipo_manutencao = ?,
+                    data_inicio = ?,
+                    data_fim = ?,
+                    descricao = ?,
+                    custo = ?,
+                    status = ?,
+                    fk_idequipamento = ?,
+                    fk_idtecnico = ?
+                WHERE id = ?
+                """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, manutencao.getTipoManutencao().name());
+
+            stmt.setDate(2, Date.valueOf(manutencao.getDataInicio()));
+
+            if (manutencao.getDataFim() != null) {
+                stmt.setDate(
+                        3,
+                        Date.valueOf(manutencao.getDataFim())
+                );
+            } else {
+                stmt.setNull(3, Types.DATE);
+            }
+
+            stmt.setString(4, manutencao.getDescricao());
+            stmt.setDouble(5, manutencao.getCusto());
+            stmt.setString(6, manutencao.getStatus().name());
+
+            stmt.setInt(7, manutencao.getEquipamento().getId());
+
+            stmt.setInt(8, manutencao.getTecnicoResponsavel().getId());
+
+            stmt.setInt(9, manutencao.getId());
+
+            stmt.executeUpdate();
+
+            System.out.println("Manutenção atualizada!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar manutenção", e);
+        }
+    }
+
 }
