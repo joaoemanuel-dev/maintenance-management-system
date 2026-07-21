@@ -87,13 +87,12 @@ public class GestaoManutencao {
         manutencaoDAO.atualizar(manutencao); // mando pro banco atualizar lá o novo status e data
     }
 
-    public void finalizarManutencao(int id) { // encerra ativa e joga pra finalizadas
-        Manutencao mnt = buscarAtivasPorId(id);
-        mnt.setStatus(Manutencao.Status.CONCLUIDA);
-        manutencoesAtivas.remove(mnt);
-        manutencoesFinalizadas.add(mnt);
-        mnt.getEquipamento().adicionarManutencao(mnt); // joga pro histórico do equipamento
-        mnt.getTecnicoResponsavel().adicionarManutencao(mnt); // joga pro histórico do técnico
+    public void finalizarManutencao(int id, double custo) { // encerra ativa e joga pra finalizadas
+        Manutencao manutencao = buscarAtivasPorId(id);
+        manutencao.setStatus(Manutencao.Status.CONCLUIDA);
+        manutencao.setDataFim(LocalDate.now());
+        manutencao.setCusto(custo);
+        manutencaoDAO.atualizar(manutencao);
     }
 
     public void excluirManutencao(int id){ // excluir do sistema (finalizadas)
