@@ -133,7 +133,7 @@ public class ManutencaoDAO {
         return manutencoes;
     }
 
-    // listo as manutenções de um determinado equipamento
+    // manutenções associadas a um equipamento
     public List<Manutencao> buscarPorEquipamento(int equipamentoId) {
 
         String sql = """
@@ -156,14 +156,39 @@ public class ManutencaoDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(
-                    "Erro ao buscar manutenções do equipamento", e
-            );
+            throw new RuntimeException("Erro ao buscar manutenções do equipamento", e);
         }
 
         return manutencoes;
     }
 
+    // manutenções sob responsabilidade de um técnico específico
+    public List<Manutencao> buscarPorTecnico(int tecnicoId) {
 
+        String sql = """
+                SELECT * FROM manutencao
+                WHERE fk_idtecnico = ?
+                """;
+
+        List<Manutencao> manutencoes = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, tecnicoId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    manutencoes.add(construirManutencao(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar manutenções do técnico", e);
+        }
+
+        return manutencoes;
+    }
 
 }
