@@ -13,6 +13,17 @@ public class GestaoManutencao {
 
     ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
 
+    public Manutencao buscarPorId(int id) {
+
+        Manutencao manutencao = manutencaoDAO.buscarPorId(id);
+
+        if (manutencao == null) {
+            throw new ManutencaoNaoEncontradaException("Manutenção com ID " + id + " não encontrada.");
+        }
+
+        return manutencao;
+    }
+
     public Manutencao buscarAtivasPorId(int id){
         return manutencoesAtivas.stream().
                 filter(mnt -> mnt.getId() == id). //só passa os que forem true
