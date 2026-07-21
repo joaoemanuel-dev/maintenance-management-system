@@ -1,6 +1,7 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.dao.EquipamentoDAO;
+import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.exceptions.EquipamentoNaManutencaoException;
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.model.Equipamento;
@@ -9,7 +10,7 @@ import java.util.List;
 public class GestaoEquipamento {
 
     private EquipamentoDAO equipamentoDAO = new EquipamentoDAO();
-
+    private ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
     private GestaoManutencao gestaoManutencao;
 
     public GestaoEquipamento() {
@@ -49,7 +50,7 @@ public class GestaoEquipamento {
 
         buscarPorId(id); // vejo se existe, caso contrário já lança a exceção
 
-        if (gestaoManutencao.existeManutencaoDoEquipamento(id)) {
+        if (manutencaoDAO.existeManutencaoDoEquipamento(id)) {
             throw new EquipamentoNaManutencaoException(
                     "Não é possível excluir. Equipamento possui manutenção associada.");
         }
