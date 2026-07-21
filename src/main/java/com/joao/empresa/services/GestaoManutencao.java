@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
 import com.joao.empresa.model.Manutencao;
@@ -10,9 +11,7 @@ import java.util.Set;
 
 public class GestaoManutencao {
 
-    private Set<Manutencao> manutencoesAtivas = new LinkedHashSet<>();
-
-    private Set<Manutencao> manutencoesFinalizadas = new LinkedHashSet<>();
+    ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
 
     public Manutencao buscarAtivasPorId(int id){
         return manutencoesAtivas.stream().
