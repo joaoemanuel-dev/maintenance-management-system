@@ -6,6 +6,7 @@ import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -80,10 +81,10 @@ public class GestaoManutencao {
     }
 
     public void cancelarManutencao(int id){ // remove das manutenções ativas
-        Manutencao mnt = buscarAtivasPorId(id);
-        mnt.setStatus(Manutencao.Status.CANCELADA);
-        manutencoesAtivas.remove(mnt);
-        manutencoesFinalizadas.add(mnt);
+        Manutencao manutencao = buscarAtivasPorId(id);
+        manutencao.setStatus(Manutencao.Status.CANCELADA); // altero localmente assim
+        manutencao.setDataFim(LocalDate.now());
+        manutencaoDAO.atualizar(manutencao); // mando pro banco atualizar lá o novo status e data
     }
 
     public void finalizarManutencao(int id) { // encerra ativa e joga pra finalizadas
