@@ -60,8 +60,8 @@ public class GestaoManutencao {
         return manutencaoDAO.listarPorStatus(Manutencao.Status.ANDAMENTO);
     }
 
-    public Set<Manutencao> listarManutencoesFinalizadas() {
-        return Collections.unmodifiableSet(manutencoesFinalizadas);
+    public Set<Manutencao> listarManutencoesConcluidas() {
+        return manutencaoDAO.listarPorStatus(Manutencao.Status.CONCLUIDA);
     }
 
     public Set<Manutencao> listarTodasManutencoes() {
