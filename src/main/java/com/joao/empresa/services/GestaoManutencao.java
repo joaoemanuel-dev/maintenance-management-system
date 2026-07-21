@@ -57,7 +57,7 @@ public class GestaoManutencao {
     }
 
     public Set<Manutencao> listarManutencoesAtivas() {
-        return Collections.unmodifiableSet(manutencoesAtivas);
+        return manutencaoDAO.listarPorStatus(Manutencao.Status.ANDAMENTO);
     }
 
     public Set<Manutencao> listarManutencoesFinalizadas() {
