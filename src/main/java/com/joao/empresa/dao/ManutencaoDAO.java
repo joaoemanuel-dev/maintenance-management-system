@@ -4,9 +4,7 @@ import com.joao.empresa.database.ConnectionFactory;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.model.Tecnico;
-
 import java.sql.*;
-
 
 public class ManutencaoDAO {
 
@@ -53,9 +51,10 @@ public class ManutencaoDAO {
 
             stmt.setInt(1, id);
 
+            // aqui está dentro do try pra ser fechado automaticamente depois
             try(ResultSet rs = stmt.executeQuery()){
 
-                // à cada tupla (uma manutencao) do banco de dados eu chamo a função. Só vai ter uma pq é id
+                // à cada tupla do resultado eu chamo a função. Só vai ter uma pq é id
                 if(rs.next()){
                     return construirManutencao(rs);
                 }
@@ -68,7 +67,7 @@ public class ManutencaoDAO {
         return null;
     }
 
-    // transforma uma linha do banco em um objeto Manutencao
+    // transforma uma linha do resultado em um objeto Manutencao
     private Manutencao construirManutencao(ResultSet rs) throws SQLException {
 
         int id = rs.getInt("id_manutencao");
