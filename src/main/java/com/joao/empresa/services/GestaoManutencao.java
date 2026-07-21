@@ -1,16 +1,10 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.dao.ManutencaoDAO;
-import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
-import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
-
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class GestaoManutencao {
 
@@ -95,9 +89,17 @@ public class GestaoManutencao {
         manutencaoDAO.atualizar(manutencao);
     }
 
-    public void excluirManutencao(int id){ // excluir do sistema (finalizadas)
-        Manutencao mnt = buscarFinalizadasPorId(id);
-        manutencoesFinalizadas.remove(mnt);
+    public void excluirManutencao(int id) { // excluir do sistema (finalizadas)
+
+        Manutencao manutencao = buscarPorId(id);
+
+        if (manutencao.getStatus() == Manutencao.Status.ANDAMENTO) {
+            throw new IllegalStateException(
+                    "Não é possível excluir uma manutenção em andamento."
+            );
+        }
+
+        manutencaoDAO.deletar(id);
     }
 
 }
