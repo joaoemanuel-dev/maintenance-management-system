@@ -1,17 +1,17 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
+import com.joao.empresa.dao.EquipamentoDAO;
+import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.exceptions.EquipamentoNaManutencaoException;
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.model.Equipamento;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class GestaoEquipamento {
 
+    private EquipamentoDAO equipamentoDAO = new EquipamentoDAO();
+    private ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
     private GestaoManutencao gestaoManutencao;
-    private Set<Equipamento> equipamentos = new HashSet<>();
 
     public GestaoEquipamento() {
         this.gestaoManutencao = new GestaoManutencao();
@@ -24,56 +24,38 @@ public class GestaoEquipamento {
     }
 
     public Equipamento buscarPorId(int id){
-        return equipamentos.stream().
-                filter(eqp -> eqp.getId() == id).
-                findFirst().
-                orElseThrow(() ->
-                        new EquipamentoNaoEncontradoException("Equipamento com o ID: " + id + "não encontrado."));
+        Equipamento equipamento = equipamentoDAO.buscarPorId(id);
+
+        if(equipamento == null){
+            throw new EquipamentoNaoEncontradoException("Equipamento com ID " + id + " não encontrado.");
+        }
+
+        return equipamento;
     }
 
-    //método interno para usar sem ter que lançar exceção
-    private Equipamento buscarPorIdSemExcecao(int id){
-        return equipamentos.stream().
-                filter(eqp -> eqp.getId() == id).
-                findFirst().
-                orElse(null);
+    public void cadastrarEquipamento(Equipamento equipamento, int idEmpresaDona){
+        equipamentoDAO.salvar(equipamento, idEmpresaDona);
     }
 
-    public void cadastrarEquipamento(Equipamento eqp){
-        if(buscarPorIdSemExcecao(eqp.getId()) != null){
-            throw new EquipamentoJaCadastradoException("Já existe um equipamento com o id: " + eqp.getId());
-        }
-        equipamentos.add(eqp);
+    public List<Equipamento> listarEquipamentos() {
+        return equipamentoDAO.listar();
     }
 
-    public Set<Equipamento> listarEquipamentos(){
-        return Collections.unmodifiableSet(equipamentos); // devolve uma visão somente-leitura do conjunto, impedindo alterações externas
-    }
-
-    public void atualizarEquipamento(Equipamento alterado){
-        Equipamento existente = buscarPorId(alterado.getId());
-
-        if (alterado.getNome() != null) {
-            existente.setNome(alterado.getNome());
-        }
-        if (alterado.getCodigoPatrimonio() != null) {
-            existente.setCodigoPatrimonio(alterado.getCodigoPatrimonio());
-        }
-        if (alterado.getDataAquisicao() != null) {
-            existente.setDataAquisicao(alterado.getDataAquisicao());
-        }
+    public void atualizarEquipamento(Equipamento alterado) {
+        buscarPorId(alterado.getId());
+        equipamentoDAO.atualizar(alterado);
     }
 
     public void excluirEquipamento(int id) { //só exclui se não tiver manutenção aberta com ele
 
-        Equipamento existente = buscarPorId(id); // vejo se existe, caso contrário já lança a exceção
+        buscarPorId(id); // vejo se existe, caso contrário já lança a exceção
 
-        if (gestaoManutencao.existeManutencaoDoEquipamento(id)) {
+        if (manutencaoDAO.existeManutencaoDoEquipamento(id)) {
             throw new EquipamentoNaManutencaoException(
                     "Não é possível excluir. Equipamento possui manutenção associada.");
         }
 
-        equipamentos.remove(existente);
+        equipamentoDAO.deletar(id);
     }
 
 }

@@ -1,51 +1,47 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
-import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
-import com.joao.empresa.model.Usuario;
+import com.joao.empresa.dao.UsuarioDAO;
+import com.joao.empresa.model.*;
+import com.joao.empresa.exceptions.*;
 import java.util.*;
 
 public class GestaoUsuario {
 
-    private Set<Usuario> usuarios = new HashSet<>();
+    private UsuarioDAO usuarioDAO = new UsuarioDAO(); // poder mexer no banco daqui mesmo
 
     public Usuario buscarPorId(int id){
-        return usuarios.stream()
-                .filter(usr -> usr.getId() == id)
-                .findFirst()
-                .orElseThrow(() ->
-                        new UsuarioNaoEncontradoException("Usuario com ID " + id + " não encontrado.")
-                );
-    }
+        Usuario usuario = usuarioDAO.buscarPorId(id);
 
-    private Usuario buscarPorIdSemExcecao(int id) {
-        return usuarios.stream()
-                .filter(usr -> usr.getId() == id)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void cadastrarUsuario(Usuario usr){
-        if(buscarPorIdSemExcecao(usr.getId()) != null){
-            throw new UsuarioJaCadastradoException("Já existe um usuário cadastrado com o ID: " + usr.getId());
+        if(usuario == null){
+            throw new UsuarioNaoEncontradoException("Usuario com ID " + id + " não encontrado.");
         }
-        usuarios.add(usr);
+
+        return usuario;
     }
 
-    public Set<Usuario> listarUsuarios() {
-        return Collections.unmodifiableSet(usuarios);
+    public void cadastrarUsuario(Usuario usuario){
+        usuarioDAO.salvar(usuario);
     }
 
-    public void atualizarUsuario(Usuario alterado){
-        Usuario existente = buscarPorId(alterado.getId()); // aqui já lança exceção
+    public List<Usuario> listarUsuarios() {
+        return usuarioDAO.listar();
+    }
+
+    public void atualizarUsuario(Usuario alterado) {
+
+        Usuario existente = buscarPorId(alterado.getId());
 
         existente.atualizarDados(alterado);
         existente.atualizarEspecifico(alterado);
+
+        usuarioDAO.atualizar(existente);
     }
 
-    public void removerUsuario(int id){
-        Usuario usr = buscarPorId(id); // aqui lança exceção
-        usuarios.remove(usr);
+    public void removerUsuario(int id) {
+
+        buscarPorId(id); // garante que existe, se n existir já lança a exceção
+
+        usuarioDAO.deletar(id);
     }
 
 }

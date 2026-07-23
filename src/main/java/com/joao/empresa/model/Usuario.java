@@ -26,14 +26,14 @@ public abstract class Usuario extends Entidade{
     private String nome;
     private String email;
     private String senha;
-    private TipoUsuario tipoUsuario;
+    private TipoUsuario tipo;
 
-    public Usuario(int id, String nome, String email, String senha, TipoUsuario tipoUsuario){
+    public Usuario(int id, String nome, String email, String senha, TipoUsuario tipo){
         super(id);
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.tipoUsuario = tipoUsuario;
+        this.tipo = tipo;
     }
 
     public String getNome() {
@@ -60,12 +60,12 @@ public abstract class Usuario extends Entidade{
         this.senha = senha;
     }
 
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
+    public TipoUsuario getTipo() {
+        return tipo;
     }
 
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
     }
 
     public void atualizarDados(Usuario alterado){  // regra de negócio do próprio objeto
@@ -84,7 +84,7 @@ public abstract class Usuario extends Entidade{
         return "Usuario{" +
                 "nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                ", tipo_usuario='" + tipoUsuario + '\'' +
+                ", tipo_usuario='" + tipo + '\'' +
                 '}';
     }
 }

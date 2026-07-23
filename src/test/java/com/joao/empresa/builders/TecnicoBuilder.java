@@ -9,7 +9,6 @@ public class TecnicoBuilder {
     private String email = "pnjoao@gmail.com";
     private String senha = "ea34";
     private String especialidade = "Tecnologia da Informação";
-    private String certificacoes = "Universidade Federal de São João del Rei";
 
     public static TecnicoBuilder builder() {
         return new TecnicoBuilder();
@@ -40,13 +39,8 @@ public class TecnicoBuilder {
         return this;
     }
 
-    public TecnicoBuilder comCertificacoes(String certificacoes) {
-        this.certificacoes = certificacoes;
-        return this;
-    }
-
     public Tecnico build() {
-        return new Tecnico(id, nome, email, senha, especialidade, certificacoes);
+        return new Tecnico(id, nome, email, senha, especialidade);
     }
 
 }

@@ -1,121 +1,105 @@
 package com.joao.empresa.services;
 
-import com.joao.empresa.exceptions.ManutencaoJaCadastradaException;
+import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
 import com.joao.empresa.model.Manutencao;
-
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
 public class GestaoManutencao {
 
-    private Set<Manutencao> manutencoesAtivas = new LinkedHashSet<>();
+    ManutencaoDAO manutencaoDAO = new ManutencaoDAO();
 
-    private Set<Manutencao> manutencoesFinalizadas = new LinkedHashSet<>();
+    public Manutencao buscarPorId(int id) {
 
-    public Manutencao buscarAtivasPorId(int id){
-        return manutencoesAtivas.stream().
-                filter(mnt -> mnt.getId() == id). //só passa os que forem true
-                findFirst(). //retorna o primeiro
-                orElseThrow(() ->
-                        new ManutencaoNaoEncontradaException("Manutenção com ID " + id + " não encontrada.")
-                );
+        Manutencao manutencao = manutencaoDAO.buscarPorId(id);
+
+        if (manutencao == null) {
+            throw new ManutencaoNaoEncontradaException("Manutenção com ID " + id + " não encontrada.");
+        }
+
+        return manutencao;
     }
 
-    private Manutencao buscarAtivasPorIdSemExcecao(int id){
-        return manutencoesAtivas.stream().
-                filter(mnt -> mnt.getId() == id).
-                findFirst().
-                orElse(null);
+    public Manutencao buscarAtivasPorId(int id) {
+
+        Manutencao manutencao = manutencaoDAO.buscarPorId(id);
+
+        if (manutencao.getStatus() != Manutencao.Status.ANDAMENTO){ // esta comparando somente com a String retornada
+            throw new ManutencaoNaoEncontradaException(
+                    "Não existe manutenção ativa com ID " + id + "."
+            );
+        }
+
+        return manutencao;
     }
 
     public Manutencao buscarFinalizadasPorId(int id){
-        return manutencoesFinalizadas.stream().
-                filter(mnt -> mnt.getId() == id). //só passa os que forem true
-                        findFirst(). //retorna o primeiro
-                        orElseThrow(() ->
-                        new ManutencaoNaoEncontradaException("Manutenção com ID " + id + " não encontrada.")
-                );
-    }
 
-    private Manutencao buscarFinalizadasPorIdSemExcecao(int id){
-        return manutencoesFinalizadas.stream().
-                filter(mnt -> mnt.getId() == id).
-                findFirst().
-                orElse(null);
-    }
+        Manutencao manutencao = manutencaoDAO.buscarPorId(id);
 
-    public void cadastrarManutencao(Manutencao mnt) {
-        if (buscarAtivasPorIdSemExcecao(mnt.getId()) != null ||
-                buscarFinalizadasPorIdSemExcecao(mnt.getId()) != null) {
-            throw new ManutencaoJaCadastradaException(
-                    "Já existe uma manutenção cadastrada com o ID " + mnt.getId());
+        if (manutencao.getStatus() == Manutencao.Status.ANDAMENTO){ // não finalizou, está em andamento
+            throw new ManutencaoNaoEncontradaException(
+                    "Não existe manutenção finalizada com ID " + id + "."
+            );
         }
-        manutencoesAtivas.add(mnt);
+
+        return manutencao;
     }
 
-    public boolean existeManutencaoDoEquipamento(int idEquipamento) { // me diz se o equipamento tem manuntenção associada
-        return manutencoesAtivas.stream()
-                .anyMatch(m -> m.getEquipamento().getId() == idEquipamento)
-                || manutencoesFinalizadas.stream()
-                .anyMatch(m -> m.getEquipamento().getId() == idEquipamento);
+    // o próprio banco não deixa cadastrar duplicado. Ele lança erro, assim, justamente para não
+    // aparecer aquele erro feio na cara do usuário, a gente trata esse erro sem quebrar o programa
+    public void cadastrarManutencao(Manutencao manutencao) {
+        manutencaoDAO.salvar(manutencao);
     }
 
-    public Set<Manutencao> listarManutencoesAtivas() {
-        return Collections.unmodifiableSet(manutencoesAtivas);
+    public List<Manutencao> listarTodasManutencoes() {
+        return manutencaoDAO.listar();
     }
 
-    public Set<Manutencao> listarManutencoesFinalizadas() {
-        return Collections.unmodifiableSet(manutencoesFinalizadas);
+    public List<Manutencao> listarManutencoesAtivas() {
+        return manutencaoDAO.listarPorStatus(Manutencao.Status.ANDAMENTO);
     }
 
-    public Set<Manutencao> listarTodasManutencoes() {
-        Set<Manutencao> todas = new LinkedHashSet<>();
-        todas.addAll(manutencoesAtivas);
-        todas.addAll(manutencoesFinalizadas);
-        return Collections.unmodifiableSet(todas);
+    public List<Manutencao> listarManutencoesConcluidas() {
+        return manutencaoDAO.listarPorStatus(Manutencao.Status.CONCLUIDA);
     }
 
-    public void atualizarManutencao(Manutencao alterada){ // recebo objeto somente com o campos que quero alterar, os demais ficam null
-        Manutencao existente = buscarAtivasPorId(alterada.getId()); //lança exceção
+    public List<Manutencao> listarManutencoesCanceladas() {
+        return manutencaoDAO.listarPorStatus(Manutencao.Status.CANCELADA);
+    }
 
-        if(alterada.getTipoManutencao() != null){
-            existente.setTipoManutencao(alterada.getTipoManutencao());
-        }
-        if(alterada.getDataInicio() != null){
-            existente.setDataInicio(alterada.getDataInicio());
-        }
-        if(alterada.getDescricao() != null){
-            existente.setDescricao(alterada.getDescricao());
-        }
-        if(alterada.getTecnicoResponsavel() != null){
-            existente.setTecnicoResponsavel(alterada.getTecnicoResponsavel());
-        }
-        if(alterada.getEquipamento() != null){
-            existente.setEquipamento(alterada.getEquipamento());
-        }
+    public void atualizarManutencao(Manutencao alterada){
+        buscarAtivasPorId(alterada.getId()); //lança exceção
+        manutencaoDAO.atualizar(alterada);
     }
 
     public void cancelarManutencao(int id){ // remove das manutenções ativas
-        Manutencao mnt = buscarAtivasPorId(id);
-        mnt.setStatus(Manutencao.Status.CANCELADA);
-        manutencoesAtivas.remove(mnt);
-        manutencoesFinalizadas.add(mnt);
+        Manutencao manutencao = buscarAtivasPorId(id);
+        manutencao.setStatus(Manutencao.Status.CANCELADA); // altero localmente assim
+        manutencao.setDataFim(LocalDate.now());
+        manutencaoDAO.atualizar(manutencao); // mando pro banco atualizar lá o novo status e data
     }
 
-    public void finalizarManutencao(int id) { // encerra ativa e joga pra finalizadas
-        Manutencao mnt = buscarAtivasPorId(id);
-        mnt.setStatus(Manutencao.Status.CONCLUIDA);
-        manutencoesAtivas.remove(mnt);
-        manutencoesFinalizadas.add(mnt);
-        mnt.getEquipamento().adicionarManutencao(mnt); // joga pro histórico do equipamento
-        mnt.getTecnicoResponsavel().adicionarManutencao(mnt); // joga pro histórico do técnico
+    public void finalizarManutencao(int id, double custo) { // encerra ativa e joga pra finalizadas
+        Manutencao manutencao = buscarAtivasPorId(id);
+        manutencao.setStatus(Manutencao.Status.CONCLUIDA);
+        manutencao.setDataFim(LocalDate.now());
+        manutencao.setCusto(custo);
+        manutencaoDAO.atualizar(manutencao);
     }
 
-    public void excluirManutencao(int id){ // excluir do sistema (finalizadas)
-        Manutencao mnt = buscarFinalizadasPorId(id);
-        manutencoesFinalizadas.remove(mnt);
+    public void excluirManutencao(int id) { // excluir do sistema (finalizadas)
+
+        Manutencao manutencao = buscarPorId(id);
+
+        if (manutencao.getStatus() == Manutencao.Status.ANDAMENTO) {
+            throw new IllegalStateException(
+                    "Não é possível excluir uma manutenção em andamento."
+            );
+        }
+
+        manutencaoDAO.deletar(id);
     }
 
 }
