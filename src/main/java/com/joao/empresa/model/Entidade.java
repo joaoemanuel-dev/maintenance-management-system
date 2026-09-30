@@ -1,8 +1,23 @@
 package com.joao.empresa.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Entidade {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    // JPA precisa de um construtor vazio
+    protected Entidade() {
+
+    }
+
+    // Métodos de validação do id gerado pelo banco
 
     protected Entidade(Integer id) {
         if (id != null) {
@@ -16,7 +31,6 @@ public abstract class Entidade {
         return id;
     }
 
-    // alterar o id da entidade que estava nulo para o id que veio do banco
     public void definirId(Integer id) {
         validarIdPositivo(id);
 
@@ -37,8 +51,6 @@ public abstract class Entidade {
         }
     }
 
-    // dois objetos só representam a mesma entidade quando pertencem exatamente à mesma classe
-    // e possuem o mesmo ID não nulo
     @Override
     public final boolean equals(Object objeto) {
         if (this == objeto) {
@@ -54,13 +66,10 @@ public abstract class Entidade {
         return id != null && id.equals(outraEntidade.id);
     }
 
-    // retorna o hash da própria classe
     @Override
     public final int hashCode() {
         return getClass().hashCode();
     }
-
-    // são finais para nenhuma subclasse sobreescrever e avacalhar o negócio
 
     @Override
     public String toString() {
