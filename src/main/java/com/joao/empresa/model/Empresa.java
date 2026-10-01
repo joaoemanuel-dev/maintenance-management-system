@@ -4,55 +4,43 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "empresa")
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+@Entity
+@Table(
+        name = "empresa",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_empresa_cnpj",
+                        columnNames = "cnpj"
+                )
+        }
+)
+
 public class Empresa extends Entidade {
 
-    public enum Status {
-        ATIVADA("Empresa ativada"),
-        DESATIVADA("Empresa desativada");
-
-        private final String descricao;
-
-        Status(String descricao) {
-            this.descricao = descricao;
-        }
-
-        public String getDescricao() {
-            return descricao;
-        }
-
-        @Override
-        public String toString() {
-            return descricao;
-        }
-    }
-
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String nome;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, length = 18)
     private String cnpj;
 
-    @Column(nullable = false)
+    @Column(length = 255)
     private String endereco;
 
-    @Column(nullable = false)
+    @Column(length = 100)
     private String segmento;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private Status status;
 
-    @Transient
+    @OneToMany(mappedBy = "empresa")
     private Set<Equipamento> equipamentos = new HashSet<>();
 
     public Empresa(
@@ -68,8 +56,35 @@ public class Empresa extends Entidade {
         this.segmento = segmento;
         this.status = status;
     }
+
+    // substitui os setters que era aberto para alteração, e deixa um operação com significado
+    public void atualizarDados(
+            String nome,
+            String cnpj,
+            String endereco,
+            String segmento,
+            Status status
+    ) {
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+        this.segmento = segmento;
+        this.status = status;
+    }
+
+    public enum Status {
+
+        ATIVADA("Empresa ativada"),
+        DESATIVADA("Empresa desativada");
+
+        private final String descricao;
+
+        Status(String descricao) {
+            this.descricao = descricao;
+        }
+
+        public String getDescricao() {
+            return descricao;
+        }
+    }
 }
-
-
-
-
