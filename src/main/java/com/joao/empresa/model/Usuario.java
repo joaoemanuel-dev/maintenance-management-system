@@ -1,89 +1,61 @@
 package com.joao.empresa.model;
 
-public abstract class Usuario extends Entidade{
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-    public enum TipoUsuario { // uma variável que só pode assumir esses valores:
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // pro JPA reconstruir
+@Entity
+@Table(name = "usuario",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_usuario_email", columnNames = "email")
+        }
+)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(
+        name = "tipo_usuario",
+        discriminatorType = DiscriminatorType.STRING,
+        length = 20
+)
+public abstract class Usuario extends Entidade {
+
+    public enum TipoUsuario {
+
         ADMINISTRADOR("Administrador"),
         TECNICO("Técnico"),
-        GESTOR("Gestor"); // "apelidos"
+        GESTOR("Gestor");
 
-        private String descricao;
+        private final String descricao;
 
         TipoUsuario(String descricao) {
-            this.descricao = descricao; // associa cada string extra à cada valor
+            this.descricao = descricao;
         }
 
-        public String getDescricao() { // retorna somente a descrição
+        public String getDescricao() {
             return descricao;
         }
-
-        @Override
-        public String toString() {
-            return descricao; // o java chama automaticamente quando o enum vira string, estética
-        }
     }
 
+    @Column(nullable = false, length = 150)
     private String nome;
+
+    @Column(nullable = false, length = 150)
     private String email;
-    private TipoUsuario tipo;
 
-    protected Usuario(String nome, String email, TipoUsuario tipo) {
-        this(
-                null,
-                nome,
-                email,
-                tipo
-        );
-    }
-
-    protected Usuario(Integer id, String nome, String email, TipoUsuario tipo){
-        super(id);
+    protected Usuario(
+            String nome,
+            String email
+    ) {
         this.nome = nome;
         this.email = email;
-        this.tipo = tipo;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
+    // antigos setters
+    public void atualizarDados(String nome, String email) {
         this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
     }
 
-    public TipoUsuario getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoUsuario tipo) {
-        this.tipo = tipo;
-    }
-
-    public void atualizarDados(Usuario alterado){  // regra de negócio do próprio objeto
-        if(alterado.getNome() != null){
-            setNome(alterado.getNome());
-        }
-        if(alterado.getEmail() != null){
-            setEmail(alterado.getEmail());
-        }
-    }
-
-    public abstract void atualizarEspecifico(Usuario alterado); // cada usuário implementa suas atualizações específicas
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "nome='" + nome + '\'' +
-                ", email='" + email + '\'' +
-                ", tipo_usuario='" + tipo + '\'' +
-                '}';
-    }
 }
