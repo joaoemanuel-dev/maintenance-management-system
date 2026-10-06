@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = true) // só ler, não é pra alterar nada no banco
 public class EmpresaService {
 
     private final EmpresaRepository empresaRepository;
@@ -32,6 +32,14 @@ public class EmpresaService {
                         )
                 );
     }
+
+    public List<Empresa> listar() {
+        return empresaRepository.findAll(
+                Sort.by(Sort.Direction.ASC, "id") // ordenadas pelo id do menor para o maior
+        );
+    }
+
+
 
 }
 
