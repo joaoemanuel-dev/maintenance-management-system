@@ -1,4 +1,73 @@
-package com.joao.empresa.services;
+package com.joao.empresa.service;
+
+import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
+import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
+import com.joao.empresa.exceptions.EntidadeEmUsoException;
+import com.joao.empresa.model.Empresa;
+import com.joao.empresa.repository.EmpresaRepository;
+import com.joao.empresa.repository.EquipamentoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class EmpresaService {
+
+    private final EmpresaRepository empresaRepository;
+    private final EquipamentoRepository equipamentoRepository;
+
+    public Empresa buscarPorId(Integer id) {
+
+        validarId(id);
+
+        return empresaRepository.findById(id)
+                .orElseThrow(
+                        () -> new EmpresaNaoEncontradaException(
+                                "Empresa com ID " + id + " não encontrada."
+                        )
+                );
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*package com.joao.empresa.services;
 
 import com.joao.empresa.dao.EmpresaDAO;
 import com.joao.empresa.exceptions.*;
@@ -115,6 +184,6 @@ public class GestaoEmpresa {
     eu não vou deixar meus dados ficarem inconsistentes)
 
      */
-}
+}*/
 
 
