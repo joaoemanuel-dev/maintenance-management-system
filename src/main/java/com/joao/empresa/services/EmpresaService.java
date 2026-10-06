@@ -71,6 +71,14 @@ public class EmpresaService {
 
         Empresa empresa = buscarPorId(id);
 
+        // Empresa diferente da empresa do id
+        if (empresaRepository.existsByCnpjAndIdNot(novosDados.getCnpj(), id)) {
+            throw new EmpresaJaCadastradaException(
+                    "Já existe outra empresa cadastrada com o CNPJ "
+                            + novosDados.getCnpj() + "."
+            );
+        }
+
         empresa.atualizarDados(
                 novosDados.getNome(),
                 novosDados.getCnpj(),
