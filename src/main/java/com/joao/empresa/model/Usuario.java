@@ -58,4 +58,6 @@ public abstract class Usuario extends Entidade {
         this.email = email;
     }
 
+    public abstract TipoUsuario getTipo(); // cada uma das subclasses tem que implementar o seu
+
 }
