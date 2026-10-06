@@ -58,7 +58,30 @@ public class EmpresaService {
 
     }
 
+    @Transactional
+    public Empresa atualizar(Integer id, Empresa novosDados){
 
+        validarId(id);
+
+        if (novosDados == null) {
+            throw new IllegalArgumentException(
+                    "Os dados da empresa não podem ser nulos."
+            );
+        }
+
+        Empresa empresa = buscarPorId(id);
+
+        empresa.atualizarDados(
+                novosDados.getNome(),
+                novosDados.getCnpj(),
+                novosDados.getEndereco(),
+                novosDados.getSegmento(),
+                novosDados.getStatus()
+        );
+
+        return empresa;
+
+    }
 
     private void validarId(Integer id) {
 
