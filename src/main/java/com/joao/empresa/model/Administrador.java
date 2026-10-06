@@ -1,41 +1,44 @@
 package com.joao.empresa.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "administrador")
+@PrimaryKeyJoinColumn(
+        name = "usuario_id",
+        foreignKey = @ForeignKey(
+                name = "fk_administrador_usuario"
+        )
+)
+@DiscriminatorValue("ADMINISTRADOR")
 public class Administrador extends Usuario {
 
+    @Column(nullable = false, length = 100)
     private String departamento;
 
     public Administrador(String nome, String email, String departamento) {
-        super(nome, email, TipoUsuario.ADMINISTRADOR);
-        this.departamento = departamento;
-    }
-
-    public Administrador(Integer id, String nome, String email, String departamento){
-        super(id, nome, email, TipoUsuario.ADMINISTRADOR);
-        this.departamento = departamento;
-    }
-
-    public String getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(String departamento) {
+        super(nome, email);
         this.departamento = departamento;
     }
 
     @Override
-    public void atualizarEspecifico(Usuario alterado){
-        Administrador adm = (Administrador) alterado; //cast para tratar o usuário como administrador, adentrando na subclasse
-
-        if(adm.getDepartamento() != null){
-            setDepartamento(adm.getDepartamento());
-        }
+    public TipoUsuario getTipo() {
+        return TipoUsuario.ADMINISTRADOR;
     }
 
-    @Override
-    public String toString() {
-        return "Administrador{" +
-                "departamento='" + departamento + '\'' +
-                '}';
+    public void atualizarDados(String nome, String email, String departamento) {
+        super.atualizarDados(nome, email);
+        this.departamento = departamento;
     }
 
 }
