@@ -2,6 +2,7 @@ package com.joao.empresa.services;
 
 import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
+import com.joao.empresa.exceptions.EntidadeEmUsoException;
 import com.joao.empresa.model.Empresa;
 import com.joao.empresa.repository.EmpresaRepository;
 import com.joao.empresa.repository.EquipamentoRepository;
@@ -89,6 +90,24 @@ public class EmpresaService {
 
         return empresa;
 
+    }
+
+    @Transactional
+    public void excluir(Integer id) {
+
+        validarId(id);
+
+        Empresa empresa = buscarPorId(id);
+
+        if (equipamentoRepository.existsByEmpresaId(id)) {
+            throw new EntidadeEmUsoException(
+                    "Não é possível excluir a empresa de ID "
+                            + id
+                            + " porque ela possui equipamentos cadastrados."
+            );
+        }
+
+        empresaRepository.delete(empresa);
     }
 
     private void validarId(Integer id) {
