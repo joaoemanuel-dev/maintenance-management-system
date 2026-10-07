@@ -9,6 +9,7 @@ public interface EquipamentoRepository extends JpaRepository<Equipamento, Intege
 
     boolean existsByCodigoPatrimonioAndIdNot(String codigoPatrimonio, Integer id);
 
+    // verifica se existe algum equipamento associado a essa empresa
     boolean existsByEmpresaId(Integer empresaId);
 
 }
