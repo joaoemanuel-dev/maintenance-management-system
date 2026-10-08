@@ -1,6 +1,7 @@
 package com.joao.empresa.services;
 
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
+import com.joao.empresa.exceptions.EntidadeEmUsoException;
 import com.joao.empresa.exceptions.EquipamentoJaCadastradoException;
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.model.Empresa;
@@ -120,6 +121,20 @@ public class EquipamentoService {
         return equipamento;
     }
 
+    @Transactional
+    public void excluir(Integer id) {
 
+        Equipamento equipamento = buscarPorId(id);
+
+        if (manutencaoRepository.existsByEquipamento_Id(id)) {
+
+            throw new EntidadeEmUsoException(
+                    "Não é possível excluir o equipamento de ID " + id
+                    + " porque existem manutenções associadas a ele."
+            );
+        }
+
+        equipamentoRepository.delete(equipamento);
+    }
 
 }
