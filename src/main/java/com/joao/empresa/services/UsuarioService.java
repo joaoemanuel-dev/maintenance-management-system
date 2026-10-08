@@ -114,6 +114,17 @@ public class UsuarioService {
         return usuarioRepository.save(tecnico);
     }
 
+    private void validarEmailDisponivelNaAtualizacao(String email, Integer id) {
+
+        // se fosse buscar ia achar ele próprio
+        if (usuarioRepository.existsByEmailAndIdNot(email, id)) {
+
+            throw new UsuarioJaCadastradoException(
+                    "Já existe outro usuário cadastrado com o e-mail " + email + "."
+            );
+        }
+    }
+
     private Administrador buscarAdministrador(Integer id) {
 
         Usuario usuario = buscarPorId(id);
