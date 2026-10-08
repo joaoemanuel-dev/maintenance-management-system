@@ -48,6 +48,25 @@ public class UsuarioService {
         return usuarioRepository.findAllByOrderByIdAsc();
     }
 
+    @Transactional
+    public Administrador atualizarAdministrador(
+            Integer id,
+            String nome,
+            String email,
+            String departamento
+    ) {
+
+        Administrador administrador = buscarAdministrador(id);
+
+        validarEmailDisponivelNaAtualizacao(email, id);
+
+        administrador.atualizarDados(nome, email, departamento);
+
+        return administrador;
+    }
+
+
+
     private void validarEmailDisponivel(String email) {
 
         if (usuarioRepository.existsByEmail(email)) {
