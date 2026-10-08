@@ -126,6 +126,7 @@ public class UsuarioService {
         }
     }
 
+    //Separar cadastro por tipo ajuda evita a controller ter que ficar montando entidade JPA.
     @Transactional
     public Administrador cadastrarAdministrador(
             String nome,
