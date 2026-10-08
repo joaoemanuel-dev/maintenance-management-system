@@ -6,8 +6,11 @@ import com.joao.empresa.repository.EmpresaRepository;
 import com.joao.empresa.repository.EquipamentoRepository;
 import com.joao.empresa.repository.ManutencaoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class EquipamentoService {
         validarId(id);
 
         return equipamentoRepository.findById(id)
-                .orElseThrow(
+                .orElseThrow( // se tiver um valor devolve ele, se não lança a exceção
                         () -> new EquipamentoNaoEncontradoException(
                                 "Equipamento com ID "
                                         + id
@@ -40,5 +43,15 @@ public class EquipamentoService {
             );
         }
     }
+
+    public List<Equipamento> listar (){
+
+        return equipamentoRepository.findAll(
+                Sort.by(Sort.Direction.ASC, "id")
+        );
+
+    }
+
+
 
 }
