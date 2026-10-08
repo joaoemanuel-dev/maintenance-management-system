@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.repository.EmpresaRepository;
 import com.joao.empresa.repository.EquipamentoRepository;
@@ -19,8 +20,16 @@ public class EquipamentoService {
 
     public Equipamento buscarPorId(Integer id){
 
+        validarId(id);
 
-
+        return equipamentoRepository.findById(id)
+                .orElseThrow(
+                        () -> new EquipamentoNaoEncontradoException(
+                                "Equipamento com ID "
+                                        + id
+                                        + " não encontrado."
+                        )
+                );
     }
 
     private void validarId(Integer id) {
