@@ -114,6 +114,19 @@ public class UsuarioService {
         return usuarioRepository.save(tecnico);
     }
 
+    private Administrador buscarAdministrador(Integer id) {
+
+        Usuario usuario = buscarPorId(id);
+
+        if (!(usuario instanceof Administrador administrador)) {
+            throw new IllegalArgumentException(
+                    "O usuário de ID " + id + " não é um administrador."
+            );
+        }
+
+        return administrador;
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
