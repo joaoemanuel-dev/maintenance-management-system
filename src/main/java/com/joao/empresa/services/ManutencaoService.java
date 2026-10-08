@@ -96,6 +96,14 @@ public class ManutencaoService {
 
     }
 
+    public List<Manutencao> listarPorTecnico(Integer tecnicoId){
+
+        buscarTecnico(tecnicoId);
+
+        return manutencaoRepository.findByTecnicoResponsavel_IdOrderByIdAsc(tecnicoId);
+
+    }
+
     private Tecnico buscarTecnico(Integer tecnicoId) {
 
         validarId(tecnicoId);
