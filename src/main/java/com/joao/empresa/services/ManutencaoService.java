@@ -45,6 +45,21 @@ public class ManutencaoService {
         return manutencao;
     }
 
+    public Manutencao buscarEncerradaPorId(Integer id) {
+
+        Manutencao manutencao = buscarPorId(id);
+
+        if (manutencao.getStatus() == Manutencao.Status.ANDAMENTO) {
+
+            throw new ManutencaoNaoEncontradaException(
+                    "Não existe manutenção encerrada com ID "
+                            + id + "."
+            );
+        }
+
+        return manutencao;
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
