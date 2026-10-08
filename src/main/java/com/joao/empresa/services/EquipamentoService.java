@@ -40,15 +40,6 @@ public class EquipamentoService {
                 );
     }
 
-    private void validarId(Integer id) {
-
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException(
-                    "O ID do equipamento deve ser um número positivo."
-            );
-        }
-    }
-
     public List<Equipamento> listar (){
 
         return equipamentoRepository.findAll(
@@ -65,7 +56,7 @@ public class EquipamentoService {
             Integer empresaId
     ){
 
-        validarId(empresaId);
+        validarIdEmpresa(empresaId);
 
         if(equipamentoRepository.existsByCodigoPatrimonio(codigoPatrimonio){
 
@@ -135,6 +126,25 @@ public class EquipamentoService {
         }
 
         equipamentoRepository.delete(equipamento);
+    }
+
+
+    private void validarId(Integer id) {
+
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException(
+                    "O ID do equipamento deve ser um número positivo."
+            );
+        }
+    }
+
+    private void validarIdEmpresa(Integer empresaId) {
+
+        if (empresaId == null || empresaId <= 0) {
+            throw new IllegalArgumentException(
+                    "O ID da empresa deve ser um número positivo."
+            );
+        }
     }
 
 }
