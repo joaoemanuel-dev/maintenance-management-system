@@ -169,6 +169,15 @@ public class ManutencaoService {
         return manutencao;
     }
 
+    @Transactional
+    public Manutencao cancelar(Integer id) {
+
+        Manutencao manutencao = buscarPorId(id);
+
+        manutencao.cancelar(LocalDate.now());
+
+        return manutencao;
+    }
 
 
 
