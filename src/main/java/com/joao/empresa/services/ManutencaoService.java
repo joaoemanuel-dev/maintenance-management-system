@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -157,6 +158,19 @@ public class ManutencaoService {
 
         return manutencao;
     }
+
+    @Transactional
+    public Manutencao finalizar(Integer id, BigDecimal custo) {
+
+        Manutencao manutencao = buscarPorId(id);
+
+        manutencao.finalizar(custo, LocalDate.now());
+
+        return manutencao;
+    }
+
+
+
 
     private Equipamento buscarEquipamento(Integer equipamentoId) {
 
