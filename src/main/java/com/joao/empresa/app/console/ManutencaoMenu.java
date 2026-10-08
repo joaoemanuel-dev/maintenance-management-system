@@ -5,7 +5,6 @@ import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.services.EquipamentoService;
-import com.joao.empresa.services.GestaoManutencao;
 import com.joao.empresa.services.GestaoUsuario;
 
 import java.math.BigDecimal;
