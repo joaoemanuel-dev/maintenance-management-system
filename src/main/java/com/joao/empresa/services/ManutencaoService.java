@@ -2,7 +2,10 @@ package com.joao.empresa.services;
 
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
+import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Manutencao;
+import com.joao.empresa.model.Tecnico;
+import com.joao.empresa.model.Usuario;
 import com.joao.empresa.repository.EquipamentoRepository;
 import com.joao.empresa.repository.ManutencaoRepository;
 import com.joao.empresa.repository.UsuarioRepository;
@@ -91,6 +94,27 @@ public class ManutencaoService {
 
         return manutencaoRepository.findByEquipamento_IdOrderByIdAsc(equipamentoId);
 
+    }
+
+    private Tecnico buscarTecnico(Integer tecnicoId) {
+
+        validarId(tecnicoId);
+
+        Usuario usuario = usuarioRepository
+                .findById(tecnicoId)
+                .orElseThrow(
+                        () -> new UsuarioNaoEncontradoException(
+                                "Usuário com ID " + tecnicoId + " não encontrado."
+                        )
+                );
+
+        if (!(usuario instanceof Tecnico tecnico)) {
+            throw new IllegalArgumentException(
+                    "O usuário de ID " + tecnicoId + " não é um técnico."
+            );
+        }
+
+        return tecnico;
     }
 
     private void validarId(Integer id) {
