@@ -3,6 +3,7 @@ package com.joao.empresa.services;
 import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
+import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -96,12 +98,26 @@ public class ManutencaoService {
 
     }
 
+
     public List<Manutencao> listarPorTecnico(Integer tecnicoId){
 
         buscarTecnico(tecnicoId);
 
         return manutencaoRepository.findByTecnicoResponsavel_IdOrderByIdAsc(tecnicoId);
 
+    }
+
+    private Equipamento buscarEquipamento(Integer equipamentoId) {
+
+        validarId(equipamentoId);
+
+        return equipamentoRepository
+                .findById(equipamentoId)
+                .orElseThrow(
+                        () -> new EquipamentoNaoEncontradoException(
+                                "Equipamento com ID " + equipamentoId + " não encontrado."
+                        )
+                );
     }
 
     private Tecnico buscarTecnico(Integer tecnicoId) {
