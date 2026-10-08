@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.EquipamentoNaoEncontradoException;
 import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.repository.EquipamentoRepository;
@@ -75,8 +76,21 @@ public class ManutencaoService {
     }
 
     public List<Manutencao> listarCanceladas() {
-
         return manutencaoRepository.findByStatusOrderByIdAsc(Manutencao.Status.CANCELADA);
+    }
+
+    public List<Manutencao> listarPorEquipamento(Integer equipamentoId) {
+
+        validarId(equipamentoId);
+
+        if (!equipamentoRepository.existsById(equipamentoId)) {
+            throw new EquipamentoNaoEncontradoException(
+                    "Equipamento com ID " + equipamentoId + " não encontrado."
+            );
+        }
+
+        return manutencaoRepository.findByEquipamento_IdOrderByIdAsc(equipamentoId);
+
     }
 
     private void validarId(Integer id) {
