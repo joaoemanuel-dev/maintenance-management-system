@@ -2,6 +2,7 @@ package com.joao.empresa.services;
 
 import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
+import com.joao.empresa.model.Administrador;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.repository.ManutencaoRepository;
 import com.joao.empresa.repository.UsuarioRepository;
@@ -52,6 +53,25 @@ public class UsuarioService {
                     "Já existe um usuário cadastrado com o e-mail " + email + "."
             );
         }
+    }
+
+    @Transactional
+    public Administrador cadastrarAdministrador(
+            String nome,
+            String email,
+            String departamento
+    ) {
+
+        validarEmailDisponivel(email);
+
+        Administrador administrador =
+                new Administrador(
+                        nome,
+                        email,
+                        departamento
+                );
+
+        return usuarioRepository.save(administrador);
     }
 
     private void validarId(Integer id) {
