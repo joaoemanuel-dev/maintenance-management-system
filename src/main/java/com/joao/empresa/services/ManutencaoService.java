@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.ManutencaoNaoEncontradaException;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.repository.EquipamentoRepository;
 import com.joao.empresa.repository.ManutencaoRepository;
@@ -16,6 +17,18 @@ public class ManutencaoService {
     private final ManutencaoRepository manutencaoRepository;
     private final EquipamentoRepository equipamentoRepository;
     private final UsuarioRepository usuarioRepository;
+
+    public Manutencao buscarPorId(Integer id) {
+
+        validarId(id);
+
+        return manutencaoRepository.findById(id)
+                .orElseThrow(
+                        () -> new ManutencaoNaoEncontradaException(
+                                "Manutenção com ID " + id + " não encontrada."
+                        )
+                );
+    }
 
     private void validarId(Integer id) {
 
