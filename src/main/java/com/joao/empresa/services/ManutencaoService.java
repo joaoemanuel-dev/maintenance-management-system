@@ -179,7 +179,21 @@ public class ManutencaoService {
         return manutencao;
     }
 
+    // os outros vão só alterar estado da manutenção, essa aqui vai mexer com bd, por isso tem q ser aqui
+    @Transactional
+    public void excluir(Integer id) {
 
+        Manutencao manutencao = buscarPorId(id);
+
+        if (manutencao.getStatus() == Manutencao.Status.ANDAMENTO) {
+
+            throw new IllegalStateException(
+                    "Não é possível excluir uma manutenção em andamento."
+            );
+        }
+
+        manutencaoRepository.delete(manutencao);
+    }
 
     private Equipamento buscarEquipamento(Integer equipamentoId) {
 
