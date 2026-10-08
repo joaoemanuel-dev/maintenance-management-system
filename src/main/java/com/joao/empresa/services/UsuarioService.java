@@ -3,6 +3,7 @@ package com.joao.empresa.services;
 import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Administrador;
+import com.joao.empresa.model.Gestor;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.repository.ManutencaoRepository;
 import com.joao.empresa.repository.UsuarioRepository;
@@ -72,6 +73,25 @@ public class UsuarioService {
                 );
 
         return usuarioRepository.save(administrador);
+    }
+
+    @Transactional
+    public Gestor cadastrarGestor(
+            String nome,
+            String email,
+            String areaResponsavel
+    ) {
+
+        validarEmailDisponivel(email);
+
+        Gestor gestor =
+                new Gestor(
+                        nome,
+                        email,
+                        areaResponsavel
+                );
+
+        return usuarioRepository.save(gestor);
     }
 
     private void validarId(Integer id) {
