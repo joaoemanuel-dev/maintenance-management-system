@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.repository.ManutencaoRepository;
 import com.joao.empresa.repository.UsuarioRepository;
@@ -14,6 +15,19 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ManutencaoRepository manutencaoRepository;
+
+    public Usuario buscarPorId(Integer id) {
+
+        validarId(id);
+
+        return usuarioRepository.findById(id)
+                .orElseThrow(
+                        () -> new UsuarioNaoEncontradoException(
+                                "Usuário com ID " + id + " não encontrado."
+                        )
+                );
+    }
+
 
     private void validarId(Integer id) {
 
