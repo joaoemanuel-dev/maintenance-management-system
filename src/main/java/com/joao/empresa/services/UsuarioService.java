@@ -4,6 +4,7 @@ import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Administrador;
 import com.joao.empresa.model.Gestor;
+import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.repository.ManutencaoRepository;
 import com.joao.empresa.repository.UsuarioRepository;
@@ -92,6 +93,25 @@ public class UsuarioService {
                 );
 
         return usuarioRepository.save(gestor);
+    }
+
+    @Transactional
+    public Tecnico cadastrarTecnico(
+            String nome,
+            String email,
+            String especialidade
+    ) {
+
+        validarEmailDisponivel(email);
+
+        Tecnico tecnico =
+                new Tecnico(
+                        nome,
+                        email,
+                        especialidade
+                );
+
+        return usuarioRepository.save(tecnico);
     }
 
     private void validarId(Integer id) {
