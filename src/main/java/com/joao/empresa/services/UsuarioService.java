@@ -82,6 +82,25 @@ public class UsuarioService {
         return gestor;
     }
 
+    @Transactional
+    public Tecnico atualizarTecnico(
+            Integer id,
+            String nome,
+            String email,
+            String especialidade
+    ) {
+
+        Tecnico tecnico = buscarTecnico(id);
+
+        validarEmailDisponivelNaAtualizacao(email, id
+        );
+
+        tecnico.atualizarDados(nome, email, especialidade);
+
+        return tecnico;
+    }
+
+
     private void validarEmailDisponivel(String email) {
 
         if (usuarioRepository.existsByEmail(email)) {
