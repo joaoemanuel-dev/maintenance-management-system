@@ -74,6 +74,11 @@ public class ManutencaoService {
         return manutencaoRepository.findByStatusOrderByIdAsc(Manutencao.Status.CONCLUIDA);
     }
 
+    public List<Manutencao> listarCanceladas() {
+
+        return manutencaoRepository.findByStatusOrderByIdAsc(Manutencao.Status.CANCELADA);
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
