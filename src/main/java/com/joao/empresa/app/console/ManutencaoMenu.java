@@ -4,7 +4,7 @@ import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
-import com.joao.empresa.services.GestaoEquipamento;
+import com.joao.empresa.services.EquipamentoService;
 import com.joao.empresa.services.GestaoManutencao;
 import com.joao.empresa.services.GestaoUsuario;
 
@@ -15,13 +15,13 @@ import java.util.List;
 public final class ManutencaoMenu {
 
     private final GestaoManutencao gestaoManutencao;
-    private final GestaoEquipamento gestaoEquipamento;
+    private final EquipamentoService gestaoEquipamento;
     private final GestaoUsuario gestaoUsuario;
     private final ConsoleInput input;
 
     public ManutencaoMenu(
             GestaoManutencao gestaoManutencao,
-            GestaoEquipamento gestaoEquipamento,
+            EquipamentoService gestaoEquipamento,
             GestaoUsuario gestaoUsuario,
             ConsoleInput input
     ) {

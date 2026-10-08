@@ -25,12 +25,12 @@ public class GestaoEquipamentoTest {
     @Mock
     private ManutencaoDAO manutencaoDAO;
 
-    private GestaoEquipamento gestaoEquipamento;
+    private EquipamentoService gestaoEquipamento;
 
     @BeforeEach
     void setUp() {
         gestaoEquipamento = // cria a gestão equipamento e injeta os daos nela
-                new GestaoEquipamento(
+                new EquipamentoService(
                         equipamentoDAO,
                         manutencaoDAO
                 );

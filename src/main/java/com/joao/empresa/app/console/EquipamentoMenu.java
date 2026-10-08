@@ -2,19 +2,19 @@ package com.joao.empresa.app.console;
 
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.services.GestaoEmpresa;
-import com.joao.empresa.services.GestaoEquipamento;
+import com.joao.empresa.services.EquipamentoService;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public final class EquipamentoMenu {
 
-    private final GestaoEquipamento gestaoEquipamento;
+    private final EquipamentoService gestaoEquipamento;
     private final GestaoEmpresa gestaoEmpresa;
     private final ConsoleInput input;
 
     public EquipamentoMenu(
-            GestaoEquipamento gestaoEquipamento,
+            EquipamentoService gestaoEquipamento,
             GestaoEmpresa gestaoEmpresa,
             ConsoleInput input
     ) {

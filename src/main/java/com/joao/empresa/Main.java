@@ -11,7 +11,7 @@ import com.joao.empresa.dao.EquipamentoDAO;
 import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.dao.UsuarioDAO;
 import com.joao.empresa.services.GestaoEmpresa;
-import com.joao.empresa.services.GestaoEquipamento;
+import com.joao.empresa.services.EquipamentoService;
 import com.joao.empresa.services.GestaoManutencao;
 import com.joao.empresa.services.GestaoUsuario;
 
@@ -30,7 +30,7 @@ public final class Main {
 
         GestaoUsuario gestaoUsuario = new GestaoUsuario(usuarioDAO);
         GestaoEmpresa gestaoEmpresa = new GestaoEmpresa(empresaDAO);
-        GestaoEquipamento gestaoEquipamento = new GestaoEquipamento(
+        EquipamentoService gestaoEquipamento = new EquipamentoService(
                 equipamentoDAO,
                 manutencaoDAO
         );
