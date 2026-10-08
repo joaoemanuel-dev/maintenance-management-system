@@ -140,6 +140,19 @@ public class UsuarioService {
         return gestor;
     }
 
+    private Tecnico buscarTecnico(Integer id) {
+
+        Usuario usuario = buscarPorId(id);
+
+        if (!(usuario instanceof Tecnico tecnico)) {
+            throw new IllegalArgumentException(
+                    "O usuário de ID " + id + " não é um técnico."
+            );
+        }
+
+        return tecnico;
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
