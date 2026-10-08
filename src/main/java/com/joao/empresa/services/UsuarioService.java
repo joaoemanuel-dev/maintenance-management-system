@@ -65,7 +65,22 @@ public class UsuarioService {
         return administrador;
     }
 
+    @Transactional
+    public Gestor atualizarGestor(
+            Integer id,
+            String nome,
+            String email,
+            String areaResponsavel
+    ) {
 
+        Gestor gestor = buscarGestor(id);
+
+        validarEmailDisponivelNaAtualizacao(email, id);
+
+        gestor.atualizarDados(nome, email, areaResponsavel);
+
+        return gestor;
+    }
 
     private void validarEmailDisponivel(String email) {
 
