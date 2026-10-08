@@ -98,12 +98,36 @@ public class ManutencaoService {
 
     }
 
-
     public List<Manutencao> listarPorTecnico(Integer tecnicoId){
 
         buscarTecnico(tecnicoId);
 
         return manutencaoRepository.findByTecnicoResponsavel_IdOrderByIdAsc(tecnicoId);
+
+    }
+
+    @Transactional
+    public Manutencao cadastrar(
+            Manutencao.TipoManutencao tipoManutencao,
+            String descricao,
+            LocalDate dataInicio,
+            Integer equipamentoId,
+            Integer tecnicoId
+    ) {
+
+        Equipamento equipamento = buscarEquipamento(equipamentoId);
+
+        Tecnico tecnico = buscarTecnico(tecnicoId);
+
+        Manutencao manutencao = new Manutencao(
+                tipoManutencao,
+                descricao,
+                dataInicio,
+                equipamento,
+                tecnico
+        );
+
+        return manutencaoRepository.save(manutencao);
 
     }
 
