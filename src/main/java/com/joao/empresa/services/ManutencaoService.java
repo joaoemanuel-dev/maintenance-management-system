@@ -70,7 +70,9 @@ public class ManutencaoService {
         return manutencaoRepository.findByStatusOrderByIdAsc(Manutencao.Status.ANDAMENTO);
     }
 
-
+    public List<Manutencao> listarConcluidas() {
+        return manutencaoRepository.findByStatusOrderByIdAsc(Manutencao.Status.CONCLUIDA);
+    }
 
     private void validarId(Integer id) {
 
