@@ -127,6 +127,19 @@ public class UsuarioService {
         return administrador;
     }
 
+    private Gestor buscarGestor(Integer id) {
+
+        Usuario usuario = buscarPorId(id);
+
+        if (!(usuario instanceof Gestor gestor)) {
+            throw new IllegalArgumentException(
+                    "O usuário de ID " + id + " não é um gestor."
+            );
+        }
+
+        return gestor;
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
