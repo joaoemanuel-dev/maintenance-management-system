@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.EntidadeEmUsoException;
 import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Administrador;
@@ -100,6 +101,21 @@ public class UsuarioService {
         return tecnico;
     }
 
+    @Transactional
+    public void excluir(Integer id) {
+
+        Usuario usuario = buscarPorId(id);
+
+        if (usuario instanceof Tecnico && manutencaoRepository.existsByTecnicoResponsavel_Id(id)) {
+
+            throw new EntidadeEmUsoException(
+                    "Não é possível remover o técnico de ID " + id
+                    + " porque existem manutenções associadas a ele."
+            );
+        }
+
+        usuarioRepository.delete(usuario);
+    }
 
     private void validarEmailDisponivel(String email) {
 
