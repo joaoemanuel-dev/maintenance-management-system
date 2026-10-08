@@ -49,7 +49,7 @@ public class EquipamentoService {
     }
 
     @Transactional
-    public Equipamento cadastrar(
+    public Equipamento cadastrar( // não usa entidade pronta por causa de DTO da controller
             String nome,
             String codigoPatrimonio,
             LocalDate dataAquisicao,
@@ -87,6 +87,7 @@ public class EquipamentoService {
 
     }
 
+    // Atualização não troca empresa
     @Transactional
     public Equipamento atualizar(
             Integer id,
