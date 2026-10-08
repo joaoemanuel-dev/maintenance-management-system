@@ -66,6 +66,12 @@ public class ManutencaoService {
         return manutencaoRepository.findAllByOrderByIdAsc();
     }
 
+    public List<Manutencao> listarAtivas() {
+        return manutencaoRepository.findByStatusOrderByIdAsc(Manutencao.Status.ANDAMENTO);
+    }
+
+
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
