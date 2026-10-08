@@ -1,5 +1,6 @@
 package com.joao.empresa.services;
 
+import com.joao.empresa.exceptions.UsuarioJaCadastradoException;
 import com.joao.empresa.exceptions.UsuarioNaoEncontradoException;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.repository.ManutencaoRepository;
@@ -44,6 +45,15 @@ public class UsuarioService {
         return usuarioRepository.findAllByOrderByIdAsc();
     }
 
+    private void validarEmailDisponivel(String email) {
+
+        if (usuarioRepository.existsByEmail(email)) {
+            throw new UsuarioJaCadastradoException(
+                    "Já existe um usuário cadastrado com o e-mail " + email + "."
+            );
+        }
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
@@ -52,8 +62,5 @@ public class UsuarioService {
             );
         }
     }
-
-
-
 
 }
