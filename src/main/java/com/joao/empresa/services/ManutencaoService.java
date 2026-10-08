@@ -30,6 +30,21 @@ public class ManutencaoService {
                 );
     }
 
+    public Manutencao buscarAtivaPorId(Integer id) {
+
+        Manutencao manutencao = buscarPorId(id);
+
+        if (manutencao.getStatus() != Manutencao.Status.ANDAMENTO) {
+
+            throw new ManutencaoNaoEncontradaException(
+                    "Não existe manutenção ativa com ID "
+                            + id + "."
+            );
+        }
+
+        return manutencao;
+    }
+
     private void validarId(Integer id) {
 
         if (id == null || id <= 0) {
