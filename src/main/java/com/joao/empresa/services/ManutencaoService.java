@@ -131,6 +131,33 @@ public class ManutencaoService {
 
     }
 
+    @Transactional
+    public Manutencao atualizar(
+            Integer id,
+            Manutencao.TipoManutencao tipoManutencao,
+            String descricao,
+            LocalDate dataInicio,
+            Integer equipamentoId,
+            Integer tecnicoId
+    ) {
+
+        Manutencao manutencao = buscarPorId(id);
+
+        Equipamento equipamento = buscarEquipamento(equipamentoId);
+
+        Tecnico tecnico = buscarTecnico(tecnicoId);
+
+        manutencao.atualizarDados(
+                tipoManutencao,
+                descricao,
+                dataInicio,
+                equipamento,
+                tecnico
+        );
+
+        return manutencao;
+    }
+
     private Equipamento buscarEquipamento(Integer equipamentoId) {
 
         validarId(equipamentoId);
