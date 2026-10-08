@@ -28,6 +28,17 @@ public class UsuarioService {
                 );
     }
 
+    public Usuario buscarPorEmail(String email) {
+
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new UsuarioNaoEncontradoException(
+                                "Usuário com e-mail " + email + " não encontrado."
+                        )
+                );
+    }
+
+
 
     private void validarId(Integer id) {
 
