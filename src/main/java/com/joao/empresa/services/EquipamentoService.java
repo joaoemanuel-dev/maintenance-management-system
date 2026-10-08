@@ -56,6 +56,7 @@ public class EquipamentoService {
 
     }
 
+    @Transactional
     public Equipamento cadastrar(
             String nome,
             String codigoPatrimonio,
@@ -92,6 +93,31 @@ public class EquipamentoService {
 
         return equipamentoRepository.save(equipamento);
 
+    }
+
+    @Transactional
+    public Equipamento atualizar(
+            Integer id,
+            String nome,
+            String codigoPatrimonio,
+            LocalDate dataAquisicao
+    ) {
+
+        Equipamento equipamento = buscarPorId(id);
+
+        // caso vier um código pra atualizar só que ele já existe
+        if (equipamentoRepository.existsByCodigoPatrimonioAndIdNot(codigoPatrimonio, id)) {
+
+            throw new EquipamentoJaCadastradoException(
+                    "Já existe outro equipamento cadastrado "
+                            + "com o código de patrimônio "
+                            + codigoPatrimonio + "."
+            );
+        }
+
+        equipamento.atualizarDados(nome, codigoPatrimonio, dataAquisicao);
+
+        return equipamento;
     }
 
 
