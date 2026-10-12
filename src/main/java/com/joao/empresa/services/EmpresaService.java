@@ -39,25 +39,7 @@ public class EmpresaService {
         );
     }
 
-    @Transactional
-    public Empresa cadastrarEmpresa(Empresa empresa){
 
-        if(empresa == null){
-            throw new IllegalArgumentException(
-                    "A empresa a ser cadastrada não pode ser nula."
-            );
-        }
-
-        if(empresaRepository.existsByCnpj(empresa.getCnpj())){
-            throw new EmpresaJaCadastradaException(
-                    "Já existe uma empresa cadastrada com o CNPJ "
-                            + empresa.getCnpj() + "."
-            );
-        }
-
-        return empresaRepository.save(empresa);
-
-    }
 
     @Transactional
     public Empresa atualizar(Integer id, Empresa novosDados){
