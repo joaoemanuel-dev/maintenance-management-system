@@ -39,7 +39,35 @@ public class EmpresaService {
         );
     }
 
+    // a controller não vai criar a empresa e mandar pra cá
+    // aqui vai receber os dados e reconstruir o objeto aqui
+    @Transactional
+    public Empresa cadastrar(
+            String nome,
+            String cnpj,
+            String endereco,
+            String segmento,
+            Empresa.Status status
+    ){
 
+        if(empresaRepository.existsByCnpj(cnpj){
+            throw new EmpresaJaCadastradaException(
+                    "Já existe uma empresa cadastrada com o CNPJ "
+                            + cnpj + "."
+            );
+        }
+
+        Empresa empresa = new Empresa(
+                nome,
+                cnpj,
+                endereco,
+                segmento,
+                status
+        );
+
+        return empresaRepository.save(empresa);
+
+    }
 
     @Transactional
     public Empresa atualizar(Integer id, Empresa novosDados){
