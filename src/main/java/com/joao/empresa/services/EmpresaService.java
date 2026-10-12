@@ -70,36 +70,34 @@ public class EmpresaService {
     }
 
     @Transactional
-    public Empresa atualizar(Integer id, Empresa novosDados){
-
-        validarId(id);
-
-        if (novosDados == null) {
-            throw new IllegalArgumentException(
-                    "Os dados da empresa não podem ser nulos."
-            );
-        }
+    public Empresa atualizar(
+            Integer id,
+            String nome,
+            String cnpj,
+            String endereco,
+            String segmento,
+            Empresa.Status status
+    ){
 
         Empresa empresa = buscarPorId(id);
 
         // Empresa diferente da empresa do id
-        if (empresaRepository.existsByCnpjAndIdNot(novosDados.getCnpj(), id)) {
+        if (empresaRepository.existsByCnpjAndIdNot(cnpj, id)) {
             throw new EmpresaJaCadastradaException(
                     "Já existe outra empresa cadastrada com o CNPJ "
-                            + novosDados.getCnpj() + "."
+                            + cnpj + "."
             );
         }
 
         empresa.atualizarDados(
-                novosDados.getNome(),
-                novosDados.getCnpj(),
-                novosDados.getEndereco(),
-                novosDados.getSegmento(),
-                novosDados.getStatus()
+                nome,
+                cnpj,
+                endereco,
+                segmento,
+                status
         );
 
         return empresa;
-
     }
 
     @Transactional
