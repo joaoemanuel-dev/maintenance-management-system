@@ -24,4 +24,18 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
+    @GetMapping
+    public ResponseEntity<List<UsuarioResponse>> listar() {
+
+        List<UsuarioResponse> usuarios =
+                usuarioService.listar()
+                        .stream()
+                        .map(UsuarioResponse::from)
+                        .toList();
+
+        return ResponseEntity.ok(usuarios);
+    }
+
+
+
 }
