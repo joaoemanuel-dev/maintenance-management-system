@@ -36,6 +36,15 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioResponse> buscarPorId(
+            @PathVariable Integer id
+    ) {
 
+        Usuario usuario = usuarioService.buscarPorId(id);
+
+        // converto a entidade em DTO (padrão do JSON) e retorno via http
+        return ResponseEntity.ok(UsuarioResponse.from(usuario));
+    }
 
 }
