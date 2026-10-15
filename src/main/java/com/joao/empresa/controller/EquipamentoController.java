@@ -61,5 +61,23 @@ public class EquipamentoController {
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<EquipamentoResponse> atualizar(
+            @PathVariable Integer id,
+            @Valid @RequestBody EquipamentoRequest request
+    ) {
+
+        Equipamento equipamento =
+                equipamentoService.atualizar(
+                        id,
+                        request.nome(),
+                        request.codigoPatrimonio(),
+                        request.dataAquisicao()
+                );
+
+        return ResponseEntity.ok(EquipamentoResponse.from(equipamento));
+    }
+
+
 
 }
