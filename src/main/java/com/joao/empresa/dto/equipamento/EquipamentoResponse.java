@@ -4,6 +4,7 @@ import com.joao.empresa.model.Equipamento;
 
 import java.time.LocalDate;
 
+// transforma a entidade equipamento em equipamentoResponse, sem expor toda a entidade
 public record EquipamentoResponse(
 
         Integer id,
