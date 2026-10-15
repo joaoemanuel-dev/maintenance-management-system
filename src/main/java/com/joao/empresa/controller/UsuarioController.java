@@ -59,17 +59,28 @@ public class UsuarioController {
                         request.departamento()
                 );
 
-        URI location =
-                URI.create(
-                        "/api/usuarios/"
-                                + administrador.getId()
+        URI location = URI.create("/api/usuarios/" + administrador.getId());
+
+        return ResponseEntity.created(location).body(UsuarioResponse.from(administrador));
+
+    }
+
+    @PostMapping("/gestores")
+    public ResponseEntity<UsuarioResponse> cadastrarGestor(
+            @Valid @RequestBody GestorRequest request
+    ) {
+
+        Gestor gestor =
+                usuarioService.cadastrarGestor(
+                        request.nome(),
+                        request.email(),
+                        request.areaResponsavel()
                 );
 
+        URI location = URI.create("/api/usuarios/" + gestor.getId());
+
         return ResponseEntity
-                .created(location)
-                .body(
-                        UsuarioResponse.from(administrador)
-                );
+                .created(location).body(UsuarioResponse.from(gestor));
     }
 
 
