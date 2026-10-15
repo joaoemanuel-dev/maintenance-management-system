@@ -58,7 +58,7 @@ public class EquipamentoService {
 
         validarIdEmpresa(empresaId);
 
-        if(equipamentoRepository.existsByCodigoPatrimonio(codigoPatrimonio){
+        if(equipamentoRepository.existsByCodigoPatrimonio(codigoPatrimonio)){
 
             throw new EquipamentoJaCadastradoException(
                     "Já existe um equipamento cadastrado "
