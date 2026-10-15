@@ -47,4 +47,31 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioResponse.from(usuario));
     }
 
+    @PostMapping("/administradores")
+    public ResponseEntity<UsuarioResponse> cadastrarAdministrador(
+            @Valid @RequestBody AdministradorRequest request
+    ) {
+
+        Administrador administrador =
+                usuarioService.cadastrarAdministrador(
+                        request.nome(),
+                        request.email(),
+                        request.departamento()
+                );
+
+        URI location =
+                URI.create(
+                        "/api/usuarios/"
+                                + administrador.getId()
+                );
+
+        return ResponseEntity
+                .created(location)
+                .body(
+                        UsuarioResponse.from(administrador)
+                );
+    }
+
+
+
 }
