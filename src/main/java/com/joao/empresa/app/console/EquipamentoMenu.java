@@ -1,8 +1,8 @@
 package com.joao.empresa.app.console;
 
 import com.joao.empresa.model.Equipamento;
-import com.joao.empresa.services.GestaoEmpresa;
-import com.joao.empresa.services.EquipamentoService;
+import com.joao.empresa.service.GestaoEmpresa;
+import com.joao.empresa.service.EquipamentoService;
 
 import java.time.LocalDate;
 import java.util.List;

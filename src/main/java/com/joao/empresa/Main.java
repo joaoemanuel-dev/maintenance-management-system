@@ -10,9 +10,9 @@ import com.joao.empresa.dao.EmpresaDAO;
 import com.joao.empresa.dao.EquipamentoDAO;
 import com.joao.empresa.dao.ManutencaoDAO;
 import com.joao.empresa.dao.UsuarioDAO;
-import com.joao.empresa.services.GestaoEmpresa;
-import com.joao.empresa.services.EquipamentoService;
-import com.joao.empresa.services.GestaoUsuario;
+import com.joao.empresa.service.GestaoEmpresa;
+import com.joao.empresa.service.EquipamentoService;
+import com.joao.empresa.service.GestaoUsuario;
 
 import java.util.Scanner;
 

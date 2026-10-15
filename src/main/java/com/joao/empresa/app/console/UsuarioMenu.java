@@ -4,7 +4,7 @@ import com.joao.empresa.model.Administrador;
 import com.joao.empresa.model.Gestor;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
-import com.joao.empresa.services.GestaoUsuario;
+import com.joao.empresa.service.GestaoUsuario;
 
 import java.util.List;
 

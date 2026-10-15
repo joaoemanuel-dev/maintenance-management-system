@@ -1,7 +1,7 @@
 package com.joao.empresa.app.console;
 
 import com.joao.empresa.model.Empresa;
-import com.joao.empresa.services.GestaoEmpresa;
+import com.joao.empresa.service.GestaoEmpresa;
 
 import java.util.List;
 

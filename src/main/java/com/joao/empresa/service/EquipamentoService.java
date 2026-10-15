@@ -1,4 +1,4 @@
-package com.joao.empresa.services;
+package com.joao.empresa.service;
 
 import com.joao.empresa.exceptions.EmpresaNaoEncontradaException;
 import com.joao.empresa.exceptions.EntidadeEmUsoException;

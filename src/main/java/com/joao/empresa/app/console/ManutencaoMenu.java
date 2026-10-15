@@ -4,8 +4,8 @@ import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
-import com.joao.empresa.services.EquipamentoService;
-import com.joao.empresa.services.GestaoUsuario;
+import com.joao.empresa.service.EquipamentoService;
+import com.joao.empresa.service.GestaoUsuario;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
