@@ -136,4 +136,22 @@ public class UsuarioController {
 
     }
 
+    @PutMapping("/tecnicos/{id}")
+    public ResponseEntity<UsuarioResponse> atualizarTecnico(
+            @PathVariable Integer id,
+            @Valid @RequestBody TecnicoRequest request
+    ) {
+
+        Tecnico tecnico =
+                usuarioService.atualizarTecnico(
+                        id,
+                        request.nome(),
+                        request.email(),
+                        request.especialidade()
+                );
+
+        return ResponseEntity.ok(UsuarioResponse.from(tecnico));
+
+    }
+
 }
