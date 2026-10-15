@@ -1,15 +1,15 @@
 package com.joao.empresa.controller;
 
+import com.joao.empresa.dto.equipamento.EquipamentoRequest;
 import com.joao.empresa.dto.equipamento.EquipamentoResponse;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.service.EquipamentoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -39,6 +39,27 @@ public class EquipamentoController {
         return ResponseEntity.ok(EquipamentoResponse.from(equipamento));
     }
 
+    @PostMapping
+    public ResponseEntity<EquipamentoResponse> cadastrar(
+            @Valid @RequestBody EquipamentoRequest request
+    ) {
+
+        Equipamento equipamento =
+                equipamentoService.cadastrar(
+                        request.nome(),
+                        request.codigoPatrimonio(),
+                        request.dataAquisicao(),
+                        request.empresaId()
+                );
+
+        // crio uma nova URI pode foi adicionado um novo recurso
+        URI location = URI.create("/api/equipamentos/" + equipamento.getId());
+
+        return ResponseEntity
+                .created(location)
+                .body(EquipamentoResponse.from(equipamento));
+
+    }
 
 
 }
