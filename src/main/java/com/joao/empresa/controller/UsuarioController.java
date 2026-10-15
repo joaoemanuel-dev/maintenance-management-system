@@ -101,6 +101,7 @@ public class UsuarioController {
 
     }
 
+    @PutMapping("/administradores/{id}")
     public ResponseEntity<UsuarioResponse> atualizarAdministrador(
             @PathVariable Integer id,
             @Valid @RequestBody AdministradorRequest request
@@ -115,6 +116,24 @@ public class UsuarioController {
                 );
 
         return ResponseEntity.ok(UsuarioResponse.from(administrador));
+    }
+
+    @PutMapping("/gestores/{id}")
+    public ResponseEntity<UsuarioResponse> atualizarGestor(
+            @PathVariable Integer id,
+            @Valid @RequestBody GestorRequest request
+    ) {
+
+        Gestor gestor =
+                usuarioService.atualizarGestor(
+                        id,
+                        request.nome(),
+                        request.email(),
+                        request.areaResponsavel()
+                );
+
+        return ResponseEntity.ok(UsuarioResponse.from(gestor));
+
     }
 
 }
