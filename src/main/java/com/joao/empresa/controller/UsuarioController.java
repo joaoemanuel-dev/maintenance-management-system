@@ -154,4 +154,13 @@ public class UsuarioController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+
+        usuarioService.excluir(id);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
 }
