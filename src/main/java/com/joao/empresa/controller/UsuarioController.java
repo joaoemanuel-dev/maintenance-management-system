@@ -83,6 +83,24 @@ public class UsuarioController {
                 .created(location).body(UsuarioResponse.from(gestor));
     }
 
+    @PostMapping("/tecnicos")
+    public ResponseEntity<UsuarioResponse> cadastrarTecnico(
+            @Valid @RequestBody TecnicoRequest request
+    ) {
+
+        Tecnico tecnico =
+                usuarioService.cadastrarTecnico(
+                        request.nome(),
+                        request.email(),
+                        request.especialidade()
+                );
+
+        URI location = URI.create("/api/usuarios/" + tecnico.getId());
+
+        return ResponseEntity.created(location).body(UsuarioResponse.from(tecnico));
+
+    }
+
 
 
 }
