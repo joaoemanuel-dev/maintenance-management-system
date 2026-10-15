@@ -78,6 +78,12 @@ public class EquipamentoController {
         return ResponseEntity.ok(EquipamentoResponse.from(equipamento));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 
+        equipamentoService.excluir(id);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
