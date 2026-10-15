@@ -101,6 +101,20 @@ public class UsuarioController {
 
     }
 
+    public ResponseEntity<UsuarioResponse> atualizarAdministrador(
+            @PathVariable Integer id,
+            @Valid @RequestBody AdministradorRequest request
+    ) {
 
+        Administrador administrador =
+                usuarioService.atualizarAdministrador(
+                        id,
+                        request.nome(),
+                        request.email(),
+                        request.departamento()
+                );
+
+        return ResponseEntity.ok(UsuarioResponse.from(administrador));
+    }
 
 }
