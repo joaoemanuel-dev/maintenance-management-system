@@ -28,3 +28,5 @@ public record ManutencaoRequest(
 
 ) {
 }
+
+// O cliente não manda status, nem custo e nem dataFim. Quem decide isso é o domínio.
