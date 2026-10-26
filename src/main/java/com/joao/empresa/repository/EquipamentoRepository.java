@@ -13,3 +13,6 @@ public interface EquipamentoRepository extends JpaRepository<Equipamento, Intege
     boolean existsByEmpresaId(Integer empresaId);
 
 }
+
+
+
