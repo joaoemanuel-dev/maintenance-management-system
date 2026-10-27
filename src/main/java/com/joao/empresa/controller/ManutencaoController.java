@@ -77,4 +77,21 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @GetMapping("/equipamento/{equipamentoId}")
+    public ResponseEntity<List<ManutencaoResponse>> listarPorEquipamento(
+            @PathVariable Integer equipamentoId
+    ) {
+
+        List<ManutencaoResponse> manutencoes =
+                manutencaoService
+                        .listarPorEquipamento(equipamentoId)
+                        .stream()
+                        .map(ManutencaoResponse::from)
+                        .toList();
+
+        return ResponseEntity.ok(manutencoes);
+    }
+
+
+
 }
