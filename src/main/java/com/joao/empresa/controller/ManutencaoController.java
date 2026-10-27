@@ -53,4 +53,16 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @GetMapping("/concluidas")
+    public ResponseEntity<List<ManutencaoResponse>> listarConcluidas() {
+
+        List<ManutencaoResponse> manutencoes =
+                manutencaoService.listarConcluidas()
+                        .stream()
+                        .map(ManutencaoResponse::from)
+                        .toList();
+
+        return ResponseEntity.ok(manutencoes);
+    }
+
 }
