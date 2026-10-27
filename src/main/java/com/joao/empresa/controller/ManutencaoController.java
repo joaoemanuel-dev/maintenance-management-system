@@ -181,6 +181,14 @@ public class ManutencaoController {
         );
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 
+        manutencaoService.excluir(id);
+
+        // delete = deu tudo certo mas não tenho nada pra mandar no body
+        return ResponseEntity.noContent().build();
+
+    }
 
 }
