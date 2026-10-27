@@ -19,7 +19,7 @@ public interface EquipamentoRepository extends JpaRepository<Equipamento, Intege
 
     //busca o equipamento, busca a empresa junto e controller consegue acessar empresa.nome
     @Override
-    @EntityGraph(attributePaths = "empresa")
+    @EntityGraph(attributePaths = "empresa") // vai fazer um join pegando todos
     List<Equipamento> findAll(Sort sort);
 
     @Override
