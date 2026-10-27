@@ -41,6 +41,16 @@ public class ManutencaoController {
 
     }
 
+    @GetMapping("/ativas")
+    public ResponseEntity<List<ManutencaoResponse>> listarAtivas() {
 
+        List<ManutencaoResponse> manutencoes =
+                manutencaoService.listarAtivas()
+                        .stream()
+                        .map(ManutencaoResponse::from)
+                        .toList();
+
+        return ResponseEntity.ok(manutencoes);
+    }
 
 }
