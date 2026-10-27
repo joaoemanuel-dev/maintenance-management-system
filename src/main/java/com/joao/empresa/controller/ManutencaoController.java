@@ -168,6 +168,19 @@ public class ManutencaoController {
         );
     }
 
+    @PatchMapping("/{id}/cancelar")
+    public ResponseEntity<ManutencaoResponse> cancelar(
+            @PathVariable Integer id
+    ) {
+
+        Manutencao manutencao =
+                manutencaoService.cancelar(id);
+
+        return ResponseEntity.ok(
+                ManutencaoResponse.from(manutencao)
+        );
+    }
+
 
 
 }
