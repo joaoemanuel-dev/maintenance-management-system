@@ -1,5 +1,6 @@
 package com.joao.empresa.controller;
 
+import com.joao.empresa.dto.manutencao.FinalizarManutencaoRequest;
 import com.joao.empresa.dto.manutencao.ManutencaoRequest;
 import com.joao.empresa.dto.manutencao.ManutencaoResponse;
 import com.joao.empresa.model.Manutencao;
@@ -150,6 +151,21 @@ public class ManutencaoController {
 
         return ResponseEntity.ok(ManutencaoResponse.from(manutencao));
 
+    }
+
+    // Patch -> não estamos substituindo a manutenção inteira, só status, custo e data
+    @PatchMapping("/{id}/finalizar")
+    public ResponseEntity<ManutencaoResponse> finalizar(
+            @PathVariable Integer id,
+            @Valid @RequestBody FinalizarManutencaoRequest request
+    ) {
+
+        Manutencao manutencao =
+                manutencaoService.finalizar(id, request.custo());
+
+        return ResponseEntity.ok(
+                ManutencaoResponse.from(manutencao)
+        );
     }
 
 
