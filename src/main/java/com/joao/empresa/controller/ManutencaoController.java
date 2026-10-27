@@ -1,15 +1,15 @@
 package com.joao.empresa.controller;
 
+import com.joao.empresa.dto.manutencao.ManutencaoRequest;
 import com.joao.empresa.dto.manutencao.ManutencaoResponse;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.service.ManutencaoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -105,6 +105,31 @@ public class ManutencaoController {
                         .toList();
 
         return ResponseEntity.ok(manutencoes);
+    }
+
+    @PostMapping
+    public ResponseEntity<ManutencaoResponse> cadastrar(
+            @Valid @RequestBody ManutencaoRequest request
+    ){
+
+        Manutencao manutencao =
+                manutencaoService.cadastrar(
+                        request.tipoManutencao(),
+                        request.descricao(),
+                        request.dataInicio(),
+                        request.equipamentoId(),
+                        request.tecnicoId()
+                );
+
+        URI location = URI.create("/api/manutencoes/" + manutencao.getId());
+
+        // Retorna um HTTP 201 Created, informa onde esse novo recurso está no header, e manda no body o
+        // JSON da manutenção criada.
+
+        return ResponseEntity
+                .created(location)
+                .body(ManutencaoResponse.from(manutencao));
+
     }
 
 }
