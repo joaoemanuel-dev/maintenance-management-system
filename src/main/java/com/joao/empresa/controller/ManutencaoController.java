@@ -132,4 +132,26 @@ public class ManutencaoController {
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ManutencaoResponse> atualizar(
+            @PathVariable Integer id,
+            @Valid @RequestBody ManutencaoRequest request
+    ) {
+
+        Manutencao manutencao =
+                manutencaoService.atualizar(
+                        id,
+                        request.tipoManutencao(),
+                        request.descricao(),
+                        request.dataInicio(),
+                        request.equipamentoId(),
+                        request.tecnicoId()
+                );
+
+        return ResponseEntity.ok(ManutencaoResponse.from(manutencao));
+
+    }
+
+
+
 }
