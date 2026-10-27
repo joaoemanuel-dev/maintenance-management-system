@@ -50,7 +50,7 @@ public class EmpresaService {
             Empresa.Status status
     ){
 
-        if(empresaRepository.existsByCnpj(cnpj){
+        if(empresaRepository.existsByCnpj(cnpj)){
             throw new EmpresaJaCadastradaException(
                     "Já existe uma empresa cadastrada com o CNPJ "
                             + cnpj + "."
