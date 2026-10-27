@@ -1,4 +1,4 @@
-package com.joao.empresa.exception;
+package com.joao.empresa.handler;
 
 import com.joao.empresa.dto.error.ErrorResponse;
 import com.joao.empresa.exceptions.EmpresaJaCadastradaException;
