@@ -1,77 +1,71 @@
 package com.joao.empresa.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(
+        name = "equipamento",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_equipamento_codigo_patrimonio",
+                        columnNames = "codigo_patrimonio"
+                )
+        }
+)
 public class Equipamento extends Entidade {
 
+    @Column(nullable = false, length = 150)
     private String nome;
-    private String codigoPatrimonio;
-    private LocalDate dataAquisicao; // tipo específico para datas
 
+    @Column(name = "codigo_patrimonio", nullable = false, length = 100)
+    private String codigoPatrimonio;
+
+    @Column(name = "data_aquisicao", nullable = false)
+    private LocalDate dataAquisicao;
+
+    // Os relacionamento ficam expostos aqui
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "empresa_id", nullable = false, // coluna que vai fazer a ligação
+            foreignKey = @ForeignKey(name = "fk_equipamento_empresa") // só o nome da fk criada pelo bd
+    )
+    private Empresa empresa;
+
+    @OneToMany(mappedBy = "equipamento") // equipamento existirá em "manutencao"
     private Set<Manutencao> historicoManutencoes = new LinkedHashSet<>();
 
-    // esse construtor é para cadastrar um equipamento novo, o id virá depois pelo banco de dados
-    public Equipamento(String nome, String codigoPatrimonio, LocalDate dataAquisicao) {
-        this(
-                null,
-                nome,
-                codigoPatrimonio,
-                dataAquisicao
-        );
+    public Equipamento(
+            String nome,
+            String codigoPatrimonio,
+            LocalDate dataAquisicao,
+            Empresa empresa
+    ) {
+        this.nome = nome;
+        this.codigoPatrimonio = codigoPatrimonio;
+        this.dataAquisicao = dataAquisicao;
+        this.empresa = empresa;
     }
 
-    // esse construtor é para reconstruir um equipamento que já veio do banco
-    public Equipamento(Integer id, String nome, String codigoPatrimonio, LocalDate dataAquisicao) {
-        super(id);
+    // aqueles setters é substituída para ter mais segurança e controle
+    public void atualizarDados(
+            String nome,
+            String codigoPatrimonio,
+            LocalDate dataAquisicao
+    ) {
         this.nome = nome;
         this.codigoPatrimonio = codigoPatrimonio;
         this.dataAquisicao = dataAquisicao;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCodigoPatrimonio() {
-        return codigoPatrimonio;
-    }
-
-    public void setCodigoPatrimonio(String codigoPatrimonio) {
-        this.codigoPatrimonio = codigoPatrimonio;
-    }
-
-    public LocalDate getDataAquisicao() {
-        return dataAquisicao;
-    }
-
-    public void setDataAquisicao(LocalDate dataAquisicao) {
-        this.dataAquisicao = dataAquisicao;
-    }
-
-    public Set<Manutencao> getHistoricoManutencoes() {
-        return historicoManutencoes;
-    }
-
-    public void adicionarManutencao(Manutencao manutencao) {
-        boolean add = historicoManutencoes.add(manutencao);
-    }
-
-    @Override
-    public String toString() {
-        return "Equipamento{" +
-                "nome='" + nome + '\'' +
-                ", codigoPatrimonio='" + codigoPatrimonio + '\'' +
-                ", dataAquisicao=" + dataAquisicao +
-                ", historicoManutencoes=" + historicoManutencoes +
-                '}';
+    void adicionarManutencao(Manutencao manutencao) {
+        historicoManutencoes.add(manutencao);
     }
 }
-
-

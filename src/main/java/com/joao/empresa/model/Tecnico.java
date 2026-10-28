@@ -1,55 +1,50 @@
 package com.joao.empresa.model;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+// por causa da herança o técnico é persistido em duas tabelas
+
+@Entity
+@Table(name = "tecnico")
+
+@PrimaryKeyJoinColumn(
+        name = "usuario_id",
+        foreignKey = @ForeignKey(
+                name = "fk_tecnico_usuario"
+        )
+)
+
+@DiscriminatorValue("TECNICO")
 public class Tecnico extends Usuario {
 
+    @Column(nullable = false, length = 100)
     private String especialidade;
 
+    @OneToMany(mappedBy = "tecnicoResponsavel")
     private Set<Manutencao> manutencoesResponsaveis = new LinkedHashSet<>();
 
     public Tecnico(String nome, String email, String especialidade) {
-        super(nome, email, TipoUsuario.TECNICO);
+        super(nome, email);
         this.especialidade = especialidade;
-    }
-
-    public Tecnico(Integer id, String nome, String email, String especialidade) {
-        super(id, nome, email, TipoUsuario.TECNICO);
-        this.especialidade = especialidade;
-    }
-
-    public String getEspecialidade() {
-        return especialidade;
-    }
-
-    public void setEspecialidade(String especialidade) {
-        this.especialidade = especialidade;
-    }
-
-    public Set<Manutencao> getManutencoesResponsaveis() {
-        return manutencoesResponsaveis;
-    }
-
-    public void adicionarManutencao(Manutencao manutencao) {
-        manutencoesResponsaveis.add(manutencao);
     }
 
     @Override
-    public void atualizarEspecifico(Usuario alterado) {
-        Tecnico tec = (Tecnico) alterado;
-
-        if(tec.getEspecialidade() != null){
-            setEspecialidade(tec.getEspecialidade());
-        }
+    public TipoUsuario getTipo() {
+        return TipoUsuario.TECNICO;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() +
-                "Tecnico{" +
-                "especialidade='" + especialidade + '\'' +
-                ", chamadosAtivos=" + manutencoesResponsaveis +
-                '}';
+    public void atualizarDados(String nome, String email, String especialidade) {
+        super.atualizarDados(nome, email);
+        this.especialidade = especialidade;
     }
+
 }

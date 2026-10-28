@@ -1,41 +1,43 @@
 package com.joao.empresa.model;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "gestor")
+@PrimaryKeyJoinColumn(
+        name = "usuario_id",
+        foreignKey = @ForeignKey(
+                name = "fk_gestor_usuario"
+        )
+)
+@DiscriminatorValue("GESTOR")
 public class Gestor extends Usuario {
 
+    @Column(name = "area_responsavel", nullable = false, length = 100)
     private String areaResponsavel;
 
-    public Gestor(String nome, String email, String areaResponsavel) {
-        super(nome, email, TipoUsuario.GESTOR);
-        this.areaResponsavel = areaResponsavel;
-    }
-
-    public Gestor(Integer id, String nome, String email, String areaResponsavel) {
-        super(id, nome, email, TipoUsuario.GESTOR);
-        this.areaResponsavel = areaResponsavel;
-    }
-
-    public String getAreaResponsavel() {
-        return areaResponsavel;
-    }
-
-    public void setAreaResponsavel(String areaResponsavel) {
+    public Gestor(
+            String nome,
+            String email,
+            String areaResponsavel
+    ) {
+        super(nome, email);
         this.areaResponsavel = areaResponsavel;
     }
 
     @Override
-    public void atualizarEspecifico(Usuario alterado) {
-        Gestor gestor = (Gestor) alterado;
-
-        if(gestor.getAreaResponsavel() != null){
-            setAreaResponsavel(gestor.getAreaResponsavel());
-        }
+    public TipoUsuario getTipo() {
+        return TipoUsuario.GESTOR;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() +
-                "Gestor{" +
-                "areaResponsavel='" + areaResponsavel +
-                '}';
+    public void atualizarDados(String nome, String email, String areaResponsavel) {
+        super.atualizarDados(nome, email);
+        this.areaResponsavel = areaResponsavel;
     }
+
 }
