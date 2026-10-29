@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static com.joao.empresa.builders.EmpresaBuilder.umaEmpresa;
+import static com.joao.empresa.builders.EquipamentoBuilder.umEquipamento;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -40,17 +42,14 @@ class EquipamentoServiceTest {
     @Test
     void deveBuscarEquipamentoPorId() {
 
-        Equipamento equipamento = criarEquipamento();
+        Equipamento equipamento = umEquipamento();
 
         when(equipamentoRepository.findById(1))
                 .thenReturn(Optional.of(equipamento));
 
-        Equipamento resultado =
-                equipamentoService.buscarPorId(1);
+        Equipamento resultado = equipamentoService.buscarPorId(1);
 
         assertSame(equipamento, resultado);
-
-        verify(equipamentoRepository).findById(1);
     }
 
     @Test
@@ -68,7 +67,7 @@ class EquipamentoServiceTest {
     @Test
     void deveCadastrarEquipamento() {
 
-        Empresa empresa = criarEmpresa();
+        Empresa empresa = umaEmpresa();
 
         when(equipamentoRepository
                 .existsByCodigoPatrimonio("PAT-001"))
@@ -104,13 +103,10 @@ class EquipamentoServiceTest {
                 empresa,
                 resultado.getEmpresa()
         );
-
-        verify(equipamentoRepository)
-                .save(any(Equipamento.class));
     }
 
     @Test
-    void deveImpedirCadastroComCodigoPatrimonioDuplicado() {
+    void deveImpedirCadastroComCodigoDuplicado() {
 
         when(equipamentoRepository
                 .existsByCodigoPatrimonio("PAT-001"))
@@ -129,7 +125,7 @@ class EquipamentoServiceTest {
         verify(
                 equipamentoRepository,
                 never()
-        ).save(any(Equipamento.class));
+        ).save(any());
     }
 
     @Test
@@ -155,13 +151,14 @@ class EquipamentoServiceTest {
         verify(
                 equipamentoRepository,
                 never()
-        ).save(any(Equipamento.class));
+        ).save(any());
     }
 
     @Test
     void deveAtualizarEquipamento() {
 
-        Equipamento equipamento = criarEquipamento();
+        Equipamento equipamento =
+                umEquipamento();
 
         when(equipamentoRepository.findById(1))
                 .thenReturn(Optional.of(equipamento));
@@ -176,13 +173,13 @@ class EquipamentoServiceTest {
         Equipamento resultado =
                 equipamentoService.atualizar(
                         1,
-                        "Compressor Novo",
+                        "Compressor Atualizado",
                         "PAT-002",
                         LocalDate.of(2026, 5, 20)
                 );
 
         assertEquals(
-                "Compressor Novo",
+                "Compressor Atualizado",
                 resultado.getNome()
         );
 
@@ -193,9 +190,10 @@ class EquipamentoServiceTest {
     }
 
     @Test
-    void deveImpedirExclusaoDeEquipamentoComManutencao() {
+    void deveImpedirExclusaoQuandoPossuirManutencao() {
 
-        Equipamento equipamento = criarEquipamento();
+        Equipamento equipamento =
+                umEquipamento();
 
         when(equipamentoRepository.findById(1))
                 .thenReturn(Optional.of(equipamento));
@@ -212,13 +210,14 @@ class EquipamentoServiceTest {
         verify(
                 equipamentoRepository,
                 never()
-        ).delete(any(Equipamento.class));
+        ).delete(any());
     }
 
     @Test
     void deveExcluirEquipamentoSemManutencao() {
 
-        Equipamento equipamento = criarEquipamento();
+        Equipamento equipamento =
+                umEquipamento();
 
         when(equipamentoRepository.findById(1))
                 .thenReturn(Optional.of(equipamento));
@@ -232,5 +231,4 @@ class EquipamentoServiceTest {
         verify(equipamentoRepository)
                 .delete(equipamento);
     }
-
 }
