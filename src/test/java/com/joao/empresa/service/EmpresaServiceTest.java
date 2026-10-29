@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.joao.empresa.builders.EmpresaBuilder.umaEmpresa;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -33,13 +34,7 @@ class EmpresaServiceTest {
     @Test
     void deveBuscarEmpresaPorId() {
 
-        Empresa empresa = new Empresa(
-                "Empresa Teste",
-                "12.345.678/0001-90",
-                "Ouro Branco",
-                "Industrial",
-                Empresa.Status.ATIVADA
-        );
+        Empresa empresa = umaEmpresa();
 
         when(empresaRepository.findById(1))
                 .thenReturn(Optional.of(empresa));
@@ -49,7 +44,8 @@ class EmpresaServiceTest {
 
         assertSame(empresa, resultado);
 
-        verify(empresaRepository).findById(1);
+        verify(empresaRepository)
+                .findById(1);
     }
 
     @Test
@@ -67,12 +63,10 @@ class EmpresaServiceTest {
     @Test
     void deveCadastrarEmpresa() {
 
-        when(empresaRepository.existsByCnpj(
-                "12.345.678/0001-90"
-        )).thenReturn(false);
+        when(empresaRepository
+                .existsByCnpj("12.345.678/0001-90"))
+                .thenReturn(false);
 
-        // Isso faz o mock do empresaRepository.save(...) retornar exatamente a mesma Empresa que
-        // foi passada como argumento para o save
         when(empresaRepository.save(any(Empresa.class)))
                 .thenAnswer(invocation ->
                         invocation.getArgument(0)
@@ -98,20 +92,15 @@ class EmpresaServiceTest {
         );
 
         verify(empresaRepository)
-                .existsByCnpj(
-                        "12.345.678/0001-90"
-                );
-
-        verify(empresaRepository)
                 .save(any(Empresa.class));
     }
 
     @Test
     void deveImpedirCadastroComCnpjDuplicado() {
 
-        when(empresaRepository.existsByCnpj(
-                "12.345.678/0001-90"
-        )).thenReturn(true);
+        when(empresaRepository
+                .existsByCnpj("12.345.678/0001-90"))
+                .thenReturn(true);
 
         assertThrows(
                 EmpresaJaCadastradaException.class,
@@ -133,20 +122,14 @@ class EmpresaServiceTest {
     @Test
     void deveAtualizarEmpresa() {
 
-        Empresa empresa = new Empresa(
-                "Nome Antigo",
-                "11.111.111/0001-11",
-                "Endereço Antigo",
-                "Industrial",
-                Empresa.Status.ATIVADA
-        );
+        Empresa empresa = umaEmpresa();
 
         when(empresaRepository.findById(1))
                 .thenReturn(Optional.of(empresa));
 
         when(empresaRepository
                 .existsByCnpjAndIdNot(
-                        "22.222.222/0001-22",
+                        "98.765.432/0001-10",
                         1
                 ))
                 .thenReturn(false);
@@ -154,20 +137,20 @@ class EmpresaServiceTest {
         Empresa resultado =
                 empresaService.atualizar(
                         1,
-                        "Nome Novo",
-                        "22.222.222/0001-22",
-                        "Endereço Novo",
+                        "Empresa Atualizada",
+                        "98.765.432/0001-10",
+                        "Belo Horizonte",
                         "Tecnologia",
                         Empresa.Status.ATIVADA
                 );
 
         assertEquals(
-                "Nome Novo",
+                "Empresa Atualizada",
                 resultado.getNome()
         );
 
         assertEquals(
-                "22.222.222/0001-22",
+                "98.765.432/0001-10",
                 resultado.getCnpj()
         );
     }
@@ -175,13 +158,7 @@ class EmpresaServiceTest {
     @Test
     void deveImpedirExclusaoDeEmpresaComEquipamentos() {
 
-        Empresa empresa = new Empresa(
-                "Empresa Teste",
-                "12.345.678/0001-90",
-                "Ouro Branco",
-                "Industrial",
-                Empresa.Status.ATIVADA
-        );
+        Empresa empresa = umaEmpresa();
 
         when(empresaRepository.findById(1))
                 .thenReturn(Optional.of(empresa));
@@ -199,5 +176,23 @@ class EmpresaServiceTest {
                 empresaRepository,
                 never()
         ).delete(any(Empresa.class));
+    }
+
+    @Test
+    void deveExcluirEmpresaSemEquipamentos() {
+
+        Empresa empresa = umaEmpresa();
+
+        when(empresaRepository.findById(1))
+                .thenReturn(Optional.of(empresa));
+
+        when(equipamentoRepository
+                .existsByEmpresaId(1))
+                .thenReturn(false);
+
+        empresaService.excluir(1);
+
+        verify(empresaRepository)
+                .delete(empresa);
     }
 }
