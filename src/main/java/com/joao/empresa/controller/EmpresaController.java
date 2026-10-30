@@ -4,6 +4,7 @@ import com.joao.empresa.dto.empresa.EmpresaRequest;
 import com.joao.empresa.dto.empresa.EmpresaResponse;
 import com.joao.empresa.model.Empresa;
 import com.joao.empresa.service.EmpresaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/empresas")
 @RequiredArgsConstructor //Inj Dep
+@Tag(
+        name = "Empresas",
+        description = "Gerenciamento de empresas"
+)
 public class EmpresaController {
 
     private final EmpresaService empresaService; //Inj Dep

@@ -5,6 +5,7 @@ import com.joao.empresa.dto.manutencao.ManutencaoRequest;
 import com.joao.empresa.dto.manutencao.ManutencaoResponse;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.service.ManutencaoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/manutencoes")
 @RequiredArgsConstructor
+@Tag(
+        name = "Manutenções",
+        description = "Gerenciamento de manutenções"
+)
 public class ManutencaoController {
 
     private final ManutencaoService manutencaoService;

@@ -9,6 +9,7 @@ import com.joao.empresa.model.Gestor;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.service.UsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
+@Tag(
+        name = "Usuários",
+        description = "Gerenciamento de usuários"
+)
 public class UsuarioController {
 
     private final UsuarioService usuarioService;

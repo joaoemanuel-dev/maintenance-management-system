@@ -4,6 +4,7 @@ import com.joao.empresa.dto.equipamento.EquipamentoRequest;
 import com.joao.empresa.dto.equipamento.EquipamentoResponse;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.service.EquipamentoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/equipamentos")
 @RequiredArgsConstructor
+@Tag(
+        name = "Equipamentos",
+        description = "Gerenciamento de equipamentos"
+)
 public class EquipamentoController {
 
     private final EquipamentoService equipamentoService;
