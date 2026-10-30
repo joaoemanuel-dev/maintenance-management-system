@@ -9,6 +9,7 @@ import com.joao.empresa.model.Gestor;
 import com.joao.empresa.model.Tecnico;
 import com.joao.empresa.model.Usuario;
 import com.joao.empresa.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
+    @Operation(summary = "Lista todos os usuários")
     @GetMapping
     public ResponseEntity<List<UsuarioResponse>> listar() {
 
@@ -41,6 +43,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @Operation(summary = "Busca um usuário pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponse> buscarPorId(
             @PathVariable Integer id
@@ -52,6 +55,7 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioResponse.from(usuario));
     }
 
+    @Operation(summary = "Cadastra um novo administrador")
     @PostMapping("/administradores")
     public ResponseEntity<UsuarioResponse> cadastrarAdministrador(
             @Valid @RequestBody AdministradorRequest request
@@ -70,6 +74,7 @@ public class UsuarioController {
 
     }
 
+    @Operation(summary = "Cadastra um novo gestor")
     @PostMapping("/gestores")
     public ResponseEntity<UsuarioResponse> cadastrarGestor(
             @Valid @RequestBody GestorRequest request
@@ -88,6 +93,7 @@ public class UsuarioController {
                 .created(location).body(UsuarioResponse.from(gestor));
     }
 
+    @Operation(summary = "Cadastra um novo técnico")
     @PostMapping("/tecnicos")
     public ResponseEntity<UsuarioResponse> cadastrarTecnico(
             @Valid @RequestBody TecnicoRequest request
@@ -106,6 +112,7 @@ public class UsuarioController {
 
     }
 
+    @Operation(summary = "Atualiza um administrador")
     @PutMapping("/administradores/{id}")
     public ResponseEntity<UsuarioResponse> atualizarAdministrador(
             @PathVariable Integer id,
@@ -123,6 +130,7 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioResponse.from(administrador));
     }
 
+    @Operation(summary = "Atualiza um gestor")
     @PutMapping("/gestores/{id}")
     public ResponseEntity<UsuarioResponse> atualizarGestor(
             @PathVariable Integer id,
@@ -141,6 +149,7 @@ public class UsuarioController {
 
     }
 
+    @Operation(summary = "Atualiza um técnico")
     @PutMapping("/tecnicos/{id}")
     public ResponseEntity<UsuarioResponse> atualizarTecnico(
             @PathVariable Integer id,
@@ -159,6 +168,7 @@ public class UsuarioController {
 
     }
 
+    @Operation(summary = "Exclui um usuário")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 

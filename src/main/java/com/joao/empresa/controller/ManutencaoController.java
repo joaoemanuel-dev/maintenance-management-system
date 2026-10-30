@@ -5,6 +5,7 @@ import com.joao.empresa.dto.manutencao.ManutencaoRequest;
 import com.joao.empresa.dto.manutencao.ManutencaoResponse;
 import com.joao.empresa.model.Manutencao;
 import com.joao.empresa.service.ManutencaoService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class ManutencaoController {
 
     private final ManutencaoService manutencaoService;
 
+    @Operation(summary = "Lista todas as manutenções")
     @GetMapping
     public ResponseEntity<List<ManutencaoResponse>> listar() {
 
@@ -38,6 +40,7 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @Operation(summary = "Busca uma manutenção pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<ManutencaoResponse> buscarPorId(@PathVariable Integer id){ // espero http com o body dentro
 
@@ -47,6 +50,7 @@ public class ManutencaoController {
 
     }
 
+    @Operation(summary = "Lista as manutenções em andamento")
     @GetMapping("/ativas")
     public ResponseEntity<List<ManutencaoResponse>> listarAtivas() {
 
@@ -59,6 +63,7 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @Operation(summary = "Lista as manutenções concluídas")
     @GetMapping("/concluidas")
     public ResponseEntity<List<ManutencaoResponse>> listarConcluidas() {
 
@@ -71,6 +76,7 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @Operation(summary = "Lista as manutenções canceladas")
     @GetMapping("/canceladas")
     public ResponseEntity<List<ManutencaoResponse>> listarCanceladas() {
 
@@ -83,6 +89,7 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @Operation(summary = "Lista as manutenções de um equipamento")
     @GetMapping("/equipamento/{equipamentoId}")
     public ResponseEntity<List<ManutencaoResponse>> listarPorEquipamento(
             @PathVariable Integer equipamentoId
@@ -98,6 +105,7 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @Operation(summary = "Lista as manutenções atribuídas a um técnico")
     @GetMapping("/tecnico/{tecnicoId}")
     public ResponseEntity<List<ManutencaoResponse>> listarPorTecnico(
             @PathVariable Integer tecnicoId
@@ -113,6 +121,7 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencoes);
     }
 
+    @Operation(summary = "Cadastra uma nova manutenção")
     @PostMapping
     public ResponseEntity<ManutencaoResponse> cadastrar(
             @Valid @RequestBody ManutencaoRequest request
@@ -138,6 +147,7 @@ public class ManutencaoController {
 
     }
 
+    @Operation(summary = "Atualiza uma manutenção em andamento")
     @PutMapping("/{id}")
     public ResponseEntity<ManutencaoResponse> atualizar(
             @PathVariable Integer id,
@@ -159,6 +169,7 @@ public class ManutencaoController {
     }
 
     // Patch -> não estamos substituindo a manutenção inteira, só status, custo e data
+    @Operation(summary = "Finaliza uma manutenção")
     @PatchMapping("/{id}/finalizar")
     public ResponseEntity<ManutencaoResponse> finalizar(
             @PathVariable Integer id,
@@ -173,6 +184,7 @@ public class ManutencaoController {
         );
     }
 
+    @Operation(summary = "Cancela uma manutenção")
     @PatchMapping("/{id}/cancelar")
     public ResponseEntity<ManutencaoResponse> cancelar(
             @PathVariable Integer id
@@ -186,6 +198,7 @@ public class ManutencaoController {
         );
     }
 
+    @Operation(summary = "Exclui uma manutenção encerrada")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 
