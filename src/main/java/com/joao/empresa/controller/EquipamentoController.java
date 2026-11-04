@@ -4,6 +4,8 @@ import com.joao.empresa.dto.equipamento.EquipamentoRequest;
 import com.joao.empresa.dto.equipamento.EquipamentoResponse;
 import com.joao.empresa.model.Equipamento;
 import com.joao.empresa.service.EquipamentoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/equipamentos")
 @RequiredArgsConstructor
+@Tag(
+        name = "Equipamentos",
+        description = "Gerenciamento de equipamentos"
+)
 public class EquipamentoController {
 
     private final EquipamentoService equipamentoService;
 
+    @Operation(summary = "Lista todos os equipamentos")
     @GetMapping
     public ResponseEntity<List<EquipamentoResponse>> listar() {
 
@@ -31,6 +38,7 @@ public class EquipamentoController {
         return ResponseEntity.ok(equipamentos);
     }
 
+    @Operation(summary = "Busca um equipamento pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<EquipamentoResponse> buscarPorId(@PathVariable Integer id) {
 
@@ -39,6 +47,7 @@ public class EquipamentoController {
         return ResponseEntity.ok(EquipamentoResponse.from(equipamento));
     }
 
+    @Operation(summary = "Cadastra um novo equipamento")
     @PostMapping
     public ResponseEntity<EquipamentoResponse> cadastrar(
             @Valid @RequestBody EquipamentoRequest request
@@ -61,6 +70,7 @@ public class EquipamentoController {
 
     }
 
+    @Operation(summary = "Atualiza um equipamento")
     @PutMapping("/{id}")
     public ResponseEntity<EquipamentoResponse> atualizar(
             @PathVariable Integer id,
@@ -78,6 +88,7 @@ public class EquipamentoController {
         return ResponseEntity.ok(EquipamentoResponse.from(equipamento));
     }
 
+    @Operation(summary = "Exclui um equipamento")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 

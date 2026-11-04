@@ -4,6 +4,8 @@ import com.joao.empresa.dto.empresa.EmpresaRequest;
 import com.joao.empresa.dto.empresa.EmpresaResponse;
 import com.joao.empresa.model.Empresa;
 import com.joao.empresa.service.EmpresaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +17,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/empresas")
 @RequiredArgsConstructor //Inj Dep
+@Tag(
+        name = "Empresas",
+        description = "Gerenciamento de empresas"
+)
 public class EmpresaController {
 
     private final EmpresaService empresaService; //Inj Dep
 
     // Esse método é um endpoint GET que busca todas as empresas,
     //  transforma cada Empresa em EmpresaResponse e devolve a lista de DTOS no HTTP
+    @Operation(summary = "Lista todas as empresas")
     @GetMapping
     public ResponseEntity<List<EmpresaResponse>> listar() {
 
@@ -33,6 +40,7 @@ public class EmpresaController {
         return ResponseEntity.ok(empresas);
     }
 
+    @Operation(summary = "Busca uma empresa pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<EmpresaResponse> buscarPorId(@PathVariable Integer id) {
 
@@ -41,6 +49,7 @@ public class EmpresaController {
         return ResponseEntity.ok(EmpresaResponse.from(empresa));
     }
 
+    @Operation(summary = "Cadastra uma nova empresa")
     @PostMapping
     public ResponseEntity<EmpresaResponse> cadastrar(@Valid @RequestBody EmpresaRequest request) {
 
@@ -63,6 +72,7 @@ public class EmpresaController {
                 .body(EmpresaResponse.from(empresa));
     }
 
+    @Operation(summary = "Atualiza uma empresa")
     @PutMapping("/{id}")
     public ResponseEntity<EmpresaResponse> atualizar(
             @PathVariable Integer id,
@@ -82,6 +92,7 @@ public class EmpresaController {
         return ResponseEntity.ok(EmpresaResponse.from(empresa));
     }
 
+    @Operation(summary = "Exclui uma empresa")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 
