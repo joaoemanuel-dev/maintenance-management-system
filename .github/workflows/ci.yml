@@ -9,9 +9,6 @@ on:
   # Executa automaticamente quando houver atividade em um Pull Request
   pull_request:
 
-  # Possibilidade de disparar o workflow manualmente
-  workflow_dispatch:
-
 # Define as permissões do workflow
 permissions:
   # Permite apenas ler o conteúdo do repositório
