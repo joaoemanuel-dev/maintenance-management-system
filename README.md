@@ -1,495 +1,304 @@
 # 🔧 Maintenance Management System
 
-![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+**API REST para gerenciamento de empresas, equipamentos, usuários e manutenções industriais**, desenvolvida com Java 17, Spring Boot, Spring Data JPA e PostgreSQL.
 
-API REST para gerenciamento de **empresas, equipamentos, usuários e manutenções**, desenvolvida com **Java 17 e Spring Boot**.
+![Java 17](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot 3.5.16](https://img.shields.io/badge/Spring_Boot-3.5.16-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![JUnit 5](https://img.shields.io/badge/Tests-JUnit_5_%2B_Mockito-25A162?style=for-the-badge)
+![Maven](https://img.shields.io/badge/Build-Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-O projeto nasceu inicialmente como uma aplicação Java com **JDBC puro e MySQL**. Depois de consolidar os fundamentos de persistência, SQL, transações e arquitetura em camadas, a aplicação foi migrada para **Spring Boot, Spring Data JPA, Hibernate e PostgreSQL**.
+> **Status do projeto:** API funcional, com CRUDs, regras de negócio, testes unitários, geração de relatório de cobertura, documentação OpenAPI, pipeline de CI, análise estática local e execução com Docker Compose. Projeto de estudo e portfólio, em evolução.
 
-A proposta não é apenas implementar um CRUD, mas aplicar conceitos reais de desenvolvimento Back-End: regras de negócio, relacionamentos entre entidades, DTOs, validações, transações, tratamento centralizado de exceções e respostas HTTP adequadas.
+## 📑 Sumário
 
-> **Status:** versão Spring Boot funcional e em evolução. A API principal já está implementada; testes automatizados, documentação OpenAPI, containerização, CI/CD e análise estática fazem parte da próxima etapa do projeto.
-
----
-
-## 🎯 Objetivo
-
-Este projeto foi criado para desenvolver e consolidar conhecimentos de Back-End Java em uma aplicação com domínio, persistência e regras de negócio reais.
-
-Entre os principais conceitos aplicados estão:
-
-- desenvolvimento de API REST com Spring Boot;
-- arquitetura em camadas;
-- orientação a objetos e modelagem de domínio;
-- persistência com Spring Data JPA e Hibernate;
-- banco de dados PostgreSQL;
-- relacionamentos JPA `@OneToMany` e `@ManyToOne`;
-- herança JPA com estratégia `JOINED`;
-- DTOs de entrada e saída;
-- Bean Validation;
-- transações com `@Transactional`;
-- consultas derivadas do Spring Data JPA;
-- tratamento global de exceções com `@RestControllerAdvice`;
-- respostas HTTP com `ResponseEntity`;
-- restrições de unicidade e integridade de dados;
-- Maven para gerenciamento de dependências e build;
-- Lombok para redução de código repetitivo;
-- JaCoCo configurado para análise de cobertura de testes.
+- [Sobre o projeto](#-sobre-o-projeto)
+- [Como executar com Docker](#-como-executar-com-docker)
+- [Tecnologias](#-tecnologias)
+- [Arquitetura](#-arquitetura)
+- [Modelo de domínio](#-modelo-de-domínio)
+- [Funcionalidades e regras de negócio](#-funcionalidades-e-regras-de-negócio)
+- [Endpoints da API](#-endpoints-da-api)
+- [Exemplos de requisições](#-exemplos-de-requisições)
+- [Swagger / OpenAPI](#-swagger--openapi)
+- [Testes e cobertura](#-testes-e-cobertura)
+- [Integração contínua](#-integração-contínua)
+- [Análise estática com SonarQube](#-análise-estática-com-sonarqube)
+- [Execução local sem Docker](#-execução-local-sem-docker)
+- [Configuração e boas práticas](#-configuração-e-boas-práticas)
+- [Evolução e próximos passos](#-evolução-e-próximos-passos)
+- [Autor](#-autor)
 
 ---
 
-## 🚀 Evolução do projeto
+## 🎯 Sobre o projeto
 
-Uma das principais características deste repositório é a evolução da aplicação a partir de uma implementação com JDBC puro para uma API REST utilizando o ecossistema Spring.
+O **Maintenance Management System** simula o gerenciamento do ciclo de vida de equipamentos e manutenções em empresas: cadastro, associação de responsáveis, abertura de serviços, acompanhamento de status, encerramento e controle de regras de integridade.
 
-| Conceito | V1 | V2 atual |
+O projeto começou com **Java, JDBC e MySQL**, com consultas SQL, DAOs e transações controladas manualmente. Em sua segunda versão, foi transformado em uma **API REST com Spring Boot e PostgreSQL**, permitindo explorar a diferença entre implementar a persistência diretamente e utilizar as abstrações do Spring e do Hibernate.
+
+Mais do que operações de CRUD, o foco está em aspectos relevantes do desenvolvimento Back-End:
+
+- **Modelagem de domínio:** entidades, herança, relacionamentos e estados válidos.
+- **Integridade de dados:** unicidade, validações e exclusões condicionadas a vínculos.
+- **Organização do código:** controllers, services, repositories e DTOs separados.
+- **Persistência:** JPA/Hibernate, transações e carregamento planejado de relacionamentos.
+- **Confiabilidade:** testes unitários, tratamento global de erros e integração contínua.
+- **Execução e manutenção:** Swagger/OpenAPI, Docker Compose, JaCoCo e SonarQube.
+
+### Evolução técnica
+
+| Aspecto | Primeira versão | Versão atual |
 | --- | --- | --- |
-| Linguagem | Java 17 | Java 17 |
-| Interface | Console | API REST |
-| Persistência | JDBC | Spring Data JPA |
-| ORM | Mapeamento manual | Hibernate |
-| Banco | MySQL | PostgreSQL |
-| Acesso a dados | DAO | Repository |
-| Transações | `commit` / `rollback` manual | `@Transactional` |
-| Entrada e saída | Console | JSON / HTTP |
-| Validação | Regras manuais | Bean Validation + domínio |
-| Tratamento de erros | Exceções da aplicação | `@RestControllerAdvice` + respostas HTTP |
-| Injeção de dependência | Manual | Spring IoC / DI |
-
-Essa migração foi feita de forma intencional para compreender primeiro os mecanismos de persistência e transações em baixo nível e, posteriormente, entender quais responsabilidades são abstraídas pelo Spring e pelo Hibernate.
+| Interface | Aplicação de console | API REST com JSON/HTTP |
+| Persistência | JDBC e DAOs | Spring Data JPA / Hibernate |
+| Banco de dados | MySQL | PostgreSQL |
+| Transações | Controle manual | `@Transactional` |
+| Validação | Regras em Java | Bean Validation + domínio |
+| Tratamento de erros | Exceções da aplicação | Respostas HTTP com `@RestControllerAdvice` |
+| Testes | Testes do projeto original | Testes unitários com JUnit 5 e Mockito |
+| Documentação | — | Swagger / OpenAPI |
+| Automação e execução | Execução manual | GitHub Actions + Docker Compose |
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## 🐳 Como executar com Docker
 
-### Back-End
+Esta é a **forma mais simples de iniciar o projeto**. O Docker Compose configura a aplicação Spring Boot e o PostgreSQL sem exigir uma instalação local desses componentes.
 
-- Java 17
-- Spring Boot 3.5.16
-- Spring Web
-- Spring Data JPA
-- Hibernate
-- Bean Validation / Jakarta Validation
-- Lombok
+**Pré-requisitos:** Docker Engine / Docker Desktop com o plugin Docker Compose e portas **8080** e **5433** disponíveis.
 
-### Banco de dados
+### 1. Baixe o projeto
 
-- PostgreSQL
+Clone o repositório pelo GitHub ou baixe o ZIP e abra o terminal na pasta que contém `compose.yaml`.
 
-### Build e qualidade
+### 2. Inicie os serviços
 
-- Maven
-- Spring Boot Starter Test
-- JUnit 5
-- Mockito
-- JaCoCo
+```bash
+docker compose up --build -d
+```
 
-### Ferramentas de desenvolvimento
+O Compose:
 
-- Git e GitHub
-- Postman
-- IntelliJ IDEA
-- DBeaver / ferramentas de administração PostgreSQL
+1. baixa a imagem do PostgreSQL 18;
+2. constrói a imagem da aplicação em duas etapas, com Maven + Java 17 para build e Java 17 JRE para execução;
+3. cria um volume persistente para o banco de dados;
+4. aguarda o healthcheck do PostgreSQL antes de iniciar a aplicação;
+5. publica a API em `http://localhost:8080`.
+
+### 3. Acesse a API
+
+| Serviço | Endereço |
+| --- | --- |
+| API REST | `http://localhost:8080/api` |
+| Swagger UI | [`http://localhost:8080/swagger-ui/index.html`](http://localhost:8080/swagger-ui/index.html) |
+| Especificação OpenAPI | [`http://localhost:8080/v3/api-docs`](http://localhost:8080/v3/api-docs) |
+| PostgreSQL, a partir do computador | `localhost:5433` |
+
+> O PostgreSQL escuta na porta **5432 dentro da rede Docker**. A aplicação usa o endereço `db:5432`, enquanto clientes executados no computador usam `localhost:5433`.
+
+### 4. Comandos úteis
+
+```bash
+# Verificar os containers
+docker compose ps
+
+# Acompanhar os logs da aplicação
+docker compose logs -f app
+
+# Parar e remover os containers sem excluir o volume do banco
+docker compose down
+
+# Reiniciar os serviços
+docker compose up -d
+
+# ATENÇÃO: remover containers e apagar os dados persistidos
+docker compose down -v
+```
+
+**Nota:** a configuração atual do `compose.yaml` usa credenciais de desenvolvimento (`postgres` / `root`) e destina-se a **ambiente local**, não à produção. Não reutilize essas credenciais em uma implantação pública.
+
+---
+
+## 🛠️ Tecnologias
+
+| Categoria | Tecnologias / finalidade |
+| --- | --- |
+| Linguagem e framework | Java 17, Spring Boot 3.5.16, Spring Web |
+| Persistência | Spring Data JPA, Hibernate, PostgreSQL |
+| Modelagem e validação | Jakarta Bean Validation, Lombok, DTOs com `record` |
+| Testes | JUnit 5, Mockito, Spring Boot Starter Test |
+| Cobertura | JaCoCo |
+| API | REST, JSON, SpringDoc OpenAPI / Swagger UI |
+| Build | Maven |
+| Automação | GitHub Actions |
+| Qualidade | SonarQube (análise local) |
+| Containers | Docker, Docker Compose, Dockerfile multi-stage |
+| Desenvolvimento | Git, GitHub, IntelliJ IDEA, Postman |
 
 ---
 
 ## 🏗️ Arquitetura
 
-A aplicação segue uma arquitetura em camadas:
+A aplicação adota uma arquitetura em camadas, separando o contrato HTTP, a execução das regras de negócio e a persistência.
 
-```text
-Cliente HTTP / Postman
-        ↓
-   Controllers
-        ↓
-      DTOs
-        ↓
-     Services
-        ↓
-   Repositories
-        ↓
-Spring Data JPA / Hibernate
-        ↓
-    PostgreSQL
+```mermaid
+flowchart TD
+    A[Cliente HTTP / Postman / Swagger] --> B[Controllers REST]
+    B <--> C[DTOs de Request e Response]
+    B --> D[Services]
+    D --> E[Repositories]
+    E --> F[Spring Data JPA / Hibernate]
+    F --> G[(PostgreSQL)]
+    D --> H[Entidades e regras do domínio]
+    B -. exceções .-> I[GlobalExceptionHandler]
 ```
 
-### Responsabilidade de cada camada
+### Responsabilidades
 
-| Camada | Responsabilidade |
+| Pacote | Papel |
 | --- | --- |
-| `controller` | Recebe requisições HTTP e devolve respostas HTTP |
-| `dto` | Define os dados que entram e saem da API |
-| `service` | Coordena casos de uso, regras de negócio e transações |
-| `repository` | Realiza o acesso aos dados utilizando Spring Data JPA |
-| `model` | Representa as entidades e comportamentos do domínio |
-| `handler` | Centraliza o tratamento das exceções da API |
-| `exceptions` | Contém exceções específicas de negócio e recursos |
+| `controller` | Mapeamento de endpoints, validação de entrada e respostas HTTP |
+| `dto` | Contratos de entrada e saída, sem expor entidades JPA diretamente |
+| `service` | Casos de uso, coordenação das regras e limites transacionais |
+| `model` | Entidades, relacionamentos e regras próprias do domínio |
+| `repository` | Consultas e persistência com Spring Data JPA |
+| `exceptions` | Exceções específicas da aplicação |
+| `handler` | Conversão de exceções para respostas HTTP padronizadas |
+| `config` | Configuração da documentação OpenAPI |
 
----
-
-## 📁 Estrutura do projeto
+### Estrutura de pastas
 
 ```text
-src/main/java/com/joao/empresa
-├── controller
-│   ├── EmpresaController.java
-│   ├── EquipamentoController.java
-│   ├── ManutencaoController.java
-│   └── UsuarioController.java
-│
-├── dto
-│   ├── empresa
-│   ├── equipamento
-│   ├── error
-│   ├── manutencao
-│   └── usuario
-│
-├── exceptions
-│
-├── handler
-│   └── GlobalExceptionHandler.java
-│
-├── model
-│   ├── Entidade.java
-│   ├── Empresa.java
-│   ├── Equipamento.java
-│   ├── Usuario.java
-│   ├── Administrador.java
-│   ├── Gestor.java
-│   ├── Tecnico.java
-│   └── Manutencao.java
-│
-├── repository
-│   ├── EmpresaRepository.java
-│   ├── EquipamentoRepository.java
-│   ├── ManutencaoRepository.java
-│   └── UsuarioRepository.java
-│
-├── service
-│   ├── EmpresaService.java
-│   ├── EquipamentoService.java
-│   ├── ManutencaoService.java
-│   └── UsuarioService.java
-│
-└── MaintenanceManagementApplication.java
+maintenance-management-system/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── Dockerfile
+├── compose.yaml
+├── .dockerignore
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/com/joao/empresa/
+│   │   │   ├── config/          # OpenApiConfig
+│   │   │   ├── controller/      # Endpoints REST
+│   │   │   ├── dto/             # Requests, responses e erros
+│   │   │   ├── exceptions/      # Exceções de negócio
+│   │   │   ├── handler/         # GlobalExceptionHandler
+│   │   │   ├── model/           # Entidades e domínio
+│   │   │   ├── repository/      # Repositórios JPA
+│   │   │   ├── service/         # Regras e casos de uso
+│   │   │   └── MaintenanceManagementApplication.java
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/java/com/joao/empresa/
+│       ├── builders/            # Dados de apoio aos testes
+│       └── service/             # Testes unitários dos services
+└── README.md
 ```
+
+### Persistência: LAZY, EntityGraph e transações
+
+Os relacionamentos `@ManyToOne` de **equipamento → empresa** e **manutenção → equipamento / técnico** são configurados com `FetchType.LAZY`. Para carregar os relacionamentos necessários nas consultas que montam DTOs, os repositories aplicam **`@EntityGraph`** em métodos específicos.
+
+O projeto também configura:
+
+```properties
+spring.jpa.open-in-view=false
+```
+
+Com isso, a aplicação evita depender de uma sessão de persistência aberta durante toda a requisição. Os services usam `@Transactional(readOnly = true)` por padrão e `@Transactional` nas operações de escrita. A combinação busca tornar explícitos os limites transacionais e os dados necessários para cada operação.
 
 ---
 
 ## 🧩 Modelo de domínio
 
-O sistema trabalha com quatro grupos principais de entidades:
-
-```text
-Empresa
-   │
-   └── 1:N ── Equipamento
-                 │
-                 └── 1:N ── Manutencao ── N:1 ── Tecnico
-
-Usuario
-   ├── Administrador
-   ├── Gestor
-   └── Tecnico
+```mermaid
+erDiagram
+    EMPRESA ||--o{ EQUIPAMENTO : possui
+    EQUIPAMENTO ||--o{ MANUTENCAO : recebe
+    TECNICO ||--o{ MANUTENCAO : executa
+    USUARIO ||--o| ADMINISTRADOR : especializacao
+    USUARIO ||--o| GESTOR : especializacao
+    USUARIO ||--o| TECNICO : especializacao
 ```
 
-### Herança de usuários
+- **Empresa:** nome, CNPJ, endereço, segmento e status (`ATIVADA` ou `DESATIVADA`).
+- **Equipamento:** nome, código de patrimônio, data de aquisição e empresa vinculada.
+- **Usuário:** entidade abstrata com nome, e-mail e tipo. Possui especializações `Administrador` (departamento), `Gestor` (área responsável) e `Tecnico` (especialidade), persistidas por herança JPA `JOINED`.
+- **Manutenção:** tipo (`PREVENTIVA` ou `CORRETIVA`), descrição, datas, custo, status, equipamento e técnico responsável.
 
-`Usuario` é uma entidade abstrata e possui três especializações:
+### Ciclo de vida da manutenção
 
-- **Administrador** — possui departamento;
-- **Gestor** — possui área responsável;
-- **Técnico** — possui especialidade e pode ser responsável por manutenções.
-
-A hierarquia é persistida utilizando:
-
-```java
-@Inheritance(strategy = InheritanceType.JOINED)
+```mermaid
+stateDiagram-v2
+    [*] --> ANDAMENTO: Cadastro
+    ANDAMENTO --> CONCLUIDA: Finalização com custo
+    ANDAMENTO --> CANCELADA: Cancelamento
+    CONCLUIDA --> [*]
+    CANCELADA --> [*]
 ```
 
-Dessa forma, os dados comuns permanecem na tabela de usuários e os dados específicos de cada tipo são armazenados em suas respectivas tabelas.
+Toda manutenção é criada com `status = ANDAMENTO`, `custo = 0,00` e `dataFim = null`. A data de encerramento é definida pela aplicação ao finalizar ou cancelar. Manutenções concluídas ou canceladas não podem ser editadas ou reabertas pelos métodos existentes.
 
 ---
 
-## ✨ Funcionalidades
-
-### 🏢 Empresas
-
-- cadastrar empresa;
-- buscar empresa por ID;
-- listar empresas;
-- atualizar dados;
-- excluir empresa;
-- controlar status `ATIVADA` e `DESATIVADA`;
-- garantir unicidade de CNPJ;
-- impedir exclusão de empresa que possua equipamentos vinculados.
-
-### 🖥️ Equipamentos
-
-- cadastrar equipamento associado a uma empresa;
-- buscar equipamento por ID;
-- listar equipamentos;
-- atualizar dados do equipamento;
-- excluir equipamento;
-- garantir unicidade do código de patrimônio;
-- validar a existência da empresa associada;
-- impedir exclusão quando existirem manutenções vinculadas.
-
-### 👤 Usuários
-
-O sistema possui três tipos de usuário:
-
-- Administrador;
-- Gestor;
-- Técnico.
-
-Funcionalidades disponíveis:
-
-- cadastro por tipo de usuário;
-- busca por ID;
-- listagem geral;
-- atualização respeitando o tipo concreto do usuário;
-- exclusão;
-- unicidade de e-mail;
-- proteção contra atualização de um usuário utilizando um tipo incorreto;
-- bloqueio da exclusão de técnico associado a manutenções.
-
-### 🔧 Manutenções
-
-Tipos de manutenção:
-
-```text
-PREVENTIVA
-CORRETIVA
-```
-
-Estados possíveis:
-
-```text
-             ┌────────────→ CONCLUIDA
-ANDAMENTO ───┤
-             └────────────→ CANCELADA
-```
-
-Funcionalidades:
-
-- cadastrar manutenção;
-- associar equipamento e técnico responsável;
-- listar todas as manutenções;
-- listar por status;
-- listar por equipamento;
-- listar por técnico;
-- buscar por ID;
-- atualizar manutenção enquanto estiver em andamento;
-- finalizar informando o custo;
-- registrar automaticamente a data de finalização;
-- cancelar manutenção;
-- impedir alteração de manutenção encerrada;
-- impedir exclusão de manutenção em andamento.
-
-Ao cadastrar uma manutenção, o próprio domínio define automaticamente:
-
-```text
-status  = ANDAMENTO
-custo   = 0.00
-dataFim = null
-```
-
-O cliente da API não controla diretamente esses campos.
-
----
-
-## 🌐 Endpoints da API
-
-Base URL:
-
-```text
-http://localhost:8080/api
-```
+## ✨ Funcionalidades e regras de negócio
 
 ### Empresas
 
-| Método | Endpoint | Descrição |
-| --- | --- | --- |
-| `GET` | `/empresas` | Lista todas as empresas |
-| `GET` | `/empresas/{id}` | Busca uma empresa por ID |
-| `POST` | `/empresas` | Cadastra uma empresa |
-| `PUT` | `/empresas/{id}` | Atualiza uma empresa |
-| `DELETE` | `/empresas/{id}` | Exclui uma empresa |
+- Cadastro, consulta, listagem, atualização e exclusão.
+- Controle de status `ATIVADA` / `DESATIVADA`.
+- CNPJ único, verificado na aplicação e por restrição no banco.
+- Exclusão impedida quando existem equipamentos vinculados.
 
 ### Equipamentos
 
-| Método | Endpoint | Descrição |
-| --- | --- | --- |
-| `GET` | `/equipamentos` | Lista todos os equipamentos |
-| `GET` | `/equipamentos/{id}` | Busca um equipamento por ID |
-| `POST` | `/equipamentos` | Cadastra um equipamento |
-| `PUT` | `/equipamentos/{id}` | Atualiza um equipamento |
-| `DELETE` | `/equipamentos/{id}` | Exclui um equipamento |
+- Cadastro, consulta, listagem, atualização e exclusão.
+- Associação obrigatória a uma empresa existente.
+- Código de patrimônio único.
+- Exclusão impedida quando existem manutenções vinculadas.
+- A atualização de dados não altera a empresa associada.
 
 ### Usuários
 
-| Método | Endpoint | Descrição |
-| --- | --- | --- |
-| `GET` | `/usuarios` | Lista todos os usuários |
-| `GET` | `/usuarios/{id}` | Busca um usuário por ID |
-| `POST` | `/usuarios/administradores` | Cadastra um administrador |
-| `POST` | `/usuarios/gestores` | Cadastra um gestor |
-| `POST` | `/usuarios/tecnicos` | Cadastra um técnico |
-| `PUT` | `/usuarios/administradores/{id}` | Atualiza um administrador |
-| `PUT` | `/usuarios/gestores/{id}` | Atualiza um gestor |
-| `PUT` | `/usuarios/tecnicos/{id}` | Atualiza um técnico |
-| `DELETE` | `/usuarios/{id}` | Exclui um usuário |
+- Cadastro específico de administradores, gestores e técnicos.
+- Consulta, listagem geral, atualização por tipo e exclusão.
+- Unicidade de e-mail.
+- Validação de tipo concreto nas operações de atualização.
+- Exclusão de técnicos impedida quando possuem manutenções associadas.
 
 ### Manutenções
 
-| Método | Endpoint | Descrição |
-| --- | --- | --- |
-| `GET` | `/manutencoes` | Lista todas as manutenções |
-| `GET` | `/manutencoes/{id}` | Busca uma manutenção por ID |
-| `GET` | `/manutencoes/ativas` | Lista manutenções em andamento |
-| `GET` | `/manutencoes/concluidas` | Lista manutenções concluídas |
-| `GET` | `/manutencoes/canceladas` | Lista manutenções canceladas |
-| `GET` | `/manutencoes/equipamento/{equipamentoId}` | Lista por equipamento |
-| `GET` | `/manutencoes/tecnico/{tecnicoId}` | Lista por técnico |
-| `POST` | `/manutencoes` | Cadastra uma manutenção |
-| `PUT` | `/manutencoes/{id}` | Atualiza uma manutenção em andamento |
-| `PATCH` | `/manutencoes/{id}/finalizar` | Finaliza uma manutenção |
-| `PATCH` | `/manutencoes/{id}/cancelar` | Cancela uma manutenção |
-| `DELETE` | `/manutencoes/{id}` | Exclui uma manutenção encerrada |
+- Abertura de manutenções preventivas ou corretivas.
+- Associação obrigatória a equipamento e usuário do tipo técnico.
+- Busca por ID e listagem geral, por status, equipamento ou técnico.
+- Atualização permitida somente enquanto `ANDAMENTO`.
+- Finalização com custo não negativo e registro da data de término.
+- Cancelamento com registro da data de término.
+- Exclusão permitida somente para manutenções encerradas.
+- Validação para impedir data final anterior à inicial.
 
----
+### Validações e tratamento de erros
 
-## 📦 DTOs
+A entrada é validada com anotações como `@NotBlank`, `@NotNull`, `@Email`, `@Size`, `@Positive` e `@PositiveOrZero`. Regras adicionais são aplicadas na camada de serviço e nas entidades.
 
-As entidades JPA não são utilizadas diretamente como contrato da API.
+O `GlobalExceptionHandler`, implementado com `@RestControllerAdvice`, padroniza respostas de erro:
 
-A aplicação utiliza DTOs específicos para entrada e saída, como:
-
-```text
-EmpresaRequest       → dados recebidos no cadastro/atualização
-EmpresaResponse      → representação devolvida pela API
-
-EquipamentoRequest   → dados recebidos
-EquipamentoResponse  → dados retornados + informações resumidas da empresa
-
-ManutencaoRequest    → dados controlados pelo cliente
-ManutencaoResponse   → dados da manutenção + equipamento + técnico
-
-AdministradorRequest
-GestorRequest
-TecnicoRequest
-UsuarioResponse
-```
-
-Essa separação evita expor diretamente as entidades persistidas e permite controlar quais dados fazem parte do contrato HTTP.
-
----
-
-## ✅ Validação de dados
-
-Os dados recebidos pela API são validados utilizando Jakarta Bean Validation.
-
-Entre as validações utilizadas estão:
-
-```java
-@NotBlank
-@NotNull
-@Email
-@Size
-@Positive
-@PositiveOrZero
-```
-
-Exemplos de regras:
-
-- nome obrigatório;
-- e-mail obrigatório e válido;
-- IDs devem ser positivos;
-- custo da manutenção não pode ser negativo;
-- CNPJ é obrigatório;
-- código de patrimônio é obrigatório;
-- tipo e descrição da manutenção são obrigatórios.
-
-Além das validações de entrada, regras que pertencem ao domínio permanecem nas próprias entidades ou na camada de serviço.
-
----
-
-## ⚙️ Regras de negócio
-
-Algumas das regras implementadas:
-
-- CNPJ de empresa deve ser único;
-- código de patrimônio do equipamento deve ser único;
-- e-mail de usuário deve ser único;
-- equipamento só pode ser cadastrado para uma empresa existente;
-- manutenção só pode utilizar equipamento existente;
-- responsável pela manutenção deve ser um usuário do tipo `Tecnico`;
-- manutenção recém-criada começa com status `ANDAMENTO`;
-- apenas manutenção em andamento pode ser atualizada;
-- apenas manutenção em andamento pode ser finalizada ou cancelada;
-- custo não pode ser negativo;
-- data final não pode ser anterior à data inicial;
-- manutenção em andamento não pode ser excluída;
-- empresa com equipamentos associados não pode ser excluída;
-- equipamento com manutenções associadas não pode ser excluído;
-- técnico com manutenções associadas não pode ser excluído.
-
----
-
-## 🔄 Transações
-
-Os serviços utilizam `@Transactional` para definir os limites transacionais da aplicação.
-
-A classe de serviço é configurada por padrão para leitura:
-
-```java
-@Transactional(readOnly = true)
-```
-
-Operações que alteram o estado do banco recebem uma transação de escrita:
-
-```java
-@Transactional
-public Empresa cadastrar(...) {
-    // ...
-}
-```
-
-Isso mantém a responsabilidade transacional na camada de serviço e separa operações de consulta das operações que modificam dados.
-
----
-
-## ⚠️ Tratamento global de exceções
-
-A API centraliza o tratamento de erros utilizando:
-
-```java
-@RestControllerAdvice
-```
-
-O `GlobalExceptionHandler` converte exceções da aplicação em respostas HTTP padronizadas.
-
-Principais códigos utilizados:
-
-| HTTP | Situação |
+| Código | Quando é usado |
 | --- | --- |
-| `200 OK` | Consulta ou atualização realizada com sucesso |
-| `201 Created` | Recurso criado com sucesso |
-| `204 No Content` | Exclusão realizada com sucesso |
-| `400 Bad Request` | Dados ou argumentos inválidos |
+| `400 Bad Request` | Entrada inválida ou argumento inconsistente |
 | `404 Not Found` | Recurso não encontrado |
-| `409 Conflict` | Conflito com regra de negócio ou integridade |
-| `500 Internal Server Error` | Erro inesperado |
+| `409 Conflict` | Duplicidade, recurso em uso ou transição de estado proibida |
+| `500 Internal Server Error` | Erro não tratado especificamente |
 
 Exemplo de resposta de erro:
 
 ```json
 {
-  "timestamp": "2026-10-27T11:40:00",
+  "timestamp": "2026-11-10T10:00:00",
   "status": 404,
   "error": "Not Found",
   "message": "Empresa com ID 999 não encontrada.",
@@ -499,11 +308,70 @@ Exemplo de resposta de erro:
 
 ---
 
-## 🧪 Exemplos de requisições
+## 🌐 Endpoints da API
 
-### 1. Cadastrar empresa
+**Base URL:** `http://localhost:8080/api`
 
-`POST /api/empresas`
+### Empresas
+
+| Método | Rota | Ação |
+| --- | --- | --- |
+| `GET` | `/empresas` | Listar |
+| `GET` | `/empresas/{id}` | Consultar por ID |
+| `POST` | `/empresas` | Cadastrar |
+| `PUT` | `/empresas/{id}` | Atualizar |
+| `DELETE` | `/empresas/{id}` | Excluir |
+
+### Equipamentos
+
+| Método | Rota | Ação |
+| --- | --- | --- |
+| `GET` | `/equipamentos` | Listar |
+| `GET` | `/equipamentos/{id}` | Consultar por ID |
+| `POST` | `/equipamentos` | Cadastrar |
+| `PUT` | `/equipamentos/{id}` | Atualizar |
+| `DELETE` | `/equipamentos/{id}` | Excluir |
+
+### Usuários
+
+| Método | Rota | Ação |
+| --- | --- | --- |
+| `GET` | `/usuarios` | Listar todos os tipos |
+| `GET` | `/usuarios/{id}` | Consultar por ID |
+| `POST` | `/usuarios/administradores` | Cadastrar administrador |
+| `POST` | `/usuarios/gestores` | Cadastrar gestor |
+| `POST` | `/usuarios/tecnicos` | Cadastrar técnico |
+| `PUT` | `/usuarios/administradores/{id}` | Atualizar administrador |
+| `PUT` | `/usuarios/gestores/{id}` | Atualizar gestor |
+| `PUT` | `/usuarios/tecnicos/{id}` | Atualizar técnico |
+| `DELETE` | `/usuarios/{id}` | Excluir usuário |
+
+### Manutenções
+
+| Método | Rota | Ação |
+| --- | --- | --- |
+| `GET` | `/manutencoes` | Listar todas |
+| `GET` | `/manutencoes/{id}` | Consultar por ID |
+| `GET` | `/manutencoes/ativas` | Listar em andamento |
+| `GET` | `/manutencoes/concluidas` | Listar concluídas |
+| `GET` | `/manutencoes/canceladas` | Listar canceladas |
+| `GET` | `/manutencoes/equipamento/{equipamentoId}` | Filtrar por equipamento |
+| `GET` | `/manutencoes/tecnico/{tecnicoId}` | Filtrar por técnico |
+| `POST` | `/manutencoes` | Cadastrar |
+| `PUT` | `/manutencoes/{id}` | Atualizar em andamento |
+| `PATCH` | `/manutencoes/{id}/finalizar` | Finalizar |
+| `PATCH` | `/manutencoes/{id}/cancelar` | Cancelar |
+| `DELETE` | `/manutencoes/{id}` | Excluir encerrada |
+
+Os endpoints de criação utilizam `201 Created`; as exclusões bem-sucedidas retornam `204 No Content`. As respostas de consulta e atualização utilizam `200 OK`.
+
+---
+
+## 📮 Exemplos de requisições
+
+Envie `Content-Type: application/json` nos requests que possuem corpo. Os exemplos abaixo podem ser executados pelo Postman ou Swagger UI.
+
+**1. Cadastrar empresa — `POST /api/empresas`**
 
 ```json
 {
@@ -515,21 +383,17 @@ Exemplo de resposta de erro:
 }
 ```
 
-### 2. Cadastrar técnico
-
-`POST /api/usuarios/tecnicos`
+**2. Cadastrar técnico — `POST /api/usuarios/tecnicos`**
 
 ```json
 {
   "nome": "Carlos Silva",
-  "email": "carlos@empresa.com",
+  "email": "carlos@exemplo.com",
   "especialidade": "Elétrica"
 }
 ```
 
-### 3. Cadastrar equipamento
-
-`POST /api/equipamentos`
+**3. Cadastrar equipamento — `POST /api/equipamentos`**
 
 ```json
 {
@@ -540,28 +404,26 @@ Exemplo de resposta de erro:
 }
 ```
 
-### 4. Cadastrar manutenção
-
-`POST /api/manutencoes`
+**4. Abrir manutenção — `POST /api/manutencoes`**
 
 ```json
 {
   "tipoManutencao": "PREVENTIVA",
-  "descricao": "Inspeção e lubrificação geral do equipamento",
-  "dataInicio": "2026-10-28",
+  "descricao": "Inspeção e lubrificação do equipamento",
+  "dataInicio": "2026-11-10",
   "equipamentoId": 1,
   "tecnicoId": 1
 }
 ```
 
-Resposta esperada:
+Exemplo ilustrativo de resposta (considerando que os IDs informados existem):
 
 ```json
 {
   "id": 1,
   "tipoManutencao": "PREVENTIVA",
-  "descricao": "Inspeção e lubrificação geral do equipamento",
-  "dataInicio": "2026-10-28",
+  "descricao": "Inspeção e lubrificação do equipamento",
+  "dataInicio": "2026-11-10",
   "dataFim": null,
   "custo": 0.00,
   "status": "ANDAMENTO",
@@ -572,9 +434,7 @@ Resposta esperada:
 }
 ```
 
-### 5. Finalizar manutenção
-
-`PATCH /api/manutencoes/1/finalizar`
+**5. Finalizar manutenção — `PATCH /api/manutencoes/1/finalizar`**
 
 ```json
 {
@@ -582,156 +442,212 @@ Resposta esperada:
 }
 ```
 
-A data final é definida automaticamente pela aplicação.
+**6. Cancelar manutenção — `PATCH /api/manutencoes/1/cancelar`**
+
+Esta requisição não exige corpo. A manutenção precisa estar em andamento.
+
+> **Ordem recomendada para testes manuais:** cadastrar empresa → cadastrar técnico → cadastrar equipamento vinculado à empresa → abrir manutenção → finalizar ou cancelar.
 
 ---
 
-## ▶️ Como executar o projeto
+## 📖 Swagger / OpenAPI
 
-### Pré-requisitos
+O projeto integra **SpringDoc OpenAPI** e oferece documentação interativa dos endpoints. Os controllers utilizam as anotações `@Tag` e `@Operation`, enquanto `OpenApiConfig` define título, descrição e versão do documento.
 
-Tenha instalado:
+Com a aplicação em execução:
 
-- Java 17;
-- Maven;
-- PostgreSQL;
-- Git.
+- **Swagger UI:** [`http://localhost:8080/swagger-ui/index.html`](http://localhost:8080/swagger-ui/index.html)
+- **Documento OpenAPI JSON:** [`http://localhost:8080/v3/api-docs`](http://localhost:8080/v3/api-docs)
 
-### 1. Entre na pasta do projeto
-
-Após clonar o repositório:
-
-```bash
-cd maintenance-management-system
-```
-
-### 2. Crie o banco de dados
-
-No PostgreSQL:
-
-```sql
-CREATE DATABASE manutencao_db;
-```
-
-### 3. Configure a conexão
-
-Ajuste o arquivo:
-
-```text
-src/main/resources/application.properties
-```
-
-Exemplo:
-
-```properties
-spring.application.name=maintenance-management-system
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/manutencao_db
-spring.datasource.username=SEU_USUARIO
-spring.datasource.password=SUA_SENHA
-
-spring.jpa.hibernate.ddl-auto=update
-
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-
-spring.jpa.open-in-view=false
-```
-
-### 4. Execute a aplicação
-
-```bash
-mvn spring-boot:run
-```
-
-Ou execute `MaintenanceManagementApplication` diretamente pela IDE.
-
-A API ficará disponível em:
-
-```text
-http://localhost:8080
-```
+A interface permite inspecionar requests, responses e executar chamadas de teste diretamente pelo navegador.
 
 ---
 
 ## 🧪 Testes e cobertura
 
-O projeto utiliza `spring-boot-starter-test`, que fornece suporte para JUnit 5, Mockito e ferramentas de teste do Spring.
+A suíte implementada contém **42 métodos de teste unitário** nos services, com **JUnit 5 e Mockito**, utilizando mocks para isolar repositories e builders para preparar cenários de teste.
 
-O JaCoCo já está configurado no `pom.xml` para geração de relatório de cobertura durante a fase `verify` do Maven.
+| Classe de teste | Métodos de teste |
+| --- | ---: |
+| `EmpresaServiceTest` | 7 |
+| `EquipamentoServiceTest` | 8 |
+| `UsuarioServiceTest` | 13 |
+| `ManutencaoServiceTest` | 14 |
+| **Total** | **42** |
 
-Para executar os testes:
+Os cenários cobrem, entre outros: consultas e cadastros, validação de unicidade, entidades inexistentes, vínculos obrigatórios, atualização, exclusão condicionada e transições de manutenção.
+
+### Rodar testes
 
 ```bash
 mvn test
 ```
 
-Para executar a verificação e gerar o relatório de cobertura:
+### Compilar, testar e executar a verificação do Maven
 
 ```bash
-mvn verify
+mvn clean verify
 ```
 
-O relatório do JaCoCo será gerado em:
+O **JaCoCo** está configurado no `pom.xml` para instrumentar os testes e gerar um relatório HTML de cobertura durante o ciclo de build. Após a execução, abra:
 
 ```text
 target/site/jacoco/index.html
 ```
 
-> A suíte de testes automatizados da versão Spring Boot está sendo expandida como parte da etapa atual do projeto.
+> A quantidade de testes acima foi conferida nos arquivos-fonte. Um percentual de cobertura ou resultado de execução não é afirmado aqui, pois deve ser obtido pelo relatório/execução no ambiente correspondente. Testes de integração ainda não fazem parte da suíte apresentada.
 
 ---
 
-## 🗺️ Roadmap
+## 🔄 Integração contínua
 
-- [x] Modelagem do domínio
-- [x] V1 utilizando JDBC e SQL
-- [x] Migração para Spring Boot
-- [x] API REST
-- [x] Spring Data JPA e Hibernate
-- [x] PostgreSQL
-- [x] DTOs de request e response
-- [x] Bean Validation
-- [x] Tratamento global de exceções
-- [x] Regras de negócio e integridade
-- [x] Transações com `@Transactional`
-- [x] JaCoCo configurado
-- [ ] Ampliar testes unitários com JUnit e Mockito
-- [ ] Adicionar testes de integração
-- [ ] Documentar API com Swagger / OpenAPI
-- [ ] Containerizar aplicação e banco com Docker / Docker Compose
-- [ ] Criar pipeline de CI/CD
-- [ ] Integrar análise de qualidade com SonarQube
+O workflow `.github/workflows/ci.yml` utiliza **GitHub Actions** para executar verificações automáticas em eventos de `push` e `pull_request`.
+
+```mermaid
+flowchart LR
+    A[Push / Pull Request] --> B[Checkout]
+    B --> C[Java 17 Temurin]
+    C --> D[Cache Maven]
+    D --> E[mvn -B clean verify]
+    E --> F[Build e testes]
+```
+
+O comando principal do pipeline é:
+
+```bash
+mvn -B clean verify
+```
+
+Assim, alterações enviadas ao GitHub passam por compilação e testes automatizados. O resultado de cada execução pode ser consultado na aba **Actions** e nos checks do Pull Request.
+
+**Importante:** o pipeline atual **não** publica automaticamente o relatório JaCoCo nem executa uma análise do SonarQube. Essas integrações podem ser adicionadas posteriormente.
 
 ---
 
-## 💡 Principais aprendizados
+## 🔎 Análise estática com SonarQube
 
-O desenvolvimento deste projeto permitiu praticar a evolução de uma aplicação Java de baixo nível para uma aplicação baseada em framework.
+O SonarQube é utilizado **localmente**, com análise acionada pelo Maven, para inspecionar indicadores de qualidade e identificar possíveis problemas de manutenção, bugs e vulnerabilidades.
 
-Na primeira versão, responsabilidades como conexão com banco, SQL, mapeamento de objetos e controle transacional eram tratadas manualmente com JDBC. Na versão atual, essas responsabilidades passaram a utilizar abstrações do Spring e do Hibernate.
+Com o servidor SonarQube já iniciado em `http://localhost:9000`, é possível executar a análise pelo PowerShell:
 
-Essa comparação ajudou a consolidar conceitos como:
+```powershell
+# Solicita o token sem exibi-lo na digitação
+$tokenSeguro = Read-Host "Token do SonarQube" -AsSecureString
+$env:SONAR_TOKEN = [System.Net.NetworkCredential]::new("", $tokenSeguro).Password
+$env:SONAR_HOST_URL = "http://localhost:9000"
 
-- diferença entre DAO e Repository;
-- persistência manual versus ORM;
-- ciclo de vida de entidades JPA;
-- injeção de dependências;
-- transações declarativas;
-- separação entre entidade e DTO;
-- validação na fronteira da aplicação;
-- regras de negócio no domínio e nos serviços;
-- semântica dos principais códigos HTTP;
-- organização de uma API REST em camadas.
+# Executa build, testes e análise
+mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar "-Dsonar.projectKey=maintenance-management-system"
+
+# Remove o token do ambiente ao terminar
+Remove-Item Env:\SONAR_TOKEN
+```
+
+Os resultados ficam disponíveis no painel do projeto no SonarQube local. **O scanner não integra o GitHub Actions nesta versão.**
+
+---
+
+## 💻 Execução local sem Docker
+
+Caso prefira executar no IntelliJ IDEA ou pelo terminal:
+
+**Pré-requisitos:** Java 17, Maven e PostgreSQL acessível na porta configurada.
+
+**1. Crie o banco:**
+
+```sql
+CREATE DATABASE manutencao_db;
+```
+
+**2. Configure as variáveis do banco:**
+
+O arquivo `application.properties` aceita as seguintes variáveis de ambiente:
+
+| Variável | Padrão no projeto | Finalidade |
+| --- | --- | --- |
+| `DB_URL` | `jdbc:postgresql://localhost:5432/manutencao_db` | URL JDBC |
+| `DB_USERNAME` | `postgres` | Usuário |
+| `DB_PASSWORD` | `root` | Senha local |
+
+Exemplo no PowerShell, substituindo pelos dados da sua instalação:
+
+```powershell
+$env:DB_URL = "jdbc:postgresql://localhost:5432/manutencao_db"
+$env:DB_USERNAME = "postgres"
+$env:DB_PASSWORD = "SUA_SENHA_LOCAL"
+```
+
+**3. Inicie a aplicação:**
+
+```bash
+mvn spring-boot:run
+```
+
+Também é possível iniciar a classe `MaintenanceManagementApplication` pela IDE.
+
+> **Atenção às portas:** se estiver executando **apenas o banco via Docker Compose**, mas a aplicação no IntelliJ, use `jdbc:postgresql://localhost:5433/manutencao_db`. A porta `5432` é o padrão do PostgreSQL instalado diretamente no computador; `5433` é a porta publicada pelo Compose atual.
+
+---
+
+## ⚙️ Configuração e boas práticas
+
+Algumas escolhas técnicas importantes no projeto:
+
+- **DTOs com Java Records:** contratos de entrada e saída independentes das entidades JPA.
+- **`@Valid` e Bean Validation:** validação de requests na fronteira HTTP.
+- **`@Transactional`:** operações de leitura e escrita com limites transacionais definidos nos services.
+- **`FetchType.LAZY` + `@EntityGraph`:** controle explícito do carregamento de relacionamentos nas consultas que precisam deles.
+- **`spring.jpa.open-in-view=false`:** evita depender de Open Session in View para montar respostas.
+- **Herança `JOINED`:** persistência de administradores, gestores e técnicos com dados compartilhados.
+- **Restrições de unicidade:** apoio do banco para CNPJ, patrimônio e e-mail.
+- **Docker multi-stage:** Maven usado para gerar o JAR; imagem final utiliza apenas o runtime Java.
+- **Persistência em volume Docker:** os dados permanecem entre recriações de containers, a menos que o volume seja removido.
+
+### Limitações atuais
+
+Este repositório é um projeto de estudos, **não uma configuração pronta para produção**:
+
+- **Não há autenticação ou autorização implementadas** nesta versão; Spring Security ainda é um próximo passo.
+- O Compose define credenciais fixas de banco **somente para desenvolvimento local**.
+- `spring.jpa.hibernate.ddl-auto=update` simplifica os estudos, mas um ambiente produtivo deve considerar migrações versionadas de banco.
+- O Dockerfile utiliza `-DskipTests` na etapa de empacotamento; a execução dos testes ocorre separadamente no GitHub Actions via `mvn clean verify`.
+- A análise SonarQube é local, sem publicação automática de resultados no CI.
+
+---
+
+## 🗺️ Evolução e próximos passos
+
+### Implementado
+
+- [x] Primeira versão com Java, JDBC e MySQL
+- [x] Migração para Java 17, Spring Boot e PostgreSQL
+- [x] CRUD de empresas, equipamentos, usuários e manutenções
+- [x] Modelagem de domínio e herança JPA
+- [x] Spring Data JPA / Hibernate
+- [x] Regras de negócio, integridade e Bean Validation
+- [x] DTOs, respostas HTTP e tratamento global de exceções
+- [x] Gerenciamento de transações
+- [x] `FetchType.LAZY`, `@EntityGraph` e Open Session in View desabilitado
+- [x] 42 métodos de testes unitários com JUnit 5 e Mockito
+- [x] Geração de relatório de cobertura com JaCoCo
+- [x] Documentação interativa com Swagger / OpenAPI
+- [x] Pipeline de CI com GitHub Actions
+- [x] Análise estática local com SonarQube
+- [x] Dockerfile multi-stage e Docker Compose com PostgreSQL
+
+### Planejado / possíveis melhorias
+
+- [ ] Adicionar autenticação e autorização com Spring Security
+- [ ] Adicionar testes de integração (API + banco)
+- [ ] Integrar SonarQube e relatórios de cobertura ao pipeline
+- [ ] Substituir credenciais fixas por configuração segura de ambiente
+- [ ] Adotar migrações versionadas de banco (ex.: Flyway)
+- [ ] Preparar configuração de deploy em ambiente externo
 
 ---
 
 ## 👨‍💻 Autor
 
-Desenvolvido por **João Emanuel** como projeto de estudo e evolução em desenvolvimento Back-End com Java e Spring Boot.
+Desenvolvido por **João Emanuel** como projeto de estudo e portfólio na área de **Desenvolvimento Back-End Java**, com foco em API REST, modelagem de domínio, persistência, testes, qualidade e infraestrutura.
 
----
-
-## 📌 Observação
-
-Este projeto está em evolução contínua. Novas etapas serão adicionadas ao repositório conforme o avanço dos estudos em testes automatizados, documentação de APIs, containerização, integração contínua e qualidade de código.
+> O objetivo deste repositório é documentar não apenas a implementação da aplicação, mas também sua evolução técnica: **de JDBC e SQL manual para uma API Spring Boot com testes, automação e execução em containers**.
