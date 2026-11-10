@@ -1,0 +1,80 @@
+# Define os serviços (containers) da aplicação
+services:
+
+  # SERVIÇO 1: BANCO DE DADOS POSTGRESQL
+  db:
+
+    # Utiliza a imagem oficial do PostgreSQL 18
+    image: postgres:18
+
+    # Configura as variáveis de ambiente do banco
+    environment:
+
+      # Nome do banco de dados que será criado
+      POSTGRES_DB: manutencao_db
+
+      # Usuário do banco de dados
+      POSTGRES_USER: postgres
+
+      # Senha do banco de dados
+      POSTGRES_PASSWORD: root
+
+    # Mapeia a porta 5433 do computador para a 5432 do container
+    ports:
+      - "5433:5432"
+
+    # Armazena os dados do banco em um volume persistente. Assim, os dados não se perdem ao remover o container
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+    # Verifica se o PostgreSQL está pronto para receber conexões
+    healthcheck:
+
+      # Comando que verifica se o banco está aceitando conexões
+      test: ["CMD-SHELL", "pg_isready -U postgres -d manutencao_db"]
+
+      # Executa a verificação a cada 5 segundos
+      interval: 5s
+
+      # Tempo máximo de espera por cada verificação
+      timeout: 5s
+
+      # Permite até 10 tentativas consecutivas sem sucesso
+      retries: 10
+
+
+  # SERVIÇO 2: APLICAÇÃO SPRING BOOT
+  app:
+
+    # Constrói a imagem utilizando o Dockerfile do projeto
+    build: .
+
+    # Mapeia a porta 8080 do computador para a 8080 do container
+    ports:
+      - "8080:8080"
+
+    # Variáveis de ambiente utilizadas pela aplicação
+    environment:
+
+      # Endereço de conexão com o PostgreSQL, "db" é o nome do serviço do banco dentro do Docker
+      DB_URL: jdbc:postgresql://db:5432/manutencao_db
+
+      # Usuário utilizado pela aplicação para acessar o banco
+      DB_USERNAME: postgres
+
+      # Senha utilizada pela aplicação para acessar o banco
+      DB_PASSWORD: root
+
+    # Define que a aplicação depende do banco de dados
+    depends_on:
+      db:
+
+        # Só inicia a aplicação quando o banco estiver saudável
+        condition: service_healthy
+
+
+# Declara o volume utilizado para armazenar os dados
+volumes:
+
+  # Volume gerenciado pelo Docker para persistência do PostgreSQL
+  postgres_data:
